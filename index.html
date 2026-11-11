@@ -1,0 +1,1275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#191b1f">
+<meta name="description" content="拖动影片、倒转时间，救出困在故事里的小橘。一个可以离线游玩的剪辑解谜小游戏。">
+<title>逃生剪辑师 · 把结局重新剪一次</title>
+<style>
+:root{--paper:#f6f5f0;--panel:#fffefa;--ink:#262832;--muted:#7b7d87;--line:#e4e3dd;--accent:#5551e8;--accent-soft:#eeedff;--mint:#dceee3;--peach:#f6e5d7;--purple:#e8e2fa;--success:#287c5b;--danger:#b45544;--radius:16px;font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}button:disabled{cursor:not-allowed;opacity:.38}button,a,article{ -webkit-tap-highlight-color:transparent}button:focus-visible,article:focus-visible,a:focus-visible{outline:3px solid #a09bff;outline-offset:3px}button{touch-action:manipulation}svg{display:block;flex-shrink:0}button svg{width:17px;height:17px}button:disabled:hover{transform:none}button,.clip{transition:background .16s,border-color .16s,box-shadow .16s,transform .16s}button:hover:not(:disabled){filter:brightness(.97)}.hidden,[hidden]{display:none!important}
+.topbar{height:68px;border-bottom:1px solid var(--line);background:rgba(255,254,250,.7)}.topbar-inner{max-width:1280px;padding:0 28px;margin:auto;height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:11px;font-weight:750;letter-spacing:.03em;font-size:17px}.brand-mark{display:grid;place-items:center;width:33px;height:33px;background:var(--ink);color:#fff;border-radius:10px;transform:rotate(-5deg)}.brand-mark svg{width:20px;height:20px}.brand small{color:#92939a;font-size:10px;font-weight:500;letter-spacing:.15em;margin-left:9px}.top-actions{display:flex;align-items:center;gap:12px}.badge{font-size:10px;letter-spacing:.08em;padding:5px 8px;border:1px solid var(--line);border-radius:5px;color:var(--muted)}.quiet-button{display:flex;align-items:center;gap:6px;font-size:12px;color:#656773;padding:7px 8px;border-radius:7px}.top-divider{width:1px;height:18px;background:var(--line)}
+main{max-width:1280px;padding:22px 28px 16px;margin:auto}.intro{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:19px}.intro h1{margin:0 0 6px;font-size:27px;letter-spacing:-.06em;line-height:1.3;font-weight:750}.intro p{margin:0;color:var(--muted);font-size:12px;letter-spacing:.02em}.levels{display:flex;padding:4px;background:#ecebe6;border-radius:10px;gap:3px}.level-tab{display:flex;align-items:center;gap:7px;padding:9px 12px;border-radius:7px;font-size:12px;color:#777984;white-space:nowrap}.level-tab .num{font:10px Consolas,monospace;opacity:.65}.level-tab.active{background:var(--panel);color:var(--ink);box-shadow:0 1px 5px #2628320c}.level-tab.done .num{color:var(--success);opacity:1}.level-tab.locked{color:#a4a5ab}.level-tab svg{width:11px;height:11px}
+.main-layout{display:grid;grid-template-columns:minmax(0,1fr) 266px;gap:18px;align-items:stretch}.monitor{border:1px solid #d8d7d4;border-radius:var(--radius);overflow:hidden;background:#29223e;box-shadow:0 5px 16px #29223e07;position:relative}.monitor-top{height:35px;background:#2c273b;display:flex;justify-content:space-between;align-items:center;color:#c6c1d5;font-size:10px;padding:0 16px;letter-spacing:.06em}.monitor-label{display:flex;gap:7px;align-items:center}.monitor-label svg{width:13px;height:13px;color:#a79bc4}.monitor-status{display:flex;align-items:center;gap:6px;font-size:10px}.status-dot{width:5px;height:5px;border-radius:50%;background:#b2a7cf}.monitor-status.running .status-dot{background:#c1e4b5;box-shadow:0 0 8px #c1e4b560}.screen{position:relative;aspect-ratio:1000/480;overflow:hidden}.screen canvas{display:block;width:100%;height:100%}.scene-caption{position:absolute;left:18px;top:14px;display:flex;gap:7px;align-items:center;color:#dfd6ef;font-size:10px;letter-spacing:.12em}.scene-caption:before{content:"";width:13px;height:1px;background:#b9accd}.scene-corner{position:absolute;right:18px;top:13px;font:10px Consolas,monospace;color:#bfb3d4;letter-spacing:.13em}.subtitle{position:absolute;bottom:17px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:8px;max-width:90%;width:max-content;text-align:center;background:#211a34c9;color:#f3eef9;font-size:12px;line-height:1.6;box-shadow:0 2px 8px #0001;backdrop-filter:blur(8px)}.subtitle:empty{display:none}.scene-result{position:absolute;top:48px;left:50%;transform:translateX(-50%);text-align:center;width:max-content;max-width:90%;color:#fff;pointer-events:none}.scene-result .result-word{font-size:36px;font-weight:800;letter-spacing:.14em;line-height:1;text-shadow:0 3px 20px #1b122b66}.scene-result p{font-size:12px;margin:10px 0 0;letter-spacing:.1em}.scene-result.failed .result-word{color:#ffcfad}.scene-result.success .result-word{color:#d8f7c3}.monitor-bottom{height:43px;background:var(--panel);display:flex;align-items:center;gap:12px;padding:0 14px;font-size:11px}.transport-label{color:#8c8a94;display:flex;align-items:center;gap:6px;white-space:nowrap}.transport-label svg{width:13px;height:13px}.mini-progress{height:3px;background:#eceae7;border-radius:10px;flex:1;overflow:hidden}.mini-progress span{display:block;height:100%;width:0;background:var(--accent);transition:width .1s linear}.time-code{font:10px Consolas,monospace;color:#7e7e88;white-space:nowrap}.speed-button{font:11px Consolas,monospace;background:#f0efeb;padding:5px 7px;border-radius:5px;min-width:34px}
+.mission{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:19px;display:flex;flex-direction:column;min-height:0}.mission-eyebrow{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--muted);letter-spacing:.12em}.mission-eyebrow .take{font:10px Consolas,monospace;letter-spacing:.04em}.mission h2{font-size:21px;margin:13px 0 9px;letter-spacing:-.03em;line-height:1.3}.mission-description{font-size:12px;line-height:1.85;color:#777983;margin:0}.world-states{display:flex;flex-wrap:wrap;gap:5px;margin:15px 0}.world-chip{font-size:10px;border-radius:5px;background:#f2f0ec;color:#83828a;padding:5px 7px;display:flex;gap:4px;align-items:center}.world-chip.positive{background:#e8f1e9;color:#448367}.world-chip.alert{background:#f7e8df;color:#b0704e}.world-chip svg{width:11px;height:11px}.budget{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;display:flex;align-items:center;justify-content:space-between;gap:8px}.budget-label{font-size:11px;display:flex;align-items:center;gap:6px;color:#6a6875}.budget-label svg{width:14px;height:14px}.budget-dots{display:flex;align-items:center;gap:5px}.budget-dot{width:13px;height:13px;border:1.5px solid #c9c5e6;border-radius:50%;background:#fff}.budget-dot.used{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px #fff}.budget-count{font:11px Consolas,monospace;color:#77728e;margin-left:4px}.mission-feedback{margin-top:13px;flex:1;min-height:60px}.feedback-title{font-size:12px;font-weight:650;margin:0 0 6px;display:flex;align-items:center;gap:6px}.feedback-title svg{width:14px;height:14px}.feedback-body{font-size:11px;line-height:1.8;color:#8b8993;margin:0}.feedback-title.failed{color:var(--danger)}.feedback-title.success{color:var(--success)}.hint-text{font-size:11px;line-height:1.7;background:#f1f0fb;border-radius:8px;color:#746ca6;padding:10px;margin:9px 0 0}.mission-bottom{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:14px}.hint-button{font-size:11px;display:flex;gap:5px;align-items:center;color:#7d798d;padding:4px 0}.hint-button svg{width:14px;height:14px}.next-button{background:var(--accent);color:#fff;padding:9px 12px;border-radius:8px;font-size:11px;display:flex;align-items:center;gap:7px}.next-button svg{width:13px;height:13px}
+.editor{margin-top:20px}.editor-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}.editor-heading{display:flex;align-items:center;gap:10px}.editor-heading h2{font-size:15px;font-weight:650;margin:0}.editor-heading span{font-size:10px;color:#92929a}.editor-controls{display:flex;align-items:center;gap:8px}.reset-button{font-size:11px;display:flex;align-items:center;gap:5px;color:#8a8993;padding:7px}.reset-button svg{width:13px;height:13px}.stop-button{width:32px;height:32px;display:grid;place-items:center;border:1px solid #d9d8d3;border-radius:8px;background:var(--panel)}.stop-button svg{width:12px;height:12px}.play-button{display:flex;align-items:center;justify-content:center;gap:7px;background:var(--accent);color:#fff;border-radius:8px;padding:9px 15px;font-size:12px;font-weight:600;box-shadow:0 3px 7px #5551e818;min-width:108px}.play-button svg{width:14px;height:14px}.ruler{display:grid;grid-template-columns:repeat(var(--count,3),1fr);color:#9a98a3;font:9px Consolas,monospace;letter-spacing:.03em;position:relative;border-top:1px solid #deddd7;margin:0 0 7px;padding-top:7px}.ruler span{position:relative;padding-left:5px}.ruler span:before{content:"";position:absolute;left:0;top:-8px;width:1px;height:5px;background:#c6c5c0}.ruler .end-time{position:absolute;right:0;top:7px}.ruler .end-time:before{left:auto;right:0}.timeline{display:grid;grid-template-columns:repeat(var(--count,3),minmax(0,1fr));gap:11px;min-height:172px;position:relative}.clip{position:relative;border:1.5px solid #d9d8d1;border-radius:11px;background:var(--panel);overflow:hidden;min-width:0}.clip:hover{border-color:#aaa5c5}.clip.is-reversed{border-color:#a9a0e6}.clip.is-active{border-color:var(--accent);box-shadow:0 0 0 3px #5551e81c}.clip.is-failed{border-color:#c67b63;box-shadow:0 0 0 3px #c67b6315}.clip.dragging{opacity:.35;transform:scale(.98)}.clip.drop-target{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 15px #5551e81c}.clip-top{height:25px;background:var(--clip-bg,#e8e2fa);display:flex;justify-content:space-between;align-items:center;padding:0 9px;font-size:9px;letter-spacing:.06em;color:#635d78;cursor:grab;touch-action:pan-y}.clip-top:active{cursor:grabbing}.clip-top-left{display:flex;align-items:center;gap:5px}.clip-top svg{width:11px;height:11px}.clip-num{font:10px Consolas,monospace}.clip-direction{display:flex;gap:3px;align-items:center}.clip-direction.reverse{color:#5e4ac8;font-weight:600}.clip-preview{width:100%;height:69px;display:block;padding:0;position:relative;overflow:hidden;background:#30253f}.clip-preview canvas{display:block;width:100%;height:100%;object-fit:cover}.preview-bubble{position:absolute;right:7px;bottom:6px;color:#fff;background:#231e3b99;padding:3px 6px;border-radius:4px;font-size:9px;display:flex;align-items:center;gap:3px;opacity:0;transition:opacity .15s}.clip-preview:hover .preview-bubble,.clip-preview:focus-visible .preview-bubble{opacity:1}.preview-bubble svg{width:10px;height:10px}.clip-body{padding:9px 10px 8px}.clip-title{font-size:13px;font-weight:650;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.clip-effect{margin:4px 0 8px;color:#8d8996;font-size:10px;line-height:1.5;min-height:15px}.clip-actions{display:flex;align-items:center;justify-content:space-between;gap:4px}.reverse-button{display:flex;align-items:center;gap:4px;padding:4px 6px;border:1px solid #e0ddea;color:#807592;border-radius:5px;font-size:10px;min-height:25px}.reverse-button svg{width:12px;height:12px}.reverse-button[aria-pressed="true"]{background:#eeebff;border-color:#c7bff4;color:#6551c8}.forward-label{display:flex;align-items:center;gap:4px;font-size:9px;color:#aaa5af}.forward-label svg{width:11px;height:11px}.move-actions{display:flex;gap:3px}.move-button{width:25px;height:25px;display:grid;place-items:center;border:1px solid #e8e5e1;border-radius:5px;color:#8b8794}.move-button svg{width:12px;height:12px}.timeline.is-busy .clip-top{cursor:default}.timeline.is-busy .clip{transform:none}.footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:15px;color:#a09da5;font-size:10px}.footer span{display:flex;align-items:center;gap:6px}.footer svg{width:12px;height:12px}.footer kbd{font:9px inherit;border:1px solid #dfddd7;padding:1px 4px;border-radius:3px;color:#8c8995}.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(15px);padding:11px 18px;background:#2c273bee;color:#faf7ff;border-radius:10px;font-size:12px;box-shadow:0 5px 25px #1e183122;opacity:0;transition:opacity .2s,transform .2s;z-index:30;pointer-events:none;text-align:center;max-width:calc(100% - 30px)}.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+dialog{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:29px;max-width:490px;width:calc(100% - 30px);color:var(--ink);box-shadow:0 20px 80px #27203833}dialog::backdrop{background:#24203677;backdrop-filter:blur(5px)}.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.dialog-head h2{margin:0;font-size:23px;letter-spacing:-.03em}.close-dialog{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#f0eee8}dialog .lead{font-size:12px;line-height:1.9;color:#87818f;margin:13px 0 20px}.help-step{display:flex;gap:12px;margin:16px 0}.help-index{font:12px Consolas,monospace;background:#eeebfb;border-radius:8px;color:#7661bd;width:30px;height:30px;display:grid;place-items:center;flex-shrink:0}.help-step h3{font-size:13px;margin:0 0 4px}.help-step p{font-size:11px;line-height:1.8;color:#8a8593;margin:0}.prototype-note{border-top:1px solid var(--line);padding-top:14px;margin-top:19px;font-size:10px;color:#9a95a0;line-height:1.8}.dialog-play{margin-top:20px;width:100%;justify-content:center;padding:12px}.sr-only{position:absolute;clip:rect(0,0,0,0);clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap}
+@media(min-width:1450px){main{padding-top:28px}.intro{margin-bottom:24px}.editor{margin-top:24px}.clip-preview{height:79px}}
+@media(max-width:1000px){.main-layout{grid-template-columns:minmax(0,1fr) 235px;gap:13px}.mission{padding:15px}.mission h2{font-size:19px}.mission-description{font-size:11px}.mission-feedback{min-height:45px}.world-states{margin:10px 0}.budget{padding:10px 0}.editor-heading span{display:none}.brand small{display:none}.intro h1{font-size:24px}.level-tab{padding:9px}}
+@media(max-width:760px){.topbar{height:59px}.topbar-inner{padding:0 17px}.top-actions{gap:4px}.topbar .badge,.top-divider{display:none}.brand{font-size:15px;gap:8px}.brand-mark{width:29px;height:29px}.quiet-button{font-size:11px;padding:6px}main{padding:20px 16px}.intro{align-items:flex-start;flex-direction:column;gap:16px;margin-bottom:16px}.intro h1{font-size:25px}.intro p{font-size:11px}.levels{width:100%;justify-content:space-between}.level-tab{flex:1;justify-content:center;font-size:11px;padding:9px 5px}.main-layout{display:flex;flex-direction:column;gap:12px}.monitor-top{height:30px;padding:0 11px;font-size:9px}.screen{aspect-ratio:1000/500}.scene-caption{font-size:8px;left:12px;top:10px}.scene-corner{font-size:8px;right:12px;top:10px}.subtitle{font-size:10px;padding:5px 9px;bottom:10px}.monitor-bottom{height:36px;padding:0 10px;gap:8px}.scene-result{top:38px}.scene-result .result-word{font-size:27px}.scene-result p{font-size:9px;margin-top:7px}.mission{padding:15px;display:grid;grid-template-columns:1fr auto;column-gap:15px}.mission-eyebrow{grid-column:1/-1}.mission h2{margin:9px 0 7px;grid-column:1/-1}.mission-description{grid-column:1/-1}.world-states{grid-column:1/-1;margin:10px 0}.budget{grid-column:1/-1;padding:9px 0}.mission-feedback{grid-column:1;min-height:0;margin-top:12px}.mission-bottom{grid-column:2;margin-top:12px;flex-direction:column;align-items:flex-end;justify-content:flex-start;gap:10px}.hint-text{grid-column:1/-1}.editor{margin-top:18px}.editor-head{gap:6px;margin-bottom:12px}.editor-heading h2{font-size:14px}.editor-controls{gap:4px}.reset-button{font-size:10px;padding:5px}.play-button{font-size:11px;min-width:91px;padding:9px 10px}.stop-button{height:31px;width:29px}.timeline{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ruler{display:none}.clip-preview{height:75px}.clip-title{font-size:12px}.clip-effect{font-size:9px;white-space:normal}.clip-body{padding:8px}.footer{align-items:flex-start;line-height:1.7}.footer .keyboard-help{display:none}.time-code{font-size:9px}.transport-label{font-size:10px}.next-button{white-space:nowrap}.clip-top{font-size:8px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+.tool-budget{border-bottom:1px solid var(--line);padding:10px 0;display:flex;align-items:center;justify-content:space-between;grid-column:1/-1;font-size:11px;color:#6b668b}.tool-budget strong{font:12px Consolas,monospace;color:var(--accent)}.tool-guide{display:flex;align-items:center;gap:12px;padding:12px 15px;margin-bottom:12px;background:#eeedf8;border:1px solid #dfdbf1;border-radius:10px;color:#78708e;font-size:11px;line-height:1.7}.tool-heading{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:650;color:#6454ad;white-space:nowrap}.tool-heading svg{width:16px;height:16px}.clip-tags{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 8px;min-height:17px}.clip-tag{display:flex;align-items:center;gap:4px;font-size:9px;padding:3px 6px;border-radius:4px;background:#f0eeea;color:#89838e}.clip-tag svg{width:10px;height:10px}.freeze-tag{background:#e1f2f8;color:#3d809b}.copy-tag{background:#faf0d0;color:#94753e}.clip-tools{margin-top:9px;padding-top:8px;border-top:1px dashed #e2dfe8;min-height:34px;display:flex;align-items:center}.edit-tool{font-size:11px;border:1px solid #d8d0e8;border-radius:6px;padding:6px 9px;display:flex;align-items:center;gap:5px;min-height:29px;background:#faf8ff;color:#706084}.edit-tool svg{width:13px;height:13px}.cut-button{color:#a06955;border-color:#e8d6cc;background:#fff7ef}.copy-button{color:#8b703e;border-color:#e7dcba;background:#fffaf0}.freeze-button[aria-pressed="true"]{background:#dff2fa;border-color:#9dcfdf;color:#32748a}.tool-locked{font-size:9px;color:#aaa3ad;display:flex;align-items:center;gap:4px}.tool-locked svg{width:11px;height:11px}.clip.is-frozen{border-color:#85bacc;box-shadow:0 0 0 2px #9acfe625}.clip.is-pinned .clip-top{cursor:default}.cut-tray{margin-top:12px;border:1px dashed #d7cdc5;border-radius:10px;padding:12px 14px;display:flex;align-items:center;flex-wrap:wrap;gap:12px;background:#f0eeea;font-size:11px;color:#8e8077}.tray-label{display:flex;gap:6px;align-items:center;font-weight:600}.tray-label svg{width:14px;height:14px}.cut-item{display:flex;align-items:center;gap:16px;background:#fffaf3;border:1px solid #ded3c8;padding:7px 9px;border-radius:6px;color:#76665b}.cut-item button{display:flex;align-items:center;gap:4px;font-size:10px;color:#7d67a6}.cut-item button svg{width:12px;height:12px}.tray-empty{font-size:10px;color:#a09890}
+@media(max-width:1000px) and (min-width:761px){.intro{align-items:flex-start}.levels{display:grid;grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.level-tab{padding:9px 5px}.tool-guide{align-items:flex-start;flex-direction:column;gap:4px;padding:10px 12px;font-size:10px}.clip-tools{min-height:38px}.edit-tool{font-size:10px;min-height:30px;padding:6px}.clip-tags{min-height:0}.tool-locked{line-height:1.6}.cut-tray{align-items:flex-start;gap:9px}.cut-item{gap:10px}.tool-budget{grid-column:1/-1}}
+.clip-preview:disabled{opacity:1}
+.levels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}.level-tab{padding:8px 10px;justify-content:center}.tool-budget{flex-direction:column;align-items:stretch;gap:9px}.tool-meter{display:flex;justify-content:space-between;align-items:center;gap:12px}.clip-tools{flex-wrap:wrap;gap:6px}.split-tag{color:#477f86;background:#e3f0ef}.mute-tag{color:#477976;background:#e0edeb}.mute-button[aria-pressed="true"]{color:#3b736e;background:#dbeee9;border-color:#8db8b0}.split-button{color:#447e83;background:#edf7f6;border-color:#b0cdcf}.clip.is-muted{border-color:#83b4ab}.clip-time{font:9px Consolas,monospace;color:#94909a;margin:6px 0 8px}.clip-effect{white-space:normal;min-height:26px;line-height:1.5}.editor-meta{font-size:11px;color:#827d90;margin:-2px 0 12px}.clip-num{font-weight:700}
+@media(max-width:1000px) and (min-width:761px){.intro{align-items:center}.intro h1{font-size:22px}.levels{grid-template-columns:repeat(5,minmax(0,1fr))}.level-tab{font-size:11px;padding:8px 6px;gap:4px}.level-tab svg{display:none}}
+@media(max-width:760px){.levels{grid-template-columns:repeat(5,minmax(0,1fr))}.level-tab{padding:9px 3px;font-size:10px;gap:4px}.level-tab svg{display:none}.level-tab .num{font-size:9px}.editor-meta{font-size:10px;line-height:1.6}.tool-meter{width:100%}.clip-time{font-size:8px}.clip-effect{min-height:28px}.scene-result .result-word{font-size:24px}}
+.level-directory{min-width:0;max-width:680px}.level-progress{font-size:10px;color:#8a8495;text-align:right;margin-bottom:7px}.levels{grid-template-columns:repeat(8,minmax(0,1fr))}.level-tab{padding:8px 7px;gap:5px;font-size:11px}.level-tab svg{display:none}.position-control{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;color:#8a8295;margin-top:9px}.position-select{font:inherit;background:#f5f2f8;color:#72637d;border:1px solid #ded7e6;border-radius:5px;padding:4px 6px;max-width:90px}.position-select:focus-visible{outline:2px solid #a09bff;outline-offset:2px}
+@media(max-width:1000px){.level-directory{width:48%;max-width:none}.levels{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:760px){.level-directory{width:100%}.level-progress{text-align:left}.levels{grid-template-columns:repeat(4,minmax(0,1fr))}.level-tab{font-size:11px}.position-control{font-size:9px}}
+
+/* Four chapters, four lessons each. */
+.level-directory{width:64%;max-width:790px}.levels{padding:0;background:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.chapter-group{background:#eeece7;border:1px solid #e2ded9;border-radius:10px;padding:6px;min-width:0}.chapter-group.current-chapter{background:#efedf8;border-color:#cec6e9}.chapter-heading{display:flex;justify-content:space-between;align-items:center;padding:3px 5px 7px;font-size:11px;color:#766a89;gap:5px}.chapter-heading>span{display:flex;align-items:center;gap:5px}.chapter-heading svg{width:13px;height:13px}.chapter-heading small{font-size:9px;color:#9a92a3}.chapter-levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px}.level-tab{font-size:10px;padding:7px 3px;gap:3px}.chapter-lesson{font-size:10px;color:#83719f;line-height:1.6;margin-top:12px;grid-column:1/-1}.monitor{align-self:start}.chapter-levels .active{box-shadow:0 1px 6px #6c4ea318}.intro h1{font-size:25px}
+@media(max-width:1000px){.intro{flex-direction:column;align-items:stretch}.level-directory{width:100%;max-width:none}.levels{grid-template-columns:repeat(2,minmax(0,1fr))}.level-progress{text-align:left}.level-tab{font-size:11px}}
+@media(max-width:760px){.levels{grid-template-columns:1fr;gap:6px}.chapter-heading{padding-bottom:4px}.level-tab{padding:7px 3px}.chapter-group{padding:5px}.chapter-lesson{margin-top:8px}.chapter-heading small{font-size:10px}}
+.home-screen{padding-top:54px;padding-bottom:32px}.home-kicker{display:flex;align-items:center;gap:10px;font:11px Consolas,monospace;letter-spacing:.18em;color:#85768e}.home-kicker:before{content:"";width:25px;height:1px;background:#b2a3bb}.home-hero{display:grid;grid-template-columns:.85fr 1.35fr;gap:50px;align-items:center;margin:32px 0 45px}.home-copy h1{font-family:"STSong","SimSun",serif;font-size:clamp(42px,4.7vw,64px);letter-spacing:.02em;line-height:1.18;font-weight:600;margin:0 0 24px}.home-copy h1 span{display:block;color:#847194;margin-top:8px}.home-description{font-size:14px;color:#807886;line-height:2;max-width:350px;margin-bottom:28px}.home-buttons{display:flex;flex-direction:column;gap:11px;max-width:310px}.home-primary,.home-secondary{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-radius:11px;font-size:15px;font-weight:650}.home-primary{background:#393044;color:#fff9ee;box-shadow:0 6px 16px #392e4020}.home-primary:hover{background:#50415e}.home-secondary{background:#fffdfa;border:1px solid #dcd5df;color:#64566e}.home-secondary small{font-size:11px;font-weight:400;color:#93879a}.home-continue{font-size:11px;color:#918896;line-height:1.8;margin:13px 0}.home-film{position:relative;border:1px solid #45394f;border-radius:20px;overflow:hidden;background:#2b2537;box-shadow:0 20px 65px #51405d20;transform:rotate(-1deg)}.film-perforations{height:24px;background:repeating-linear-gradient(90deg,#a99da630 0 13px,transparent 13px 28px);background-size:calc(100% - 28px) 8px;background-repeat:no-repeat;background-position:14px center;border-bottom:1px solid #a698b51c}.home-film canvas{display:block;width:100%;aspect-ratio:1000/480}.home-film-label{padding:16px 20px;color:#cfc0da;display:flex;align-items:center;justify-content:space-between;font:10px Consolas,monospace;letter-spacing:.08em}.home-film-label strong{font-size:11px;letter-spacing:.04em;font-family:inherit;color:#edddf4}.home-film-note{position:absolute;right:22px;top:44px;color:#e5d4e7;font-size:10px;letter-spacing:.12em}.home-mechanics{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;border-top:1px solid #ddd7e1;padding-top:26px}.home-mechanic{display:grid;grid-template-columns:34px 1fr;align-items:center;column-gap:12px}.home-mechanic>span{grid-row:span 2;background:#e9e3ee;border-radius:10px;width:34px;height:34px;display:grid;place-items:center;color:#76608b}.home-mechanic svg{width:17px;height:17px}.home-mechanic h2{font-size:13px;margin:0 0 5px}.home-mechanic p{font-size:11px;color:#918696;margin:0}.home-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:35px;font-size:11px;color:#928997}.home-saves{display:flex;gap:23px}.home-saves strong{font:13px Consolas,monospace;color:#62536e;margin-left:8px}.lesson-guide{display:flex;gap:22px;padding:17px 20px;margin-bottom:18px;border:1px solid #dbd5ed;background:#efedf8;border-radius:12px;color:#635581}.lesson-label{font-weight:650;font-size:12px;white-space:nowrap;padding-top:3px}.lesson-guide ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 27px;margin:0;padding-left:17px;font-size:12px;line-height:1.75}.levels.tutorial-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.tutorial-levels .level-tab{justify-content:center;padding:11px 6px}.reverse-button{white-space:nowrap}.clip-actions{flex-wrap:wrap}.home-button{color:#675478}
+@media(max-width:1000px){.home-hero{gap:28px}.home-copy h1{font-size:44px}.home-description{font-size:13px}.lesson-guide{display:block}.lesson-label{display:block;margin-bottom:8px}.lesson-guide ol{display:block}.lesson-guide li+li{margin-top:5px}}
+@media(max-width:680px){.home-screen{padding-top:28px}.home-hero{grid-template-columns:1fr;gap:22px;margin-top:23px;margin-bottom:30px}.home-copy h1{font-size:42px;margin-bottom:18px}.home-copy h1 span{display:inline;margin-left:10px}.home-description{max-width:none;margin-bottom:19px;font-size:13px}.home-buttons{max-width:none}.home-film{transform:none}.home-film-label{padding:12px}.home-mechanics{grid-template-columns:repeat(2,1fr);gap:22px 13px}.home-bottom{align-items:flex-start;flex-direction:column;gap:15px;margin-top:27px}.home-kicker{font-size:9px}.home-primary,.home-secondary{padding:14px 17px}.top-actions{gap:2px}.top-actions .badge,.top-divider{display:none}.home-button{font-size:11px;padding:7px 5px}.levels.tutorial-levels{grid-template-columns:repeat(3,minmax(0,1fr))}.lesson-guide{padding:14px}.clip-actions{gap:6px}.reverse-button{font-size:10px;padding:5px}.scene-result p{font-size:10px;letter-spacing:0;max-width:300px;line-height:1.5}}
+</style>
+<style id="timeline-style">/* A compact sequence workspace. Track width follows clip duration. */
+.nle{--nle-bg:#1d1f23;--nle-panel:#26282d;--nle-line:#393c43;--nle-text:#d1d4dc;--nle-muted:#999fab;--nle-blue:#69a8ff;--track-video-height:118px;--track-fx-height:35px;--ruler-height:34px;position:relative;background:var(--nle-bg);border:1px solid #383b42;border-radius:9px;color:var(--nle-text);overflow:hidden;box-shadow:0 8px 25px #11131b12;margin-top:20px}
+.nle button:focus-visible,.nle article:focus-visible,.nle select:focus-visible,.nle input:focus-visible,.nle [tabindex]:focus-visible{outline:2px solid #8cbcff;outline-offset:-2px}
+.nle .editor-head{min-height:46px;margin:0;padding:8px 14px;border-bottom:1px solid var(--nle-line);background:#282a30;gap:14px}
+.nle .editor-heading{min-width:0;gap:9px;align-self:stretch;position:relative}
+.nle .editor-heading:after{content:"";position:absolute;height:2px;background:var(--nle-blue);left:0;right:0;bottom:-8px}
+.nle .editor-heading h2{font-size:12px;color:#f1f3f7;white-space:nowrap}
+.nle .sequence-icon{display:block;color:#85aef0}.nle .sequence-icon svg{width:16px;height:16px}
+.nle .sequence-name{display:block;font-size:11px;color:#9da3af;max-width:230px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+.nle .editor-controls{gap:8px}.nle .reset-button{color:#b7bcc7;font-size:11px}.nle .stop-button{border-color:#50545e;background:#32353c;color:#e1e5ed;width:30px;height:29px;border-radius:4px}
+.nle .play-button{background:#3d659b;color:#f6f9ff;border:1px solid #587eb3;border-radius:4px;box-shadow:none;min-width:110px;padding:7px 11px;font-size:11px}
+.timeline-toolbar{min-height:44px;display:flex;align-items:center;gap:11px;padding:7px 13px;border-bottom:1px solid var(--nle-line);background:#22242a}
+.timeline-timecode{font:16px Consolas,"SFMono-Regular",monospace;letter-spacing:.04em;color:#83b5ff;white-space:nowrap;min-width:121px}.toolbar-divider{width:1px;height:20px;background:#424650}
+.selection-tool{width:25px;height:25px;display:grid;place-items:center;background:#384861;color:#a0c6ff;border-radius:3px;flex-shrink:0}.selection-tool svg{width:16px;height:16px}
+.selection-summary{font-size:11px;color:#a6adbb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:20px}
+.timeline-zoom{display:flex;align-items:center;gap:7px;font-size:10px;color:#a6adbb;margin-left:auto;flex-shrink:0}.timeline-zoom>button{font-size:18px;width:25px;height:25px;border-radius:3px;color:#c5ccda}.timeline-zoom>button:hover{background:#3b404b}.timeline-zoom input{width:90px;accent-color:#84b3ff;cursor:ew-resize}.timeline-zoom output{font:10px Consolas,monospace;width:35px;text-align:center}.timeline-zoom .fit-timeline{font-size:10px;font-family:inherit;width:auto;padding:4px 9px;border:1px solid #4c515d;border-radius:4px;white-space:nowrap}
+.timeline-workspace{display:grid;grid-template-columns:88px minmax(0,1fr);background:#1b1d21}
+.track-headers{background:#26292f;border-right:1px solid #4a4e58;z-index:3;user-select:none}.ruler-header{height:var(--ruler-height);padding:10px;font-size:10px;color:#8a92a2;border-bottom:1px solid #3b404b}.video-track-header{height:var(--track-video-height);display:flex;flex-direction:column;gap:8px;align-items:flex-start;padding:14px 12px;border-bottom:1px solid #414650}.video-track-header strong,.effects-track-header strong{font:11px Consolas,monospace;display:inline-block;background:#3c5578;color:#a9ccff;border:1px solid #536e95;padding:3px 6px;border-radius:2px}.video-track-header>span{font-size:10px;color:#a5adbb}.video-track-header svg{width:14px;height:14px;color:#6f7c90}.effects-track-header{height:var(--track-fx-height);display:flex;align-items:center;gap:5px;padding:0 8px}.effects-track-header strong{background:#36453d;color:#a4c4ac;border-color:#516759;font-size:9px;padding:2px 4px}.effects-track-header>span{font-size:9px;color:#959fa1;white-space:nowrap}
+.timeline-viewport{overflow-x:auto;overflow-y:hidden;min-width:0;scrollbar-color:#636b7d #24272e;scrollbar-width:thin;overscroll-behavior-x:contain;position:relative}
+.timeline-content{position:relative;min-width:100%;isolation:isolate;padding-bottom:12px}
+.nle .ruler{height:var(--ruler-height);display:block;margin:0;padding:0;border-top:0;border-bottom:1px solid #424752;background:#24272d;color:#9da8bb;position:relative;cursor:ew-resize;touch-action:none;font:10px Consolas,monospace;overflow:hidden}
+.nle .ruler span{position:absolute;padding:0 0 0 5px;top:8px;white-space:nowrap}.nle .ruler span:before{display:none}.ruler-tick{position:absolute;bottom:0;width:1px;height:5px;background:#697284;pointer-events:none}.ruler-tick.major{height:9px;background:#929aab}.ruler-end{height:100%!important;background:#768298!important;opacity:.55}
+.nle .timeline{display:flex;gap:0;height:var(--track-video-height);min-height:0;padding:11px 0;border-bottom:1px solid #414650;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(var(--second-width,56px) - 1px),#34394355 calc(var(--second-width,56px) - 1px),#34394355 var(--second-width,56px));position:relative;align-items:stretch}
+.nle .clip{--clip-tint:#526d98;flex:none;min-width:0;height:94px;background:#354c70;border:1px solid #7285a3;border-radius:3px;overflow:hidden;cursor:grab;transition:border-color .1s,box-shadow .1s;position:relative;box-sizing:border-box;touch-action:pan-x}
+.nle .clip:hover{border-color:#aec7e8;transform:none}.nle .clip.is-selected{border:2px solid #c9ddff;box-shadow:inset 0 0 0 1px #222938;z-index:2}.nle .clip.is-reversed{background:#584a77;border-color:#9a8db9}.nle .clip.is-reversed.is-selected{border-color:#ddd0ff}.nle .clip.is-active{box-shadow:inset 0 0 0 2px #a4cbff;border-color:#e2eeff;z-index:2}.nle .clip.is-failed{border-color:#f6aa89;box-shadow:inset 0 0 0 2px #c97961}.nle .clip.is-frozen:after{content:"";height:3px;position:absolute;bottom:0;left:0;right:0;background:#8fe0ec}.nle .clip.is-pinned{cursor:default}.nle .clip.dragging{opacity:.35;transform:none}.nle .clip.drop-target{box-shadow:inset 4px 0 #ffd88e;border-color:#ffd88e;transform:none}.nle .clip.is-selected.is-reversed.is-active{border-color:#ebdcff}
+.nle .clip-top{height:24px;padding:0 7px;background:#ffffff0b;color:#f0f3fa;cursor:inherit;gap:5px;letter-spacing:0}.nle .clip-top-left{min-width:0;gap:5px;flex:1}.nle .clip-top svg{width:10px;height:10px}.nle .clip-num{font:9px Consolas,monospace;color:#d0d9ed}.nle .clip-title{font-size:11px;color:#f2f5ff;font-weight:500;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nle .clip-top .clip-duration{font:9px Consolas,monospace;color:#d8deea;flex-shrink:0}
+.clip-filmstrip{display:flex;height:44px;overflow:hidden;pointer-events:none;background:#292235}.clip-filmstrip canvas{display:block;width:50%;height:44px;object-fit:cover;opacity:.85;border-right:1px solid #ffffff18}
+.nle .clip-foot{height:23px;display:flex;align-items:center;justify-content:space-between;gap:3px;padding:0 7px;color:#d1dcf0;background:#1a20342e;font:9px Consolas,monospace;white-space:nowrap;overflow:hidden}.nle .clip-direction{font-size:9px;letter-spacing:0;gap:3px;color:#d9e8ff}.nle .clip-direction svg{width:10px;height:10px}.nle .clip-direction.reverse{color:#eee1ff}.nle .clip-mini-tags{display:flex;gap:3px;color:#d9edf2}.clip-mini-tags svg{width:10px;height:10px}
+.effects-track{height:var(--track-fx-height);display:flex;align-items:center;gap:0;background:#202723;border-bottom:1px solid #363e39}.effect-segment{height:23px;display:flex;align-items:center;justify-content:center;gap:5px;flex:none;min-width:0;border:1px solid #4e6455;background:#344d3b;color:#bed5c4;font-size:9px;white-space:nowrap;overflow:hidden}.effect-segment.reversed{background:#494358;border-color:#706782;color:#d2c8e7}.effect-segment.frozen{box-shadow:inset 0 -2px #8ed8e7}.effect-segment svg{width:10px;height:10px;flex-shrink:0}
+.timeline-playhead{position:absolute;top:0;bottom:12px;width:1px;background:#78b3ff;z-index:5;pointer-events:none;left:0;box-shadow:0 0 3px #181a21}.timeline-playhead>i{display:block;width:11px;height:12px;background:#8dc0ff;position:absolute;left:-5px;top:0;clip-path:polygon(0 0,100% 0,100% 55%,50% 100%,0 55%)}
+.clip-inspector{min-height:85px;padding:13px 15px;display:flex;align-items:center;gap:17px;flex-wrap:wrap;border-top:1px solid #414650;background:#292c32}.inspector-description{min-width:170px;flex:1}.inspector-kicker{display:block;font:9px Consolas,monospace;letter-spacing:.08em;color:#8d9ab0;margin-bottom:5px}.inspector-description h3{font-size:12px;color:#edf0f6;font-weight:550;margin:0}.inspector-description p{font-size:11px;line-height:1.5;color:#a4acbb;margin:5px 0 0;max-width:420px}.inspector-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nle .clip-preview{width:auto;height:29px;padding:5px 9px;display:flex;align-items:center;gap:5px;background:#343a45;border:1px solid #535d6d;border-radius:4px;color:#d6dfed;font-size:11px}.nle .clip-preview svg{width:12px;height:12px}
+.nle .clip-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nle .reverse-button{border:1px solid #5c6272;color:#d4dbea;background:#353b46;padding:6px 9px;height:29px;border-radius:4px;font-size:11px}.nle .reverse-button[aria-pressed="true"]{background:#504664;color:#eadfff;border-color:#9c88bb}.nle .move-actions{gap:2px}.nle .move-button{color:#c1cddd;border-color:#515865;background:#333944;width:28px;height:29px;border-radius:3px}.nle .position-control{color:#9fa9b9;margin:0;gap:6px;font-size:10px}.nle .position-select{background:#363b46;color:#d7deeb;border-color:#555d6e;border-radius:4px;padding:5px;max-width:88px;height:29px}.nle .clip-tools{border:0;padding:0;margin:0;min-height:0;gap:6px}.nle .edit-tool{height:29px;min-height:29px;padding:5px 8px;border-radius:4px;background:#343b46;border-color:#566174;color:#c8d5e9;font-size:11px}.nle .cut-button{color:#efbaa0;background:#483b36;border-color:#7f6252}.nle .copy-button{color:#e1d6ad;background:#454237;border-color:#756e57}.nle .freeze-button[aria-pressed="true"]{color:#b7f0ff;background:#354c59;border-color:#69a7b5}.nle .tool-locked{font-size:10px;color:#8d96a5}.inspector-fixed{font-size:10px;color:#a5afbd;display:flex;align-items:center;gap:5px}.inspector-fixed svg{width:12px;height:12px}
+.editor-statusbar{display:flex;justify-content:space-between;gap:12px;padding:8px 14px;border-top:1px solid #3c424d;background:#24272d;color:#8f99aa;font-size:10px;flex-wrap:wrap}.nle .editor-meta{margin:0;color:#a6b1c4;font:10px Consolas,"Microsoft YaHei",monospace}.nle .tool-guide{border:0;border-top:1px solid #39404c;background:#242933;color:#9aa9c1;border-radius:0;margin:0;padding:10px 14px;font-size:10px}.nle .tool-heading{font-size:11px;color:#a7bddf}.nle .tool-heading svg{width:13px;height:13px}
+.nle .cut-tray{margin:0;border:0;border-top:1px solid #47413e;border-radius:0;background:#2c2927;color:#baa696;padding:11px 14px}.nle .cut-item{background:#393330;border:1px solid #62534a;border-radius:4px;color:#cfbba9;padding:5px 8px;font-size:10px}.nle .cut-item button{color:#d3c3ed}.nle .tray-empty{color:#998f88}
+@media(min-width:1450px){.nle{margin-top:20px}}
+@media(max-width:1000px){.nle .sequence-name{max-width:160px}.selection-summary{max-width:180px}.clip-inspector{align-items:flex-start}.inspector-controls{gap:7px}}
+@media(max-width:760px){.nle .editor-head{padding:8px 10px}.nle .sequence-name{display:none}.nle .reset-button{font-size:10px}.nle .play-button{min-width:91px;font-size:10px}.timeline-toolbar{flex-wrap:wrap;padding:8px 10px;gap:8px}.timeline-timecode{font-size:14px;min-width:108px}.timeline-zoom{width:100%;justify-content:flex-end}.timeline-zoom input{flex:1;max-width:none}.timeline-workspace{grid-template-columns:64px minmax(0,1fr)}.video-track-header{padding:12px 8px}.effects-track-header{padding:0 6px;gap:4px}.effects-track-header>span{font-size:8px}.nle .ruler{display:block}.nle .timeline{display:flex;gap:0}.clip-inspector{gap:11px;padding:12px}.inspector-description{width:100%}.inspector-controls{width:100%}.nle .clip-actions{gap:6px}.nle .position-control{font-size:10px}.nle .tool-guide{gap:4px;padding:10px 12px}.editor-statusbar{font-size:9px}.nle .clip-top{font-size:9px}}
+</style>
+<style id="workspace-style">/* The complete editor workspace. Game scenes keep their original art direction. */
+:root{color-scheme:dark;--paper:#17191d;--panel:#24262b;--ink:#d6d9e0;--muted:#9198a6;--line:#393d45;--accent:#79aaff;--accent-soft:#2d3c53;--success:#94cfad;--danger:#efb098;--radius:3px;background:var(--paper);color:var(--ink)}
+body{background:#17191d}button:hover:not(:disabled){filter:brightness(1.12)}button:focus-visible,article:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible{outline:2px solid #8abaff;outline-offset:-2px}button:disabled{opacity:.38}*{scrollbar-color:#626975 #202228;scrollbar-width:thin}
+.topbar{height:38px;background:#1d1f23;border-bottom:1px solid #080a0c}.topbar-inner{max-width:none;padding:0 14px;gap:14px}.brand{font-size:12px;gap:8px;font-weight:650;letter-spacing:.03em}.brand-mark{width:23px;height:23px;border-radius:4px;transform:none;background:#314b70;color:#b3d1ff}.brand-mark svg{width:15px;height:15px}.brand small{display:inline;color:#7e8797;font-size:9px;letter-spacing:.1em;margin-left:3px}.top-actions{gap:9px}.badge{border:0;color:#7f8794;font-size:9px;padding:0 8px}.quiet-button{font-size:10px;color:#aeb5c2;padding:5px 7px;border-radius:3px}.quiet-button svg{width:13px;height:13px}.top-divider{background:#3b3f48;height:15px}
+.workspace-strip{height:36px;border-bottom:1px solid #080a0c;background:#25272c;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 16px;gap:14px;font-size:10px}.project-path{display:flex;align-items:center;gap:7px;min-width:0;color:#9ba4b4}.project-path>span:last-child{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.project-path svg{width:12px;height:12px;color:#8da5c7}.workspace-tabs{align-self:stretch;display:flex;gap:23px}.workspace-tabs button{color:#a2a8b3;padding:0 4px;border-bottom:2px solid transparent;font-size:11px}.workspace-tabs button[aria-pressed="true"]{color:#a6c7ff;border-bottom-color:#80afff}.workspace-format{text-align:right;color:#7c8696;font:9px Consolas,monospace;letter-spacing:.06em}
+#gameScreen{max-width:none;width:100%;height:calc(100dvh - 74px);min-height:672px;margin:0;padding:6px;display:grid;grid-template-columns:222px minmax(0,1fr) 272px;grid-template-rows:minmax(240px,1fr) auto 21px;gap:6px;overflow:hidden}.main-layout{display:contents}
+.panel-title{height:33px;min-height:33px;padding:0 12px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #3b3f47;background:#282b31;color:#c7cfdd;font-size:11px;font-weight:550}.panel-title svg{width:13px;height:13px;color:#8da8cd}.panel-dots{margin-left:auto;font-size:16px;letter-spacing:1px;color:#8f98a8}.intro.project-panel{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;border:1px solid #3b3f47;border-radius:2px;background:#22252a;min-height:0;min-width:0;margin:0;overflow:hidden}.intro h1{font-size:11px;font-weight:550;margin:0;line-height:1.3;letter-spacing:0}.project-info{padding:12px 11px 10px;border-bottom:1px solid #343941}.intro .project-info p{font-size:10px;line-height:1.6;color:#939dad}.project-location{display:flex;align-items:center;gap:6px;margin-top:11px;color:#b5bfcd;font-size:10px}.project-location svg{width:12px;height:12px;color:#82a9df}.level-directory{width:100%;min-width:0;max-width:none;display:flex;flex-direction:column;flex:1;min-height:100px;overflow:hidden}.library-columns{display:flex;justify-content:space-between;padding:6px 12px;background:#262a30;color:#8994a5;font-size:9px;border-bottom:1px solid #3a4049}.levels,.levels.tutorial-levels{display:block;overflow-y:auto;min-height:0;border:0;border-radius:0;background:none;padding:5px 0;gap:0;width:100%;flex:1}.chapter-group{border:0;border-radius:0;background:none;padding:0;margin:0 0 4px;min-width:0}.chapter-group.current-chapter{background:none;border:0}.chapter-heading{margin:0;padding:8px 10px;display:flex;align-items:center;gap:4px;font-size:10px;color:#c0c6d0;cursor:pointer;background:#282c33;border-bottom:1px solid #333941;list-style:none}.chapter-heading::-webkit-details-marker{display:none}.chapter-heading:before{content:"›";font:14px Consolas,monospace;display:inline-block;transition:transform .15s;width:9px;color:#91a0b5}.chapter-group[open]>.chapter-heading:before{transform:rotate(90deg)}.chapter-heading>span{display:flex;align-items:center;gap:5px;white-space:nowrap}.chapter-heading svg{width:11px;height:11px}.chapter-heading small{margin-left:auto;font-size:9px;color:#7e8ca0}.current-chapter>.chapter-heading{color:#b7d2ff;background:#2c3543}.chapter-levels{display:block;padding:3px 0}.level-tab,.tutorial-levels .level-tab{display:flex;align-items:center;gap:7px;width:100%;justify-content:flex-start;border-radius:0;min-height:29px;padding:6px 10px 6px 18px;font-size:10px;color:#abb4c3;box-shadow:none;border-left:2px solid transparent;white-space:nowrap}.level-tab:hover{background:#303640}.level-tab .num{width:16px;flex-shrink:0;color:#7e8ca0;font:9px Consolas,monospace;opacity:1}.level-name{text-align:left;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;flex:1}.level-length{font:9px Consolas,monospace;color:#7d899b}.level-tab.active{background:#34465f;color:#e4edfc;border-left-color:#8ab9ff;box-shadow:none}.level-tab.active .num,.level-tab.active .level-length{color:#b5cceb}.level-tab.done .num{color:#a5cfb7}.level-tab.locked{color:#727c8b}.level-tab.locked .level-length{display:none}.level-tab svg{width:10px;height:10px;opacity:.7}.level-progress{padding:9px 10px;margin:0;border-top:1px solid #3b4049;color:#8e9db3;background:#272b32;text-align:left;font-size:9px}
+.lesson-guide{display:block;flex-shrink:0;max-height:260px;overflow-y:auto;margin:0;padding:12px;border:0;border-top:1px solid #465976;background:#293341;border-radius:0;color:#b2c3dc}.lesson-label{display:block;font-size:11px;margin-bottom:10px;padding:0;color:#bdd7ff}.lesson-guide ol{display:block;padding-left:16px;margin:0;font-size:10px;line-height:1.8}.lesson-guide li+li{margin-top:7px}
+.monitor{grid-column:2;grid-row:1;display:flex;flex-direction:column;min-height:0;min-width:0;align-self:stretch;border:1px solid #414650;border-radius:2px;background:#0b0d10;box-shadow:none}.monitor-top{height:33px;min-height:33px;background:#282b31;padding:0 12px;color:#c0c8d7;font-size:10px;border-bottom:1px solid #383e48;letter-spacing:0}.monitor-label svg{color:#8dadde}.monitor-status{color:#919bad;font-size:9px}.status-dot{background:#78879c}.monitor-status.running{color:#b4d2be}.screen{aspect-ratio:auto;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#0d0f13}.screen canvas{width:100%;height:100%;min-height:0;object-fit:contain}.scene-caption{top:11px;left:13px;color:#c1c8d8;font-size:9px;letter-spacing:.04em}.scene-corner{top:11px;right:13px;font-size:9px;letter-spacing:.06em}.subtitle{font-size:11px;bottom:12px;padding:6px 11px;line-height:1.6;background:#12151ee8;border:1px solid #616c823d;border-radius:3px;box-shadow:none}.scene-result{top:46px}.scene-result .result-word{font-size:30px}.scene-result p{font-size:11px;letter-spacing:0}.monitor-bottom{height:36px;min-height:36px;background:#24282f;padding:0 12px;border-top:1px solid #373e4a;gap:11px}.transport-label{color:#a1adbf;font-size:10px}.mini-progress{background:#414957;height:2px}.mini-progress span{background:#86b6ff}.time-code{color:#a9bbd8;font-size:10px}.speed-button{border:1px solid #465365;background:#313a48;border-radius:3px;color:#b5c9e8;font-size:10px;padding:4px 6px}
+.mission{grid-column:3;grid-row:1;display:flex;min-height:0;min-width:0;padding:0;background:#24272d;border:1px solid #3b414c;border-radius:2px;overflow:hidden}.mission-scroll{flex:1;min-height:0;overflow-y:auto;padding:12px 13px}.mission-eyebrow{font-size:9px;color:#8593aa;letter-spacing:.05em}.mission-eyebrow .take{font-size:9px;color:#8b9ab0}.chapter-lesson{margin-top:9px;font-size:9px;color:#8ca4c9}.mission h2{font-size:16px;margin:8px 0 9px;color:#e0e5ed;letter-spacing:0}.mission-description{font-size:11px;line-height:1.8;color:#a0abba}.world-states{gap:4px;margin:12px 0}.world-chip{font-size:9px;line-height:1.4;padding:4px 5px;border-radius:2px;color:#9eacc1;background:#303741;border:1px solid #3d4654}.world-chip.positive{color:#afd3bd;background:#283d35;border-color:#3c564a}.world-chip.alert{color:#d8b19a;background:#43372e;border-color:#5c493b}.world-chip svg{width:10px;height:10px}.budget{padding:10px 0;border-color:#3b434f;gap:5px}.budget-label{font-size:10px;color:#a2aec0;gap:5px}.budget-label svg{width:12px;height:12px}.budget-dots{gap:4px}.budget-dot{background:#303945;border-color:#63728a;width:10px;height:10px;border-radius:2px}.budget-dot.used{background:#9bc0fb;border-color:#a7cbff;box-shadow:inset 0 0 0 2px #35455e}.budget-count{font-size:10px;color:#9fb7d9;margin-left:3px}.tool-budget{padding:10px 0;gap:8px;border-color:#3b434f}.tool-budget strong{font-size:11px;color:#a6c7fb}.mission-feedback{margin-top:12px;min-height:0;flex:none}.feedback-title{font-size:11px;color:#c3d2e8;margin-bottom:6px}.feedback-title.success{color:#9fd6b5}.feedback-title.failed{color:#efb39a}.feedback-body{font-size:10px;line-height:1.8;color:#9cabc1}.hint-text{background:#2c3a4f;color:#bbd0f0;border:1px solid #455d7c;border-radius:3px;font-size:10px;padding:8px;margin:10px 0 0}.mission-bottom{min-height:44px;flex-shrink:0;padding:8px 10px;margin:0;border-top:1px solid #3c4450;background:#292e36;gap:5px;align-items:center;justify-content:space-between}.hint-button{font-size:10px;color:#9db3d5;gap:4px;padding:4px}.next-button{border:1px solid #6794cf;border-radius:3px;background:#3d6498;color:#edf5ff;font-size:10px;padding:7px 8px;white-space:nowrap;gap:5px}
+#gameScreen .nle{grid-column:2/4;grid-row:2;border-radius:2px;margin:0;box-shadow:none;min-width:0;--track-video-height:90px;--track-fx-height:28px;--ruler-height:28px}.nle .editor-head{min-height:35px;height:35px;padding:4px 11px}.nle .editor-heading:after{bottom:-4px}.nle .editor-heading h2{font-size:11px}.nle .sequence-name{font-size:10px;max-width:330px}.nle .play-button{height:26px;padding:4px 10px;font-size:10px;min-width:97px}.nle .stop-button{width:27px;height:26px}.nle .reset-button{font-size:10px;padding:4px}.timeline-toolbar{min-height:35px;padding:4px 11px}.timeline-timecode{font-size:14px;min-width:113px}.selection-summary{font-size:10px}.timeline-zoom{gap:5px}.timeline-zoom>button{height:23px;width:23px;font-size:16px}.timeline-zoom input{width:75px}.timeline-workspace{grid-template-columns:68px minmax(0,1fr)}.ruler-header{padding:8px;font-size:9px}.video-track-header{padding:10px 8px;gap:7px}.video-track-header>span{font-size:9px}.effects-track-header{padding:0 6px;gap:4px}.effects-track-header>span{font-size:8px}.effects-track-header strong{font-size:8px;padding:2px 3px}.nle .ruler span{top:6px;font-size:9px}.nle .timeline{padding:9px 0}.nle .clip{height:71px}.nle .clip-top{height:20px;padding:0 6px}.nle .clip-title{font-size:10px}.nle .clip-top .clip-duration,.nle .clip-num{font-size:8px}.clip-filmstrip,.clip-filmstrip canvas{height:32px}.nle .clip-foot{height:17px;padding:0 5px}.nle .clip-direction{font-size:8px}.effect-segment{height:20px;font-size:8px;gap:4px}.clip-inspector{min-height:67px;padding:9px 11px;gap:12px}.inspector-description{min-width:150px}.inspector-kicker{font-size:8px;margin-bottom:4px}.inspector-description h3{font-size:11px}.inspector-description p{font-size:10px;margin-top:4px;max-width:320px}.inspector-controls{gap:6px}.nle .clip-preview,.nle .reverse-button,.nle .edit-tool{height:27px;min-height:27px;font-size:10px;padding:4px 7px}.nle .move-button{height:27px;width:25px}.nle .position-select{height:27px;font-size:10px}.nle .clip-actions{gap:6px}.editor-statusbar{padding:6px 11px;min-height:25px;font-size:9px}.nle .editor-meta{font-size:9px}.nle .tool-guide{display:none!important}.nle .cut-tray{padding:7px 11px;font-size:9px;gap:8px}.nle .cut-item{padding:3px 7px;font-size:9px;gap:10px}.nle .cut-item button{font-size:9px}.nle .tray-empty{font-size:9px}.footer{grid-column:1/-1;grid-row:3;margin:0;padding:0 6px;background:#20242a;border-top:1px solid #353c47;color:#77869c;font-size:9px;line-height:1;min-width:0}.footer>span:first-child:before{content:"";width:5px;height:5px;border-radius:50%;background:#7aa892}.footer>span:first-child>span{display:none}.footer kbd{border-color:#424b5b;color:#a1afc4;background:#2a313c;font-size:9px}.toast{border:1px solid #5c7191;border-radius:4px;background:#2e3b4eeF;color:#dce9ff;font-size:11px;padding:10px 14px;bottom:25px;box-shadow:0 5px 25px #0005}
+/* Project center shares the application chrome and panel vocabulary. */
+.home-screen{max-width:1480px;padding:24px 48px 20px;min-height:calc(100dvh - 74px);background:#1b1e23}.home-kicker{font-size:10px;letter-spacing:.12em;color:#8194b2}.home-kicker:before{width:14px;background:#789fda}.home-hero{grid-template-columns:330px minmax(0,1fr);gap:54px;align-items:center;margin:20px 0 22px}.home-project-label{display:flex;align-items:center;gap:7px;color:#91a6c5;font-size:11px;margin-bottom:17px}.home-project-label svg{width:14px;height:14px}.home-copy h1{font-family:inherit;font-size:44px;line-height:1.15;letter-spacing:-.04em;font-weight:650;color:#e0e6ee;margin:0 0 20px}.home-copy h1 span{color:#9abcf2;display:inline;margin:0 0 0 4px}.home-description{font-size:13px;line-height:2;color:#949faf;margin:0 0 25px}.home-buttons{max-width:none;gap:10px}.home-primary,.home-secondary{font-size:12px;padding:13px 15px;border-radius:4px;box-shadow:none}.home-primary{background:#426fa9;color:#f1f6ff;border:1px solid #6290ce}.home-primary:hover{background:#4b7ab6}.home-secondary{background:#2b3038;color:#c2cedf;border-color:#465163}.home-secondary small{font-size:10px;color:#8e9fb6}.home-continue{font-size:10px;color:#75859d;line-height:1.8;margin-top:12px}.home-film{border:1px solid #465064;border-radius:3px;transform:none;box-shadow:0 8px 32px #0002;background:#11151c}.home-preview-header{height:34px;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 12px;background:#2b303a;color:#9eb1d0;font-size:10px;border-bottom:1px solid #424d61}.home-preview-header>span:first-child{display:flex;gap:7px;align-items:center;color:#c4d5f1}.home-preview-header svg{width:13px;height:13px}.film-perforations{display:none}.home-film-note{top:48px;right:14px;color:#a0acc2;font:8px Consolas,monospace;letter-spacing:.1em}.home-film-label{padding:12px 14px;border-top:1px solid #434b5d;background:#272d38;color:#7e93b5;font-size:9px;letter-spacing:.05em}.home-film-label strong{color:#b4cdf4;font-size:10px}.home-mechanics{border:1px solid #363e4c;border-radius:3px;background:#232830;gap:0;padding:0}.home-mechanic{padding:19px 22px;grid-template-columns:29px 1fr;column-gap:11px;border-right:1px solid #3b4350}.home-mechanic:last-child{border-right:0}.home-mechanic>span{background:#303d52;border:1px solid #4c6386;color:#b0c9ef;border-radius:3px;width:29px;height:29px}.home-mechanic svg{width:15px;height:15px}.home-mechanic h2{font-size:11px;color:#cbd5e4;margin-bottom:5px}.home-mechanic p{font-size:10px;color:#8292aa}.home-bottom{margin-top:22px;font-size:10px;color:#73839d}.home-saves{gap:22px}.home-saves strong{font-size:12px;color:#a9c7f5;margin-left:9px}
+dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1dbea;box-shadow:0 20px 80px #0008;padding:24px;max-height:88dvh;overflow-y:auto}dialog::backdrop{background:#070b12bd;backdrop-filter:blur(3px)}.dialog-head h2{font-size:19px;color:#e0e8f5;letter-spacing:0}.close-dialog{border:1px solid #4b596e;border-radius:3px;background:#323d4d;color:#bacbe4}dialog .lead{color:#9faec3;font-size:11px}.help-index{background:#344762;border:1px solid #4b668b;color:#adcaf1;border-radius:3px;font-size:11px;width:27px;height:27px}.help-step h3{font-size:12px;color:#c4d8f4}.help-step p{font-size:11px;color:#93a5c0}.prototype-note{border-color:#424e61;color:#7e91ae;font-size:10px}.dialog-play{background:#426fa9;border:1px solid #6b93ce;border-radius:4px;box-shadow:none;color:#eef5ff}
+@media(min-width:1680px){#gameScreen{grid-template-columns:244px minmax(0,1fr) 296px}.mission-scroll{padding:15px}.mission h2{font-size:18px}.mission-description{font-size:12px}.feedback-body{font-size:11px}.world-chip{font-size:10px}.level-tab{min-height:31px;font-size:11px}.chapter-heading{padding:9px 11px;font-size:11px}.home-screen{padding-top:55px}.home-hero{margin-top:40px;margin-bottom:40px}.home-copy h1{font-size:49px}}
+@media(max-width:1180px) and (min-width:901px){#gameScreen{grid-template-columns:190px minmax(0,1fr) 244px;min-height:715px}.brand small{display:none}.workspace-format{font-size:8px}.level-tab{padding-left:10px}.chapter-heading{font-size:9px;padding-left:7px}.chapter-heading small{display:none}.inspector-controls{gap:4px}.nle .sequence-name{max-width:180px}.home-screen{padding:28px}.home-hero{grid-template-columns:290px minmax(0,1fr);gap:30px}.home-copy h1{font-size:39px}.home-mechanic{padding:17px 14px}}
+@media(max-width:900px){.topbar{height:42px}.topbar-inner{padding:0 11px}.brand small,.badge,.top-divider{display:none}.top-actions{gap:3px}.workspace-strip{height:38px;grid-template-columns:1fr auto;padding:0 11px;gap:8px}.workspace-tabs{gap:12px}.workspace-format{display:none}#gameScreen{height:auto;min-height:0;padding:8px;grid-template-columns:minmax(0,1fr) 235px;grid-template-rows:auto 330px auto auto;overflow:visible;gap:8px}.intro.project-panel{grid-column:1/-1;grid-row:1}.project-info{display:none}.level-directory{min-height:0;max-height:190px}.levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow-y:auto;gap:2px;padding:0}.library-columns{display:none}.chapter-heading{padding:7px;font-size:9px}.chapter-heading small{display:none}.level-tab{font-size:9px;padding:5px 7px;min-height:27px;gap:4px}.level-tab .num{width:12px}.level-length{display:none}.levels.tutorial-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px}.tutorial-levels .level-tab{min-height:29px;padding:5px 8px}.level-progress{padding:6px 10px}.lesson-guide{max-height:none;padding:10px}.lesson-guide ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.lesson-guide li+li{margin:0}.monitor{grid-column:1;grid-row:2}.mission{grid-column:2;grid-row:2;display:flex}.mission-bottom{flex-direction:row;align-items:center;justify-content:space-between;gap:4px}.mission-scroll{padding:10px}.mission-eyebrow,.mission h2,.mission-description,.world-states,.budget,.mission-feedback,.mission-bottom{grid-column:auto}.mission-feedback{margin-top:10px}#gameScreen .nle{grid-column:1/-1;grid-row:3}.footer{grid-column:1/-1;grid-row:4;min-height:25px}.home-screen{min-height:calc(100dvh - 80px);padding:25px}.home-hero{grid-template-columns:270px minmax(0,1fr);gap:25px;margin:25px 0}.home-copy h1{font-size:35px}.home-description{font-size:12px}.home-mechanic{padding:16px 12px;column-gap:8px}.home-mechanic p{font-size:9px}}
+@media(max-width:680px){.topbar-inner{gap:5px}.brand{font-size:11px;gap:6px}.quiet-button{font-size:9px;padding:5px}.quiet-button svg{width:12px;height:12px}.project-path{font-size:9px}.workspace-tabs{gap:8px}.workspace-tabs button{font-size:10px}#gameScreen{display:flex;flex-direction:column;padding:7px;gap:8px}.intro.project-panel{flex:none}.levels{grid-template-columns:repeat(2,minmax(0,1fr))}.level-directory{max-height:210px;flex:none}.levels.tutorial-levels{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson-guide ol{display:block}.lesson-guide li+li{margin-top:5px}.monitor{height:auto;flex:none;min-height:0}.screen{aspect-ratio:1000/480;flex:none}.screen canvas{position:absolute;inset:0}.monitor-top{font-size:9px}.monitor-bottom{gap:6px;padding:0 9px}.time-code{font-size:9px}.mission{max-height:none;overflow:visible}.mission-scroll{overflow:visible}.mission h2{font-size:17px}.mission-description{font-size:11px}.world-states{margin:10px 0}.mission-bottom{min-height:43px}.mission-feedback{min-height:0}.nle .sequence-name{display:none}.timeline-toolbar{flex-wrap:wrap}.timeline-zoom{width:100%;gap:7px}.timeline-zoom input{max-width:none;width:auto;flex:1}.selection-summary{max-width:none}.clip-inspector{min-height:0;gap:9px}.inspector-description,.inspector-controls{width:100%}.inspector-description p{max-width:none}.nle .clip-actions{gap:5px}.editor-statusbar{gap:5px}.footer{padding:7px 8px;font-size:8px}.home-screen{padding:23px 17px}.home-hero{grid-template-columns:1fr;gap:23px;margin:24px 0}.home-copy h1{font-size:40px;margin-bottom:18px}.home-copy h1 span{display:inline;margin-left:5px}.home-project-label{margin-bottom:13px}.home-description{font-size:12px;line-height:1.9;margin-bottom:20px}.home-buttons{max-width:none}.home-film-label{padding:11px}.home-mechanics{grid-template-columns:repeat(2,minmax(0,1fr))}.home-mechanic{padding:15px 10px;border-bottom:1px solid #3b4350}.home-mechanic:nth-child(2){border-right:0}.home-mechanic:nth-child(n+3){border-bottom:0}.home-bottom{align-items:flex-start;gap:14px;margin-top:20px}.home-saves{gap:17px}.home-kicker{font-size:9px}}
+
+.home-film canvas{height:min(42dvh,420px);object-fit:contain;aspect-ratio:auto}
+@media(max-width:680px){.home-film canvas{height:auto;aspect-ratio:1000/480}}
+
+/* Direction controls live directly below their clips, with one matching width per clip. */
+#gameScreen .nle{--track-video-height:86px;--track-fx-height:42px}
+.nle .timeline{padding:6px 0}.nle .clip{height:72px}.nle .clip-top{height:26px}.clip-filmstrip,.clip-filmstrip canvas{height:42px}
+.effects-track{background:#202630}.direction-toggle{height:34px;border:1px solid #7086a7;border-radius:3px;background:#334e74;color:#e0edff;cursor:pointer;padding:0 5px;gap:5px;font-size:12px;line-height:1;box-shadow:inset 0 1px #a3c9ff12;transition:background .15s,border-color .15s}.direction-toggle.reversed{background:#584677;color:#f0e7ff;border-color:#a28abd}.direction-toggle:hover:not(:disabled){background:#426593;border-color:#b2d2ff}.direction-toggle.reversed:hover:not(:disabled){background:#70568f;border-color:#dcc2fa}.direction-toggle.is-selected{border-color:#d8e8ff;box-shadow:inset 0 0 0 1px #d8e8ff55}.direction-toggle.frozen{box-shadow:inset 0 -3px #90e6f5}.direction-toggle svg{width:13px;height:13px}.direction-name{flex-shrink:0}.direction-flags{display:flex;align-items:center;gap:3px;min-width:0;overflow:hidden}.direction-flags:empty{display:none}.direction-flags svg{width:11px;height:11px}.direction-toggle:disabled{opacity:.5;cursor:not-allowed;filter:none}
+.nle .editor-meta{white-space:nowrap}.direction-help{margin-left:10px;color:#a9bdd8}
+@media(min-width:901px){
+  .topbar{height:44px}.brand{font-size:15px}.brand-mark{width:28px;height:28px}.brand-mark svg{width:18px;height:18px}.brand small,.badge{font-size:11px}.quiet-button{font-size:12px;min-height:32px;padding:6px 10px}.quiet-button svg{width:15px;height:15px}.top-actions{gap:10px}
+  .workspace-strip{height:42px;font-size:12px}.workspace-tabs button{font-size:14px;padding:0 10px}.workspace-tabs{gap:20px}.project-path svg{width:15px;height:15px}.workspace-format{font-size:11px}
+  #gameScreen{height:calc(100dvh - 86px);min-height:682px;grid-template-columns:246px minmax(0,1fr) 304px;grid-template-rows:minmax(220px,1fr) auto 26px}
+  .panel-title{height:38px;min-height:38px;font-size:14px;padding:0 13px;gap:8px}.panel-title svg{width:16px;height:16px}.intro h1{font-size:14px}.intro .project-info p,.project-location{font-size:12px}.project-location svg{width:15px;height:15px}.library-columns{font-size:11px;padding:7px 12px}.chapter-heading{font-size:12px;min-height:35px;padding:8px 10px}.chapter-heading svg{width:14px;height:14px}.chapter-heading small{font-size:11px}.level-tab,.tutorial-levels .level-tab{font-size:13px;min-height:36px;padding:7px 11px 7px 15px;gap:8px}.level-tab .num{font-size:11px;width:18px}.level-length{font-size:11px}.level-tab svg{width:12px;height:12px}.level-progress{font-size:11px;line-height:1.5;padding:8px 10px}
+  .lesson-guide{max-height:290px;padding:12px}.lesson-label{font-size:14px}.lesson-guide ol{font-size:12px;line-height:1.75}.lesson-guide li+li{margin-top:8px}
+  .monitor-top{height:38px;min-height:38px;font-size:12px}.monitor-label svg{width:16px;height:16px}.monitor-status{font-size:12px}.monitor-bottom{height:40px;min-height:40px}.transport-label{font-size:12px}.transport-label svg{width:15px;height:15px}.time-code{font-size:12px}.speed-button{font-size:13px;min-width:42px;min-height:32px;padding:4px 8px}.scene-caption,.scene-corner{font-size:11px}.subtitle{font-size:14px;padding:7px 13px}.scene-result .result-word{font-size:34px}.scene-result p{font-size:13px}
+  .mission-scroll{padding:13px 14px}.mission-eyebrow,.mission-eyebrow .take,.chapter-lesson{font-size:11px}.mission h2{font-size:21px;line-height:1.4;margin:9px 0 10px}.mission-description{font-size:14px;line-height:1.75;color:#b8c1cf}.world-chip{font-size:12px;padding:5px 6px}.world-chip svg{width:13px;height:13px}.budget-label{font-size:13px}.budget-label svg{width:15px;height:15px}.budget-dots{gap:4px}.budget-dot{width:12px;height:12px}.budget-count{font-size:13px}.tool-budget strong{font-size:13px}.feedback-title{font-size:14px}.feedback-title svg{width:16px;height:16px}.feedback-body{font-size:13px;line-height:1.7;color:#aebdd1}.hint-text{font-size:13px;line-height:1.7}.mission-bottom{min-height:50px;padding:7px 10px}.hint-button{font-size:12px;min-height:34px;padding:5px}.hint-button svg{width:16px;height:16px}.next-button{font-size:13px;min-height:36px;padding:7px 10px}
+  #gameScreen .nle{--ruler-height:30px}.nle .editor-head{height:42px;min-height:42px;padding:5px 12px}.nle .editor-heading{gap:10px;min-width:0}.nle .editor-heading h2{font-size:15px}.nle .sequence-icon svg{width:17px;height:17px}.nle .sequence-name{font-size:12px;max-width:230px;min-width:0}.nle .editor-meta{font-size:12px;color:#adbed7}.nle .editor-controls{gap:8px}.nle .play-button{font-size:14px;min-height:36px;height:36px;min-width:120px;padding:7px 14px}.nle .play-button svg{width:16px;height:16px}.nle .stop-button{height:36px;width:36px}.nle .reset-button{font-size:12px;min-height:34px;padding:6px}.nle .reset-button svg{width:15px;height:15px}
+  .timeline-toolbar{min-height:42px;padding:5px 12px;gap:13px}.timeline-timecode{font-size:18px;min-width:144px}.selection-tool{width:29px;height:29px}.selection-tool svg{width:18px;height:18px}.selection-summary{font-size:13px;max-width:none}.timeline-zoom{font-size:12px;gap:7px}.timeline-zoom>button{width:32px;height:32px;font-size:22px}.timeline-zoom input{width:100px;height:24px}.timeline-zoom output{font-size:12px;width:41px}.timeline-zoom .fit-timeline{font-size:12px;min-height:32px;padding:5px 10px}
+  .timeline-workspace{grid-template-columns:90px minmax(0,1fr)}.ruler-header{font-size:11px;padding:8px 10px}.video-track-header{padding:10px;gap:8px}.video-track-header strong{font-size:12px}.video-track-header>span{font-size:11px}.effects-track-header{padding:0 6px;gap:5px}.effects-track-header strong{font-size:9px;padding:3px}.effects-track-header>span{font-size:11px}.nle .ruler span{font-size:11px;top:7px}.nle .clip-top{padding:0 6px;gap:4px}.nle .clip-title{font-size:13px}.nle .clip-num,.nle .clip-top .clip-duration{font-size:10px}.direction-toggle{height:36px;font-size:13px;padding:0 5px;gap:5px}.direction-toggle svg{width:14px;height:14px}.direction-flags svg{width:12px;height:12px}
+  .clip-inspector{min-height:74px;padding:7px 12px;gap:14px}.inspector-kicker{font-size:11px;margin-bottom:4px}.inspector-description h3{font-size:14px}.inspector-description p{font-size:13px;line-height:1.45;margin-top:4px;max-width:370px;color:#b1bdcf}.inspector-controls{gap:7px}.nle .clip-preview,.nle .edit-tool{min-height:34px;height:34px;font-size:13px;padding:6px 10px}.nle .clip-preview svg,.nle .edit-tool svg{width:15px;height:15px}.nle .move-button{height:34px;width:34px}.nle .move-button svg{width:15px;height:15px}.nle .position-control{font-size:12px;gap:7px}.nle .position-select{height:34px;font-size:13px;max-width:100px;padding:5px 7px}.inspector-fixed,.nle .tool-locked{font-size:12px}.nle .cut-tray{padding:6px 12px;font-size:12px;gap:10px}.nle .cut-item{font-size:12px;padding:3px 7px}.nle .cut-item button{font-size:12px;min-height:26px;padding:2px 4px}.nle .tray-empty{font-size:12px}
+  .footer{font-size:11px;color:#96a8c1;padding:0 8px}.footer kbd{font-size:11px;padding:2px 5px}.toast{font-size:14px;padding:11px 17px;bottom:30px}
+  .home-screen{min-height:calc(100dvh - 86px)}.home-kicker,.home-continue,.home-bottom{font-size:12px}.home-project-label{font-size:13px}.home-description{font-size:15px}.home-primary,.home-secondary{font-size:15px;min-height:48px}.home-secondary small{font-size:12px}.home-preview-header{height:39px;font-size:12px}.home-film-label,.home-film-label strong{font-size:12px}.home-mechanic h2{font-size:14px}.home-mechanic p{font-size:12px}.home-saves strong{font-size:15px}
+  dialog{max-width:580px}.dialog-head h2{font-size:22px}.close-dialog{width:36px;height:36px}dialog .lead,.help-step p{font-size:14px}.help-step h3{font-size:15px}.help-index{font-size:13px;width:33px;height:33px}.prototype-note{font-size:12px}.dialog-play{font-size:15px;min-height:42px}
+}
+@media(min-width:1680px){#gameScreen{grid-template-columns:278px minmax(0,1fr) 336px}.level-tab,.tutorial-levels .level-tab{font-size:14px;min-height:39px}.chapter-heading{font-size:13px}.mission-description{font-size:15px}.feedback-body{font-size:14px}.nle .sequence-name{max-width:310px}.home-continue,.home-bottom{font-size:13px}}
+@media(min-width:901px) and (max-width:1180px){#gameScreen{grid-template-columns:224px minmax(0,1fr) 280px;min-height:735px}.nle .sequence-name{max-width:150px}.nle .editor-meta{display:none}.brand small{display:none}.workspace-format{font-size:10px}.footer .direction-help{display:none}.chapter-heading small{display:none}.selection-summary{max-width:180px}}
+@media(max-width:900px){.nle .editor-meta{display:none}.effects-track-header>span{font-size:9px}.effects-track-header strong{font-size:8px}.effects-track-header{padding:0 4px;gap:3px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><span class="brand-mark" data-icon="film"></span>逃生剪辑师 <small>ESCAPE EDITOR</small></div>
+  <div class="top-actions"><span class="badge">本地项目 · 0.9</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
+</div></header>
+<div class="workspace-strip"><div class="project-path"><span data-icon="film"></span><span id="projectPath">月光归途 / 项目中心</span></div><nav class="workspace-tabs" aria-label="切换工作区"><button id="workspaceHome" aria-pressed="true">项目中心</button><button id="workspaceCampaign" aria-pressed="false">正式剪辑</button><button id="workspaceTutorial" aria-pressed="false">剪辑学堂</button></nav><span class="workspace-format">SEQUENCE · 24 FPS</span></div>
+<main id="homeScreen" class="home-screen" aria-label="游戏开始界面">
+  <div class="home-kicker">PROJECT CENTER / 月光归途</div>
+  <section class="home-hero" aria-labelledby="homeTitle"><div class="home-copy"><div class="home-project-label"><span data-icon="film"></span>项目 01 · 月光归途</div>
+    <h1 id="homeTitle">逃生<span>剪辑师</span></h1>
+    <p class="home-description">小橘困在一卷出错的影片里。<br>拖动镜头，倒转时间。<br>这一次，由你把结局剪好。</p>
+    <div class="home-buttons"><button id="startGame" class="home-primary"><span id="startLabel">开始游戏</span><span data-icon="arrowRight"></span></button><button id="startTutorial" class="home-secondary"><span>新手教学</span><small>6 个短练习 · 随时重温</small></button></div>
+    <p class="home-continue" id="homeContinue">从第一幕开始，剪出属于你的好结局。</p>
+  </div><div class="home-film"><div class="home-preview-header"><span><span data-icon="monitor"></span>项目预览</span><span>月光归途 · 00:18</span></div><span class="home-film-note">SOURCE / MOONLIGHT ARCHIVE</span><canvas id="homeScene" width="1200" height="576" aria-label="正放与倒放交替的月光断桥动画，小橘过桥后又退回起点"></canvas><div class="home-film-label"><span>THE WAY HOME / 00:18</span><strong id="homeDirection">◀◀ 倒放 · 桥梁坍塌</strong></div><div class="film-perforations" aria-hidden="true"></div></div></section>
+  <section class="home-mechanics" aria-label="四种剪辑方式"><div class="home-mechanic"><span data-icon="reverse"></span><h2>倒放</h2><p>让发生的事倒着回来</p></div><div class="home-mechanic"><span data-icon="cut"></span><h2>剪除</h2><p>让一次意外不再发生</p></div><div class="home-mechanic"><span data-icon="freeze"></span><h2>定格</h2><p>让闸门为你多等一镜</p></div><div class="home-mechanic"><span data-icon="copy"></span><h2>复制</h2><p>让有用的行动再来一次</p></div></section>
+  <footer class="home-bottom"><span>四章 · 十六幕 · 一条回家的路</span><div class="home-saves"><span>正式关卡<strong id="homeCampaignProgress">0 / 16</strong></span><span>剪辑学堂<strong id="homeTutorialProgress">0 / 6</strong></span></div></footer>
+</main>
+<main id="gameScreen" class="studio-shell" hidden>
+  <section class="intro project-panel" aria-label="项目与关卡"><div class="panel-title"><span data-icon="film"></span><h1 id="introTitle">项目：月光归途</h1><span class="panel-dots" aria-hidden="true">···</span></div><div class="project-info"><p id="introSubtitle">四章 · 十六个序列</p><div class="project-location"><span data-icon="film"></span><span id="libraryPath">归途 / 正式序列</span></div></div><div class="level-directory"><div class="library-columns"><span>序列名称</span><span>原片</span></div><nav class="levels" id="levels" aria-label="选择关卡"></nav></div><section id="lessonGuide" class="lesson-guide" aria-label="新手操作引导" hidden></section><div class="level-progress" id="levelProgress" aria-live="polite"></div></section>
+  <div class="main-layout">
+    <section class="monitor" aria-label="影片监视器">
+      <div class="monitor-top"><span class="monitor-label"><span data-icon="monitor"></span><span id="monitorLabel">主监视器 / MAIN MONITOR</span></span><span class="monitor-status" id="monitorStatus"><i class="status-dot"></i><span id="statusText">等待剪辑</span></span></div>
+      <div class="screen"><canvas id="scene" width="1000" height="480" aria-label="月光下的断桥，小橘在左岸，钥匙和出口在右岸">动画场景：请使用下方的片段按钮进行剪辑；右侧状态会描述播放结果。</canvas><div class="scene-caption" id="sceneCaption">第一幕 · 月光断桥</div><div class="scene-corner">CAM 01 · 24 FPS</div><div class="scene-result" id="sceneResult" hidden><div class="result-word" id="resultWord"></div><p id="resultLine"></p></div><div class="subtitle" id="subtitle">这座桥，已经断了。</div></div>
+      <div class="monitor-bottom"><span class="transport-label"><span data-icon="film"></span><span id="transportText">剪辑预览</span></span><div class="mini-progress" role="progressbar" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><span id="progressFill"></span></div><span class="time-code" id="timeCode">00:00 / 00:09</span><button class="speed-button" id="speedButton" title="切换播放速度" aria-label="播放速度 1 倍">1×</button></div>
+    </section>
+    <aside class="mission" aria-label="本关目标与状态"><div class="panel-title"><span data-icon="monitor"></span><span>任务与状态</span><span class="panel-dots" aria-hidden="true">···</span></div><div class="mission-scroll">
+      <div class="mission-eyebrow"><span id="missionNumber">CASE 01 / 16</span><span class="take" id="takeCount">TAKE 01</span></div><div class="chapter-lesson" id="chapterLesson"></div><h2 id="missionTitle" tabindex="-1">断桥救猫</h2><p class="mission-description" id="missionDescription"></p><div class="world-states" id="worldStates" aria-live="polite"></div>
+      <div class="budget" id="reverseBudget"><span class="budget-label"><span data-icon="reverse"></span>倒放额度</span><span class="budget-dots" id="budgetDots"></span></div>
+      <div class="tool-budget" id="toolBudget" hidden></div><div class="mission-feedback" aria-live="polite"><p class="feedback-title" id="feedbackTitle"></p><p class="feedback-body" id="feedbackBody"></p></div><p class="hint-text" id="hintText" hidden></p>
+      </div><div class="mission-bottom"><button class="hint-button" id="hintButton"><span data-icon="bulb"></span><span id="hintLabel">给我一点提示</span></button><button class="next-button" id="nextButton" hidden>下一幕<span data-icon="arrowRight"></span></button></div>
+    </aside>
+  </div>
+  <section class="editor nle" aria-labelledby="editorTitle">
+    <div class="editor-head"><div class="editor-heading"><span class="sequence-icon" data-icon="film"></span><h2 id="editorTitle">时间线</h2><span class="sequence-name" id="sequenceName"></span><span class="editor-meta" id="editorMeta"></span></div><div class="editor-controls"><button id="resetButton" class="reset-button"><span data-icon="reset"></span>重置序列</button><button id="stopButton" class="stop-button" aria-label="停止播放，回到剪辑" title="停止 / Esc" disabled><span data-icon="stop"></span></button><button id="playButton" class="play-button"><span data-icon="play"></span><span id="playLabel">放映试试</span></button></div></div>
+    <div class="timeline-toolbar"><output id="timelineTimeCode" class="timeline-timecode" aria-label="时间线当前位置">00:00:00:00</output><span class="toolbar-divider"></span><span class="selection-tool" title="选中片段后拖拽换序"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m5 2 14 12-7 1-3 7z"/></svg></span><span class="selection-summary" id="selectionSummary">选择片段</span><div class="timeline-zoom"><button id="zoomOut" aria-label="缩小时间线" title="缩小">−</button><label class="sr-only" for="timelineZoom">时间线缩放</label><input id="timelineZoom" type="range" min="10" max="200" step="1" value="100"><button id="zoomIn" aria-label="放大时间线" title="放大">+</button><output id="zoomLabel">100%</output><button id="fitTimeline" class="fit-timeline">适配全部</button></div></div>
+    <div class="timeline-workspace"><div class="track-headers" aria-hidden="true"><div class="ruler-header">轨道</div><div class="video-track-header"><strong>V1</strong><span>主画面</span><span data-icon="film"></span></div><div class="effects-track-header"><strong>DIR</strong><span>播放方向</span></div></div><div class="timeline-viewport" id="timelineViewport" tabindex="0" aria-label="时间线滚动区域，可横向滚动"><div class="timeline-content" id="timelineContent"><div class="ruler" id="ruler" role="slider" tabindex="0" aria-label="时间标尺，点击或使用左右方向键预览" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"></div><div class="timeline" id="timeline" aria-label="影片时间线"></div><div class="effects-track" id="effectsTrack" aria-label="各片段的播放方向，点击正放或倒放切换"></div><div class="timeline-playhead" id="timelinePlayhead" aria-hidden="true"><i></i></div></div></div></div>
+    <div id="clipInspector" class="clip-inspector" aria-label="选中片段属性"></div>
+    <div class="tool-guide" id="toolGuide" hidden></div><div class="cut-tray" id="cutTray" aria-label="废片区" hidden></div>
+  </section>
+  <footer class="footer"><span><span data-icon="spark"></span>本地工作区 · 让每一镜通往好结局</span><span class="keyboard-help"><kbd>Space</kbd> 播放 / 暂停 <span style="margin-left:7px"><kbd>←</kbd><kbd>→</kbd> 移动片段</span><span class="direction-help">点击素材下方正放 / 倒放可切换方向</span></span></footer>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。下方的文字说明它会改变什么；预览不影响本关状态。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要留下退潮、完整桥面与畅通道路。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。空格播放或暂停，Esc 停止。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—4 关：倒放，修复环境。第 5—8 关：剪除，让坏事不发生。第 9—12 关：定格，闸门停一镜、角色继续走。第 13—16 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习、变式、综合考核。两种进度独立保存。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>已有障碍要修复，未发生的可以剪掉</h3><p>剪除不会改变关卡初始状态；倒放才会清除已经挡路的障碍。废片可放回，定格可取消，副本可撤销。限时按镜数计算，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关 12 段原片可剪成 13 镜：门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
+<script id="game-campaign">
+(() => {
+  const CHAPTERS = [
+    {id:0,name:'倒转因果',tool:'reverse',mechanic:'倒放',range:'01—04',summary:'环境倒放恢复道路，通路保持畅通直到离开。'},
+    {id:1,name:'删去坏事',tool:'cut',mechanic:'剪除',range:'05—08',summary:'观察初始状态，决定哪些事件不该发生。'},
+    {id:2,name:'借来时间',tool:'freeze',mechanic:'定格',range:'09—12',summary:'闸门只留两镜，定格一镜让角色继续行动。'},
+    {id:3,name:'再来一次',tool:'copy',mechanic:'复制',range:'13—16',summary:'重复有用的动作，组合前三章完成长片。'}
+  ];
+  const stages=['应用','练习','变式','综合考核'];
+  const raw = [
+    {name:'断桥救猫',short:'断桥',order:['exit','cross','bridge'],budget:1,
+      description:'修桥、取钥匙、离开；结尾要保留完整通路。每个镜头都能正放或倒放：倒放取钥匙会归还钥匙、退回左岸。',
+      opening:'这座桥，已经断了。',hints:['过桥之前要先恢复桥梁。','倒放「桥梁坍塌」，再把它移到取钥匙之前。','修桥（倒放） → 过桥取钥匙 → 开门离开。']},
+    {name:'潮水来信',short:'退潮',order:['cross','bridge','exit','tide'],budget:2,flooded:true,
+      description:'仍然只用排序和倒放。潮水会冲散桥梁：先退潮，再让碎片回到桥面。',
+      opening:'水退了，桥才能回来。',hints:['修桥前先停止潮水的冲刷。','两次倒放分别给潮水和断桥。','退潮 → 修桥 → 取钥匙 → 离开。']},
+    {name:'桥头的落石',short:'落石',order:['rocks','cross','tide','bridge','exit'],budget:3,flooded:true,blocked:['rocks'],
+      description:'落石同样是可倒放的环境事件。退潮、修桥，也要清掉桥头落石，才能过桥取钥匙。',
+      opening:'桥面接上了，桥头还挡着石头。',hints:['查看状态栏：水、桥和落石都影响通路。','落石倒放会回到山坡；它与修桥的先后可自行安排。','退潮 → 修桥 → 落石倒放 → 取钥匙 → 离开。']},
+    {name:'把路接起来',short:'通路',order:['cross','branches','bridge','rocks','tide','exit'],budget:4,flooded:true,blocked:['rocks','branches'],
+      description:'倒放章考核。6 段素材，四处环境变化；清理桥头与对岸枯枝，接好完整通路。',
+      opening:'把分散的准备，接成一条回家的路。',hints:['本关仍然只有排序和倒放。','潮水、断桥、落石、枯枝都要恢复；取钥匙在准备之后。','退潮 → 修桥 → 清石 → 收回枯枝 → 取钥匙 → 离开。']},
+    {name:'不必发生的落石',short:'剪除',order:['cross','rocks','branches','bridge','exit'],budget:2,cutBudget:1,blocked:['branches'],
+      description:'新机制：剪除。桥头原本没有落石，播放落石反而封路；把这一镜取出，用倒放修桥、收回枯枝。',
+      opening:'已经存在的障碍要修复，还没发生的坏事可以删掉。',hints:['先分清：枯枝已经挡路，落石还没有掉下来。','倒放额度只够修桥与收回枯枝，剪除「落石封路」。','剪除落石；修桥 → 收回枯枝 → 取钥匙 → 离开。']},
+    {name:'剪掉两次意外',short:'双剪',order:['branches','cross','bridge','rocks','tide','exit'],budget:2,cutBudget:2,flooded:true,
+      description:'练习剪除。两处道路原本畅通，落石和枯枝却会随后落下。剪掉这两次意外，留下退潮与修桥。',
+      opening:'这次，有两件坏事不必发生。',hints:['落石、枯枝的初始状态都畅通。','两次倒放留给潮水和桥梁，两次剪除留给落石和枯枝。','剪除落石、枯枝；退潮 → 修桥 → 取钥匙 → 离开。']},
+    {name:'留下需要修复的',short:'取舍',order:['crate','cross','branches','rocks','bridge','tide','exit'],budget:3,cutBudget:2,flooded:true,blocked:['rocks'],
+      description:'落石已经挡路，不能靠删除它的镜头消除。枯枝和木箱尚未落下：分清要修复的状态与要剪掉的事件。',
+      opening:'剪掉镜头，不等于改写初始状态。',hints:['剪除保留关卡开始时的状态；落石本来就在那里。','倒放落石，剪掉枯枝和木箱。','剪除枯枝、木箱；退潮 → 修桥 → 清石 → 取钥匙 → 离开。']},
+    {name:'两段坍塌之间',short:'取舍考核',order:['cross','aftershock','crate','branches','bridge','rocks','tide','exit'],budget:4,cutBudget:2,flooded:true,blocked:['rocks','branches'],
+      description:'剪除章考核。8 段原片、两次剪除；两段坍塌影响同一座桥，保留一段修复，剪去另一段与落箱。',
+      opening:'两段桥梁镜头，只需要一段修复。',hints:['桥梁坍塌与桥梁再塌改变的是同一座桥。','剪除木箱和一段坍塌；另一段坍塌倒放。','剪除木箱、桥梁再塌；退潮 → 修桥 → 清石 → 收回枯枝 → 取钥匙 → 离开。']},
+    {name:'借来一镜',short:'定格',order:['shutter','unlock','cross','entry','bridge','exit'],budget:2,freezeBudget:1,shutter:true,doorSequence:true,
+      description:'新机制：定格。开闸后要进门、转钥匙、离开，共三镜；闸门只留两镜，给进门或转钥匙夹上定格夹。',
+      opening:'让闸门停一镜，让小橘继续走。',hints:['先修桥取钥匙，再开闸；暂停放映不会增加闸门时间。','「走进闸门」或「转动钥匙」可定格，其中一镜不扣闸门计时。','修桥 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+    {name:'潮声之外的两镜',short:'窗口',order:['entry','shutter','tide','cross','unlock','bridge','exit'],budget:3,freezeBudget:1,flooded:true,shutter:true,doorSequence:true,
+      description:'练习定格。把退潮、修桥和取钥匙放在开闸前，只让门内行动占用窗口；定格可夹在两个行动之一。',
+      opening:'准备在门外完成，把时间留给门内。',hints:['开闸越早，越多准备镜头会消耗它的时间。','先退潮、修桥、取钥匙，最后处理开闸后的三镜。','退潮 → 修桥 → 取钥匙 → 开闸 → 进门 → 转钥匙（定格） → 离开。']},
+    {name:'剪一镜，留一镜',short:'删与停',order:['rocks','unlock','entry','cross','shutter','bridge','tide','exit'],budget:3,cutBudget:1,freezeBudget:1,flooded:true,shutter:true,doorSequence:true,
+      description:'组合已经学过的剪除与定格。桥头原本畅通，剪掉落石镜头；门内三个必需行动不能剪，只能借来一镜。',
+      opening:'坏事可以剪掉，必需的行动要留下。',hints:['落石镜头可以剪；进门、转钥匙和离开都是必需行动。','用剪除保护通路，用定格延长门内窗口。','剪除落石；退潮 → 修桥 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+    {name:'门外准备，门内从容',short:'时间考核',order:['unlock','branches','rocks','entry','shutter','cross','tide','bridge','exit'],budget:4,cutBudget:1,freezeBudget:1,flooded:true,blocked:['branches'],shutter:true,doorSequence:true,
+      description:'定格章考核。9 段原片；枯枝需要倒放、落石应该剪除。把全部准备留在开闸前，再用定格通过门内三镜。',
+      opening:'长片也能分成准备与通过两个部分。',hints:['门外完成退潮、修桥、收回枯枝、取钥匙。','剪除落石，定格只留给进门或转钥匙。','剪除落石；退潮 → 修桥 → 收回枯枝 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+    {name:'再叫一次',short:'复制',order:['bell','unlock','rocks','cross','entry','shutter','bridge','exit'],budget:2,cutBudget:1,freezeBudget:1,copyBudget:1,guard:true,ringsRequired:2,shutter:true,doorSequence:true,
+      description:'新机制：复制。门卫听到两声铃才放行，原片只有一声。复制摇铃动作；取钥匙副本不会产生另一把钥匙。',
+      opening:'一声不够，就让这个动作再发生一次。',hints:['复制增加行动次数，不增加物品数量。','复制门铃；提前叫醒门卫，再开闸通过。其余操作沿用前三章。','剪除落石、复制门铃；修桥 → 取钥匙 → 两声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+    {name:'第三声的回应',short:'三声',order:['unlock','bell','cross','rocks','tide','shutter','entry','bridge','exit'],budget:3,cutBudget:1,freezeBudget:1,copyBudget:2,guard:true,ringsRequired:3,flooded:true,shutter:true,doorSequence:true,
+      description:'练习复制。今天门卫需要三声铃：两枚复制券都用在门铃上，三个实例独立排序。开闸前先把门卫叫醒。',
+      opening:'看清目标次数，再决定复制几次。',hints:['状态栏明确显示本关要听到 3 声铃。','原片一声，加两个副本，共三声；都安排在开闸前。','剪除落石；退潮 → 修桥 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+    {name:'把回声放在门外',short:'回声位置',order:['shutter','bell','branches','unlock','rocks','entry','cross','bridge','tide','exit'],budget:4,cutBudget:1,freezeBudget:1,copyBudget:2,guard:true,ringsRequired:3,flooded:true,blocked:['branches'],shutter:true,doorSequence:true,
+      description:'复制变式。11 镜成片里，铃声插入门内会占用窗口。将三声铃与环境准备放在开闸前，保护定格得到的一镜。',
+      opening:'重复什么很重要，放在哪里也一样重要。',hints:['副本和原片一样会消耗闸门镜数。','三声铃全部放在开闸前；两段门内行动只有一枚定格夹。','剪除落石；退潮 → 修桥 → 收回枯枝 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+    {name:'天亮之前',short:'最终剪辑',order:['shutter','bell','aftershock','unlock','crate','entry','cross','branches','rocks','bridge','tide','exit'],budget:6,cutBudget:1,freezeBudget:1,copyBudget:2,guard:true,ringsRequired:3,flooded:true,blocked:['rocks','branches','crate'],shutter:true,doorSequence:true,
+      description:'最终考核：12 段原片，用倒放修路、剪除重复坍塌、定格门内行动、复制两次门铃，完成 13 镜归途。',
+      opening:'四种本领，这次一起把小橘送回家。',hints:['先分成环境准备、叫醒门卫、门内通行三组。','保留一段坍塌倒放，剪掉另一段；三声铃放在开闸前，门内行动定格一镜。','剪除桥梁再塌；退潮 → 修桥 → 清石 → 收回枯枝 → 收回木箱 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']}
+  ];
+  const LEVELS=raw.map((data,id)=>{
+    const chapter=CHAPTERS[Math.floor(id/4)],stage=stages[id%4];
+    return {id,flooded:false,shutter:false,fixedLast:id>=4?'exit':undefined,...data,description:data.description.replace('新机制：','本章机制：'),chapter:chapter.id,stage,newMechanic:false,
+      caption:'第 '+(id+1)+' 幕 · '+chapter.name+' / '+stage,tool:chapter.tool,toolName:chapter.mechanic,
+      toolHelp:data.description.replace('新机制：','本章机制：'),required:['cross','entry','unlock','bell','exit'],
+      freezable:data.freezeBudget?['entry','unlock']:[],copyable:data.copyBudget?['bell','cross']:[],
+      timeoutHelp:'开闸后只有两镜。把准备与铃声安排在开闸前，给「走进闸门」或「转动钥匙」定格，再离开。'};
+  });
+  const lessons=[
+    {name:'先后，决定结局',short:'排序',tool:'forward',toolName:'排序与放映',order:['exit','cross'],budget:2,initialBridge:true,
+      description:'桥已经完好。把「过桥取钥匙」放到「开门离开」之前，再点击「放映试试」。',opening:'第一课：让事情按合理的顺序发生。',
+      steps:['双击时间线中的片段，先预览一段素材。','拖拽片段，或选中后用属性栏左右按钮，把取钥匙排在离开前。','点击放映，观察钥匙和角色的位置。'],hints:['离开需要钥匙。','先过桥取钥匙，再开门离开。'],lessonSuccess:'排序改变因果。接下来试试倒转环境。'},
+    {name:'把断桥倒回完整',short:'环境倒放',tool:'reverse',toolName:'环境倒放',order:['bridge','cross','exit'],budget:3,
+      description:'点击「桥梁坍塌」正下方的「正放」按钮，将它切换为倒放。观察木板如何重新拼合，再让小橘过桥。',opening:'同一个镜头，可以讲两种故事。',
+      steps:['先预览桥梁坍塌的正放。','点击素材下方「正放」切换为「倒放」，再预览木板回到桥面。','保留修桥 → 取钥匙 → 离开的顺序，完整放映。'],hints:['桥梁正放会坍塌，倒放会修复。','只把桥梁改成倒放，两个角色动作保持正放。'],lessonSuccess:'环境可以修复，角色的行动也可以倒回。'},
+    {name:'让小橘倒着回来',short:'行动倒放',tool:'reverse',toolName:'行动倒放',order:['cross','exit'],budget:2,initialBridge:true,goal:'rewind',initial:{cat:'escaped',escaped:true,key:true,gateOpen:true},
+      description:'这次从「已经离开」开始。倒放离开让小橘退回右岸，再倒放取钥匙：先归还钥匙，再退回左岸。',opening:'这一课的目标，是回到出发之前。',
+      steps:['将「开门离开」移到第一段，并切换到倒放。','把「过桥取钥匙」也切换为倒放。','放映后，小橘要在左岸，钥匙要回到右岸。'],hints:['先从出口退回，才能归还钥匙。','离开（倒放） → 取钥匙（倒放）。这课不要求逃生。'],lessonSuccess:'行动倒放会撤回结果，也需要正确的起点。'},
+    {name:'删去这次意外',short:'剪除',tool:'cut',toolName:'剪除',order:['rocks','cross','exit'],budget:3,cutBudget:1,initialBridge:true,goal:'cut',
+      description:'桥头原本畅通。用「剪除」取出落石镜头，让小橘直接取钥匙并离开。',opening:'不必发生的坏事，可以从影片里取走。',
+      steps:['选中落石片段，在下方属性栏点击「剪除」。','废片区可以放回镜头，试一次后再剪除。','让取钥匙与离开按顺序放映。'],hints:['本课需要实际使用剪除。','剪除落石 → 取钥匙 → 离开。'],lessonSuccess:'剪除不会清除初始障碍，但能阻止尚未发生的坏事。'},
+    {name:'让闸门多等一镜',short:'定格',tool:'freeze',toolName:'定格',order:['unlock','entry','shutter','exit'],budget:4,freezeBudget:1,initialBridge:true,shutter:true,doorSequence:true,initial:{cat:'right',key:true},
+      description:'小橘已持钥匙到达右岸。倒放落锁打开闸门，再进门、转钥匙、离开；给进门或转钥匙定格一镜。',opening:'闸门只等两镜，但小橘需要做三个动作。',
+      steps:['把「出口落锁」排到第一段，切换成倒放。','按进门 → 转钥匙 → 离开排序。','在进门或转钥匙上使用定格，再放映。'],hints:['定格只停闸门计时，不停小橘的动作。','开闸 → 进门（定格） → 转钥匙 → 离开。'],lessonSuccess:'暂停与倍速不改变闸门计时，定格才会借来一镜。'},
+    {name:'把有用的一声再放一次',short:'复制',tool:'copy',toolName:'复制',order:['bell','cross','exit'],budget:4,copyBudget:1,initialBridge:true,guard:true,ringsRequired:2,
+      description:'门卫需要两声铃才放行。复制「摇响门铃」，让原片和副本都正放，再取钥匙离开。',opening:'复制的是一次行动，方向由你决定。',
+      steps:['复制一份门铃，让时间线出现四段。','原片和副本都用正放；倒放会收回一声铃。','放映两声铃 → 取钥匙 → 离开。'],hints:['原片一声 + 副本一声 = 两声。','门铃 → 门铃副本 → 取钥匙 → 离开。'],lessonSuccess:'六课完成！现在可以进入四章正式挑战，按每四关一种机制继续练习。'}
+  ];
+  const TUTORIALS=lessons.map((data,id)=>({id,tutorial:true,flooded:false,shutter:false,chapter:-1,stage:'新手练习',newMechanic:true,required:['cross','entry','unlock','bell','exit'],freezable:['entry','unlock'],copyable:['bell','cross'],...data,caption:'剪辑学堂 · '+(id+1)+' / '+lessons.length,toolHelp:data.description}));
+  globalThis.EscapeCampaign={CHAPTERS,LEVELS,TUTORIALS};
+})();
+</script>
+<script id="game-rules">
+'use strict';
+(() => {
+  const CLIPS = {
+    bridge: { id:'bridge', name:'桥梁坍塌', category:'环境', reversible:true, color:'#e6dff5', forward:'完好的桥 → 断桥', backward:'断桥 → 完好的桥', duration:3 },
+    aftershock: {id:'aftershock',kind:'bridge',name:'桥梁再塌',category:'环境',reversible:true,color:'#e6dff5',forward:'同一座桥再次坍塌',backward:'修复同一座桥',duration:3},
+    rocks: {id:'rocks',name:'落石封路',category:'环境',reversible:true,color:'#dedfe8',forward:'落石挡住桥头',backward:'落石回到山坡，桥头畅通',duration:3},
+    branches: {id:'branches',name:'枯枝坠落',category:'环境',reversible:true,color:'#e6ded3',forward:'枯枝挡住对岸通路',backward:'枯枝回到树上，通路畅通',duration:3},
+    crate: {id:'crate',name:'木箱滑落',category:'环境',reversible:true,color:'#e8dccb',forward:'木箱滑落，堵住门前',backward:'木箱回到高处，门前畅通',duration:3},
+    entry: {id:'entry',name:'走进闸门',category:'行动',reversible:true,color:'#e0e8de',forward:'持钥匙从右岸走进打开的闸门',duration:3},
+    unlock: {id:'unlock',name:'转动钥匙',category:'行动',reversible:true,color:'#f0e3c9',forward:'在闸门内用钥匙解开门锁',duration:3},
+    cross: { id:'cross', name:'过桥取钥匙', category:'行动', reversible:true, color:'#f3e4d5', forward:'通过桥梁，拿到钥匙', duration:3 },
+    exit: { id:'exit', name:'开门离开', category:'行动', reversible:true, color:'#ddebe1', forward:'使用钥匙，安全离开', duration:3 },
+    tide: { id:'tide', name:'潮水上涨', category:'环境', reversible:true, color:'#dce8f0', forward:'水位升高，冲垮桥梁', backward:'潮水退去，露出河岸', duration:3 },
+    shutter: { id:'shutter', name:'出口落锁', category:'环境', reversible:true, color:'#efe1de', forward:'闸门关闭，封住出口', backward:'打开闸门，维持后续 2 段', duration:3 },
+    bell: { id:'bell', name:'摇响门铃', category:'行动', reversible:true, color:'#f4e9bc', forward:'响铃一次，第二次叫醒门卫', duration:3 },
+    lever: {id:'lever',name:'拉闸后松手',category:'复合',reversible:true,color:'#d9e9ea',forward:'先开闸 → 再松手落闸，可切成两段',duration:6,parts:['latch','release']},
+    latch: {id:'latch',name:'拉开闸门',category:'前半段',reversible:true,color:'#d9e9ea',forward:'远程拉杆打开闸门，保持通行',duration:3},
+    release: {id:'release',name:'松手落闸',category:'后半段',reversible:true,color:'#eadbd8',forward:'拉杆松开，闸门再次关闭',duration:3},
+    footsteps: {id:'footsteps',name:'穿过碎石',category:'行动',reversible:true,color:'#e4dfd5',forward:'走到出口前，脚步会惊醒巡逻犬',duration:3},
+    cell: {id:'cell',name:'拾起电池',category:'道具',reversible:true,color:'#d5e9e3',forward:'左岸拾取唯一电池，随小橘携带',duration:3},
+    socket: {id:'socket',name:'接通电源',category:'道具',reversible:true,color:'#d5e9e3',forward:'在右岸装入电池，为闸门供电',duration:3},
+    readcode: {id:'readcode',name:'读取门牌',category:'信息',reversible:true,color:'#e4dff3',forward:'在右岸读出亮着的门牌，记住密码',duration:3},
+    keypad: {id:'keypad',name:'输入密码',category:'行动',reversible:true,color:'#e4dff3',forward:'输入已记住的密码，解开电子锁',duration:3},
+    blackout: {id:'blackout',name:'线路断电',category:'环境',reversible:true,color:'#d8e1ea',forward:'线路断开，灯光熄灭，电动闸门关闭',backward:'恢复线路，让已接入的电池供电',duration:3}
+  };
+  const backwardActions={entry:'从闸门内退回右岸',unlock:'反向转动钥匙，重新锁门',cross:'归还钥匙，沿桥退回左岸',exit:'从出口退回，收回钥匙并关门',bell:'收回一声铃，门卫恢复之前的状态',lever:'倒回松手与拉闸，恢复关闭',latch:'收回拉杆，关闭闸门',release:'倒回松手，重新拉住闸门',footsteps:'沿碎石路退回，撤销通行',cell:'把携带的电池放回左岸',socket:'拔出电池，恢复随身携带',readcode:'倒回读取，忘记门牌密码',keypad:'撤回密码，重新锁住电子锁'};
+  for(const def of Object.values(CLIPS)){def.reversible=true;if(backwardActions[def.id])def.backward=backwardActions[def.id];}
+  const {CHAPTERS,LEVELS,TUTORIALS}=EscapeCampaign;
+  const clipKind=clip=>CLIPS[clip.id]?.kind||clip.id;
+  const ringTarget=level=>level.ringsRequired||2;
+  const hasPower=state=>state.cell==='socket'&&!state.powerFault;
+  const clipDuration=clip=>CLIPS[clip.id].duration;
+  const canCut=(level,clip)=>!!level.cutBudget&&!clip.copyOf&&!(level.required||[]).includes(clip.id)&&(!level.cuttable||level.cuttable.includes(clip.id));
+  function splitClip(clip){
+    return (CLIPS[clip.id]?.parts||[]).map((id,part)=>({id,uid:(clip.uid||clip.id)+'-part-'+part,splitFrom:clip.id,splitUid:clip.uid||clip.id,part,reversed:false,freeze:false,muted:false}));
+  }
+  function initialState(level) { return {bridge:!!level.initialBridge, flooded:!!level.flooded, cat:'left', key:false, escaped:false, gateOpen:false, shutterOpen:!level.shutter||!!level.initialShutterOpen, shutterTicks:0,bellCount:0,cell:'left',quietPass:false,leverPulled:false,powerFault:!!level.initialPowerFault,codeKnown:false,lockReady:false,rocks:(level.blocked||[]).includes('rocks'),branches:(level.blocked||[]).includes('branches'),crate:(level.blocked||[]).includes('crate'),entered:false,doorUnlocked:false,...level.initial}; }
+  function goalReached(level,state,clips=[],removed=[]){
+    if(level.goal==='rewind')return !state.escaped&&state.cat==='left'&&!state.key;
+    if(level.goal==='cut')return state.escaped&&removed.some(c=>c.id==='rocks');
+    return state.escaped;
+  }
+  function validateEdit(level, clips, removed=[]) {
+    const all=[...clips,...removed], groups=new Map(),copies=clips.filter(c=>c.copyOf);
+    if(!clips.length || all.some(c=>!CLIPS[c.id])) return '素材不完整，请重置本关。';
+    for(const c of all.filter(c=>c.splitFrom)){
+      if(!c.splitUid||c.copyOf||!level.order.includes(c.splitFrom)||!CLIPS[c.splitFrom]?.parts?.includes(c.id))return '切片来源不正确，请合回整段或重置。';
+      if(!groups.has(c.splitUid))groups.set(c.splitUid,[]);
+      groups.get(c.splitUid).push(c);
+    }
+    if(groups.size>(level.splitBudget||0))return '切片次数超出额度。';
+    for(const parts of groups.values()){
+      const source=parts[0].splitFrom,expected=CLIPS[source].parts;
+      if(parts.length!==expected.length||parts.some(c=>c.splitFrom!==source)||expected.some((id,i)=>parts.filter(c=>c.id===id&&c.part===i).length!==1))return '前后半镜不完整，请合回整段或重置。';
+    }
+    if(all.some(c=>!c.splitFrom&&!level.order.includes(c.id)))return '这个镜头不属于本关素材。';
+    const originals=[...all.filter(c=>!c.copyOf&&!c.splitFrom),...[...groups.values()].map(parts=>({id:parts[0].splitFrom}))];
+    if(originals.length!==level.order.length || level.order.some(id=>originals.filter(c=>c.id===id).length!==1)) return '原始素材缺失或重复，请重置本关。';
+    if(new Set(all.map(c=>c.uid||c.id)).size!==all.length) return '镜头编号重复，请重置本关。';
+    if(removed.length>(level.cutBudget||0) || removed.some(c=>!canCut(level,c))) return '剪除超出额度，或剪掉了必需镜头。';
+    if(copies.length>(level.copyBudget||0)) return '复制数量超出了本关额度。';
+    for(const copy of copies){
+      const original=clips.find(c=>(c.uid||c.id)===copy.copyOf&&!c.copyOf);
+      if(!original||original.id!==copy.id||!(level.copyable||[]).includes(copy.id)) return '这个镜头不能复制。';
+    }
+    if(clips.filter(c=>c.reversed).length > level.budget) return '当前倒放片段超出了本关额度。';
+    if(clips.filter(c=>c.freeze).length>(level.freezeBudget||0) || clips.some(c=>c.freeze&&!(level.freezable||[]).includes(c.id))) return '定格夹超出额度，或夹在了不适用的镜头上。';
+    if(clips.filter(c=>c.muted).length>(level.muteBudget||0)||clips.some(c=>c.muted&&!(level.muteable||[]).includes(c.id)))return '静音超出额度，或用在没有声音的镜头上。';
+    if(level.fixedFirst&&clips[0].id!==level.fixedFirst) return '固定片头不能移动。';
+    if(level.fixedLast&&clips.at(-1).id!==level.fixedLast) return '离开镜头必须留在片尾。';
+    return null;
+  }
+  function transition(state, clip, level) {
+    const next={...state};
+    const fail=(code,title,message)=>({ok:false,code,title,message,state:{...state}});
+    if(state.escaped&&!(clip.id==='exit'&&clip.reversed)) return fail('already-escaped','小橘已经离开','要继续剪辑这段经历，先倒放「开门离开」，让小橘回到场景。');
+    if(!CLIPS[clip.id]) return fail('unknown','找不到片段','请重新选择本关。');
+    if(clip.freeze&&(!(level.freezeBudget>0)||!(level.freezable||[]).includes(clip.id))) return fail('freeze-unavailable','这里不能使用定格夹','只可在本关指定的行动镜头上定格闸门。');
+    if(clip.muted&&(!(level.muteBudget>0)||!(level.muteable||[]).includes(clip.id)))return fail('mute-unavailable','这一镜不能静音','静音只适用于本关标记了声音的镜头。');
+    switch(clipKind(clip)) {
+      case 'rocks':
+      case 'branches':
+      case 'crate':
+        next[clip.id]=!clip.reversed;
+        break;
+      case 'bridge':
+        if(clip.reversed && state.flooded) return fail('bridge-flooded','潮水还在冲刷桥梁','先让潮水退去，碎片才能重新组成桥。');
+        next.bridge=!!clip.reversed;
+        break;
+      case 'tide':
+        next.flooded=!clip.reversed;
+        if(next.flooded) next.bridge=false;
+        break;
+      case 'cross':
+        if(clip.reversed&&(state.cat!=='right'||!state.key||state.entered))return fail('return-not-ready','还不能归还钥匙','倒放取钥匙要从持钥匙的右岸开始；在闸门内时，先倒放进门退出闸门。');
+        if(state.flooded) return fail('cross-flooded','前面都是水','河岸还被淹着。让潮水退去，再让小橘出发。');
+        if(!state.bridge) return fail('bridge-missing','路在这里断掉了','小橘过不去。试着把修复桥梁的片段放在前面。');
+        if(state.rocks||state.branches)return fail('route-blocked',state.rocks?'桥头被落石挡住了':'对岸被枯枝挡住了','已有障碍需要倒放对应镜头来清除；剪除只会阻止事件发生，不会改变初始状态。');
+        next.cat=clip.reversed?'left':'right'; next.key=!clip.reversed;if(clip.reversed)next.quietPass=false;
+        break;
+      case 'entry':
+        if(clip.reversed&&!state.entered)return fail('entry-not-entered','小橘还没进闸门','先走进闸门，才能倒放这一镜退出门内。可点击素材画面观看独立倒放预览。');
+        if(state.cat!=='right'||!state.key)return fail('entry-not-ready','还没到达闸门前','先过桥拿到钥匙，再走进闸门。');
+        if(state.crate)return fail('crate-blocked','门前被木箱堵住了','先倒放木箱滑落，或者剪掉尚未发生的落箱事件。');
+        if(!state.shutterOpen)return fail('entry-gate-closed','闸门还没有打开','倒放「出口落锁」打开闸门，再走进门内。');
+        next.entered=!clip.reversed;
+        break;
+      case 'unlock':
+        if(clip.reversed&&!state.doorUnlocked)return fail('lock-already-closed','门锁还没打开','先正放转动钥匙解锁，才能倒放重新锁门。');
+        if(!state.entered||!state.key)return fail('unlock-outside','还没走到门内的锁前','先拿钥匙、打开闸门并走进闸门，再转动钥匙。');
+        if(!state.shutterOpen)return fail('unlock-gate-closed','闸门已经落下','给进门或转钥匙的一镜夹上定格夹，让闸门少计一镜。');
+        next.doorUnlocked=!clip.reversed;
+        break;
+      case 'shutter':
+        if(clip.reversed&&level.powered&&!hasPower(state))return fail('power-missing','闸门还没有电','先把电池装进右岸电箱，并确认线路完好，再打开闸门。');
+        next.shutterOpen=!!clip.reversed;
+        next.shutterTicks=clip.reversed&&level.shutterMode!=='permanent'?2:0;
+        break;
+      case 'bell':
+        if(clip.reversed&&!clip.muted&&state.bellCount===0)return fail('bell-empty','还没有铃声可以收回','先有一声铃，倒放才能收回它；铃声次数不会低于零。');
+        if(!clip.reversed&&!clip.muted&&level.echoSensitive&&state.bellCount>=2)return fail('too-loud','第三声铃惊醒了巡逻犬','门卫只需要两声铃。撤销多余的铃声副本，复制额度可以不用满。');
+        if(!clip.muted)next.bellCount=(state.bellCount||0)+(clip.reversed?-1:1);
+        break;
+      case 'lever':
+      case 'latch':
+        if(level.powered&&!hasPower(state))return fail('power-missing','拉杆拉不动无电的闸门','先把电池装进右岸电箱，并确认线路完好，再拉闸。');
+        next.shutterOpen=clip.id==='latch'&&!clip.reversed;next.shutterTicks=0;next.leverPulled=next.shutterOpen;
+        break;
+      case 'release':
+        if(clip.reversed){if(level.powered&&!hasPower(state))return fail('power-missing','闸门还没有电','先接通电源，再倒回松手动作。');next.shutterOpen=true;next.shutterTicks=0;next.leverPulled=true;break;}
+        if(!state.leverPulled)return fail('lever-not-held','还没有拉闸，无法松手','前后半段仍遵循因果。想让闸门保持打开，剪掉松手的后半段。');
+        next.shutterOpen=false;next.shutterTicks=0;next.leverPulled=false;
+        break;
+      case 'footsteps':
+        if(clip.reversed&&!state.quietPass)return fail('path-not-crossed','还没有穿过碎石路','先完成通行，才能倒着退回。');
+        if(state.cat!=='right')return fail('wrong-bank','碎石路在右岸','先修桥并过桥取钥匙，再穿过出口前的碎石路。');
+        if(level.pathNeedsGate&&!state.shutterOpen)return fail('path-gate-closed','碎石路还在闸门后面','先打开闸门，再安静穿过碎石路。限时关要把定格留给门内行动。');
+        if(!clip.muted)return fail('dog-awake','脚步惊醒了巡逻犬','给「穿过碎石」静音：动作继续，脚步声消失。顶部音效开关不会改变关卡规则。');
+        next.quietPass=!clip.reversed;
+        break;
+      case 'cell':
+        if(state.cat!=='left')return fail('cell-left-behind','电池被留在了左岸','把「拾起电池」移到「过桥取钥匙」之前。重试会让电池回到原位。');
+        if(clip.reversed){if(state.cell!=='carried')return fail('cell-not-carried','没有电池可以放回','倒放拾取前，需要在左岸携带电池。');next.cell='left';break;}
+        if(state.cell!=='left')return fail('cell-taken','这里只有一枚电池','电池已经被带走，重复拾取不会产生新的物品。');
+        next.cell='carried';
+        break;
+      case 'socket':
+        if(state.cat!=='right')return fail('socket-wrong-bank','电箱还在河对岸','先携带电池过桥，再接通右岸电源。');
+        if(clip.reversed){if(state.cell!=='socket')return fail('socket-empty','电箱里还没有电池','先把电池装进电箱，才能倒放将它拔出。');next.cell='carried';if(level.powered&&level.shutter){next.shutterOpen=false;next.shutterTicks=0;}break;}
+        if(state.cell!=='carried')return fail('cell-missing','没有携带电池','先在左岸拾起电池；过桥本身只会拿到钥匙。');
+        next.cell='socket';
+        break;
+      case 'blackout':
+        next.powerFault=!clip.reversed;
+        if(next.powerFault&&level.shutter){next.shutterOpen=false;next.shutterTicks=0;}
+        break;
+      case 'readcode':
+        if(clip.reversed){if(!state.codeKnown)return fail('code-not-read','还没有读取密码','只有已经记住的密码才能倒回读取。');next.codeKnown=false;break;}
+        if(state.cat!=='right')return fail('code-wrong-bank','门牌在右岸','先过桥，才能看清门牌上的密码。');
+        if(level.powered&&!hasPower(state))return fail('code-dark','门牌没有亮起来','电池要装进电箱，线路也要完好。先接电并倒放断电镜头，再读取门牌。');
+        next.codeKnown=true;
+        break;
+      case 'keypad':
+        if(clip.reversed){if(state.cat!=='right'||!state.lockReady)return fail('keypad-not-open','电子锁还没打开','先解开电子锁，再倒放撤回密码。');next.lockReady=false;break;}
+        if(state.cat!=='right')return fail('keypad-wrong-bank','电子锁在右岸','先过桥到达电子锁。');
+        if(!state.codeKnown)return fail('code-unknown','还没有记住密码','把「读取门牌」放在「输入密码」之前。钥匙不能代替密码。');
+        if(level.powered&&!hasPower(state))return fail('keypad-dark','电子锁没有电','恢复线路并接入电池，电子锁才能工作。密码记忆仍然保留。');
+        if(level.keypadInside&&(!state.shutterOpen||!state.quietPass))return fail('keypad-outside','还没走到门内的电子锁','先开闸、静音穿过碎石，再输入密码。若闸门时间不够，把定格夹用在这两镜之一。');
+        next.lockReady=true;
+        break;
+      case 'exit':
+        if(clip.reversed){
+          if(!state.escaped)return fail('exit-not-escaped','小橘还没有离开','倒放这一镜会从出口退回。先有离开的结果，才有可以倒回的经历；独立预览可以直接观看。');
+          if(level.shutter&&!state.shutterOpen)return fail('return-gate-closed','闸门挡住了回路','闸门需要保持开启，才能从出口退回。');
+          next.cat='right';next.escaped=false;next.gateOpen=false;next.key=true;next.entered=!!level.doorSequence;break;
+        }
+        if(!state.key || state.cat!=='right') return fail('key-missing','小橘还没拿到钥匙','开门之前，要先过桥拿到右岸的钥匙。');
+        if(state.flooded||!state.bridge||state.rocks||state.branches)return fail('ending-blocked','结尾的通路还没接好','离开时仍要保留退潮、完整桥面和畅通道路。检查环境镜头的最后一次变化，留下完整的归途。');
+        if(state.crate)return fail('crate-blocked','门前被木箱堵住了','清除门前木箱，才能离开。');
+        if(level.doorSequence&&!state.doorUnlocked)return fail('door-locked','门内的锁还没打开','走进闸门并转动钥匙，再离开。定格只停止闸门计时，不会替你完成行动。');
+        if(level.powered&&!hasPower(state))return fail('power-missing','出口还没有供电','携带电池过桥，接通电箱，并恢复断开的线路。');
+        if(level.coded&&!state.lockReady)return fail('code-locked','电子锁还没解开','先读取门牌获得密码，再输入密码解开电子锁。');
+        if(level.dog&&!state.quietPass)return fail('path-blocked','还没有穿过碎石路','取钥匙后，需要静音穿过出口前的碎石路。');
+        if(level.shutter && !state.shutterOpen) return fail('shutter-closed','闸门把出口封住了',level.timeoutHelp|| (level.splitBudget?'复合镜头的后半段会关门。切开它，保留拉闸、剪除松手。':level.initialShutterOpen?'本关闸门原本开着。试着剪除封住出口的落闸镜头。':level.shutterMode==='permanent'?'倒放「出口落锁」，闸门就会保持打开。':level.freezeBudget?'片头开闸后，修桥和取钥匙耗尽了两镜。给其中一镜夹上定格，门就能多等一镜。':'倒放「出口落锁」可以开门；开启后必须在接下来的 2 段内离开。'));
+        if(level.guard && state.bellCount<ringTarget(level)) return fail('guard-asleep','门卫还没有醒来','本关需要 '+ringTarget(level)+' 声铃才会放行。复制「摇响门铃」，而不是复制取钥匙。');
+        next.cat='escaped'; next.escaped=true; next.gateOpen=true;
+        break;
+    }
+    if(level.shutter && level.shutterMode!=='permanent' && clip.id!=='shutter' && state.shutterOpen && !next.escaped && !clip.freeze) {
+      next.shutterTicks=Math.max(0,state.shutterTicks-1);
+      if(next.shutterTicks===0) next.shutterOpen=false;
+    }
+    return {ok:true,state:next};
+  }
+  function previewState(clip,level){
+    const id=clipKind(clip),reverse=!!clip.reversed;
+    const s={...initialState(level),flooded:false,bridge:true,cat:'left',key:false,escaped:false,gateOpen:false,powerFault:false,rocks:false,branches:false,crate:false,entered:false,doorUnlocked:false};
+    if(['rocks','branches','crate'].includes(id))s[id]=reverse;
+    if(id==='bridge')s.bridge=!reverse;
+    if(id==='tide'){s.flooded=reverse;s.bridge=false;}
+    if(id==='cross'&&reverse){s.cat='right';s.key=true;}
+    if(id==='entry'||id==='unlock'){s.cat='right';s.key=true;s.shutterOpen=true;s.shutterTicks=2;s.entered=id==='unlock'||reverse;s.doorUnlocked=id==='unlock'&&reverse;}
+    if(id==='exit'){Object.assign(s,{cat:reverse?'escaped':'right',key:true,escaped:reverse,gateOpen:reverse,shutterOpen:true,shutterTicks:2,bellCount:ringTarget(level),cell:'socket',quietPass:true,codeKnown:true,lockReady:true,entered:!!level.doorSequence,doorUnlocked:true});}
+    if(id==='bell')s.bellCount=reverse?ringTarget(level):0;
+    if(id==='shutter'){s.shutterOpen=!reverse;s.shutterTicks=reverse?0:2;s.cell='socket';}
+    if(['lever','latch','release'].includes(id)){s.cell='socket';s.shutterOpen=id==='release'?!reverse:id==='latch'&&reverse;s.leverPulled=s.shutterOpen;}
+    if(id==='cell')s.cell=reverse?'carried':'left';
+    if(id==='socket'){s.cat='right';s.cell=reverse?'socket':'carried';}
+    if(id==='footsteps'){s.cat='right';s.quietPass=reverse;s.shutterOpen=true;s.shutterTicks=2;}
+    if(id==='readcode'||id==='keypad'){s.cat='right';s.cell='socket';s.codeKnown=id==='keypad'||reverse;s.lockReady=id==='keypad'&&reverse;s.quietPass=true;s.shutterOpen=true;s.shutterTicks=2;}
+    if(id==='blackout'){s.cell='socket';s.powerFault=reverse;}
+    if(clip.freeze){s.shutterOpen=true;s.shutterTicks=2;}
+    return s;
+  }
+  globalThis.EscapeRules={CLIPS,LEVELS,CHAPTERS,TUTORIALS,initialState,goalReached,previewState,validateEdit,transition,clipDuration,canCut,splitClip,hasPower,clipKind,ringTarget};
+})();
+</script>
+<script id="game-renderer">
+(() => {
+  const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+  const mix=(a,b,t)=>a+(b-a)*t;
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  function path(ctx,points,fill,stroke,width=1){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke();}}
+  function roundRect(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();}}
+  function circle(ctx,x,y,r,fill){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();}
+  function line(ctx,points,color,width=1){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();}
+  const stars=Array.from({length:58},(_,i)=>({x:(i*173+57)%1000,y:((i*73+19)%223)+15,r:i%7===0?1.8:.8,a:.2+(i%5)*.11}));
+  function baseVisual(state,level){const catX=state.cat==='left'?207:state.cat==='right'?(state.entered?840:state.quietPass?779:727):868;return {bridge:state.bridge?1:0,water:state.flooded?1:0,catX,catAlpha:state.escaped?0:1,keyAlpha:state.key?0:1,carriedKey:state.key&&!state.escaped?1:0,gate:state.gateOpen?1:0,shutter:state.shutterOpen?0:1,ticks:state.shutterTicks,walk:0,question:false,magic:0,catLook:1,rings:state.bellCount||0,guardOpen:state.bellCount>=EscapeRules.ringTarget(level)?1:0,bellSwing:0,frozen:false,muted:false,dogAlert:false,cellX:state.cell==='left'?174:state.cell==='socket'?688:catX-28,cellY:state.cell==='left'?302:state.cell==='socket'?285:295,power:EscapeRules.hasPower(state)?1:0,quietPass:!!state.quietPass,powerFault:!!state.powerFault,codeKnown:!!state.codeKnown,lockReady:!!state.lockReady,rocks:state.rocks?1:0,branches:state.branches?1:0,crate:state.crate?1:0,doorUnlocked:!!state.doorUnlocked};}
+  function getVisual(state,animation,level){
+    const v=baseVisual(state,level);
+    if(!animation) return v;
+    const {from,to,ok}=animation;const clip={...animation.clip,id:EscapeRules.clipKind(animation.clip)};
+    const p=clamp(animation.progress),s=ease(p),start=baseVisual(from,level),end=baseVisual(to,level);
+    Object.assign(v,start);
+    v.frozen=!!clip.freeze&&from.shutterOpen&&ok;
+    v.muted=!!clip.muted;
+    if(!ok){
+      if(clip.id==='cross'){v.catX=mix(start.catX,from.cat==='left'?292:start.catX,ease(clamp(p*2)));v.walk=p<.5?1:0;}
+      if(clip.id==='bridge') v.magic=Math.sin(p*Math.PI)*.4;
+      v.question=p>.3;
+      v.dogAlert=['dog-awake','too-loud'].includes(animation.error?.code)&&p>.3;
+      return v;
+    }
+    if(['rocks','branches','crate'].includes(clip.id)){
+      v[clip.id]=mix(start[clip.id],end[clip.id],s);
+    }else if(clip.id==='entry'){
+      v.catX=mix(start.catX,end.catX,s);v.walk=p<.95?1:0;
+    }else if(clip.id==='unlock'){
+      v.doorUnlocked=p>.6?end.doorUnlocked:start.doorUnlocked;v.keyTurn=mix(from.doorUnlocked?1:0,to.doorUnlocked?1:0,s);v.turningKey=true;v.magic=Math.sin(p*Math.PI)*.4;
+    }else if(clip.id==='bridge'){
+      v.bridge=mix(start.bridge,end.bridge,s);v.magic=Math.sin(p*Math.PI)*(clip.reversed?1:.2);
+    }else if(clip.id==='tide'){
+      v.water=mix(start.water,end.water,s);
+      if(!clip.reversed)v.bridge=mix(start.bridge,0,s);
+      v.magic=Math.sin(p*Math.PI)*.2;
+    }else if(clip.id==='cross'){
+      v.catX=mix(start.catX,end.catX,ease(clamp(p/.88)));v.walk=p<.88?1:0;
+      if(clip.reversed){v.catX=mix(start.catX,end.catX,ease(clamp((p-.12)/.88)));v.keyAlpha=clamp(p/.13);v.carriedKey=1-clamp(p/.1);v.walk=p>.12&&p<.98?1:0;}
+      else if(from.key){v.keyAlpha=0;v.carriedKey=1;v.walk=0;v.catX=start.catX;}
+      else{v.keyAlpha=1-clamp((p-.82)/.13);v.carriedKey=clamp((p-.86)/.1);}
+    }else if(clip.id==='exit'){
+      const q=clip.reversed?1-p:p,origin=clip.reversed?end:start;
+      v.gate=mix(origin.gate,1,ease(clamp(q/.4)));v.catX=mix(origin.catX,868,ease(clamp((q-.15)/.7)));v.walk=q>.15&&q<.85?1:0;
+      v.catAlpha=1-clamp((q-.77)/.17);v.carriedKey=1-clamp(q/.35);v.magic=Math.sin(p*Math.PI)*.4;
+    }else if(clip.id==='shutter'){
+      v.shutter=mix(start.shutter,end.shutter,s);v.magic=Math.sin(p*Math.PI)*.6;v.ticks=clip.reversed&&p>.6?2:0;
+    }else if(clip.id==='bell'){
+      v.bellSwing=Math.sin((clip.reversed?1-p:p)*Math.PI*8)*Math.sin(p*Math.PI)*.45;
+      v.rings=p>.5?end.rings:start.rings;
+      v.guardOpen=mix(start.guardOpen,end.guardOpen,ease(clamp((p-.4)/.5)));
+    }else if(['lever','latch','release'].includes(clip.id)){
+      const q=clip.reversed?1-p:p;
+      v.shutter=clip.id==='lever'?(q<.5?mix(1,0,ease(q*2)):ease((q-.5)*2)):mix(start.shutter,end.shutter,s);
+    }else if(clip.id==='footsteps'){
+      v.catX=mix(start.catX,end.catX,s);v.walk=p<.95?1:0;
+    }else if(clip.id==='cell'||clip.id==='socket'){
+      v.cellX=mix(start.cellX,end.cellX,s);v.cellY=mix(start.cellY,end.cellY,s)-Math.sin(p*Math.PI)*18;
+      v.power=mix(start.power,end.power,ease(clamp((p-.65)/.35)));
+    }else if(clip.id==='blackout'){
+      v.power=mix(start.power,end.power,s);v.powerFault=p>.5?end.powerFault:start.powerFault;
+    }else if(clip.id==='readcode'){
+      v.codeKnown=p>.6?end.codeKnown:start.codeKnown;
+    }else if(clip.id==='keypad'){
+      v.lockReady=p>.65?end.lockReady:start.lockReady;
+    }
+    if(from.cell==='carried'&&clip.id!=='socket'){v.cellX=v.catX-28;}
+    if(!['shutter','lever','latch','release'].includes(clip.id)&&from.shutterOpen&&!to.shutterOpen){v.shutter=ease(clamp((p-.8)/.2));v.ticks=p>.8?0:from.shutterTicks;}
+    else if(clip.id!=='shutter'){v.ticks=p>.95?to.shutterTicks:from.shutterTicks;}
+    if(p>=1)Object.assign(v,end);
+    return v;
+  }
+  function drawKey(ctx,x,y,scale=1,alpha=1){ctx.save();ctx.globalAlpha*=alpha;ctx.translate(x,y);ctx.scale(scale,scale);ctx.strokeStyle='#f5d283';ctx.fillStyle='#f5d283';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,5,0,Math.PI*2);ctx.stroke();roundRect(ctx,4,-1.7,15,3.4,1,'#f5d283');roundRect(ctx,14,0,3,6,1,'#f5d283');roundRect(ctx,19,0,3,5,1,'#f5d283');ctx.restore();}
+  function drawCat(ctx,x,y,time,walk,alpha=1,question=false){
+    ctx.save();ctx.globalAlpha*=alpha;ctx.translate(x,y);const bob=walk?Math.sin(time*17)*2.5:Math.sin(time*2.1)*.6;ctx.translate(0,bob);
+    ctx.fillStyle='#203a4a44';ctx.beginPath();ctx.ellipse(1,4,25,5,0,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#d88d60';ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-17,-15);ctx.bezierCurveTo(-40,-9,-38,-35+Math.sin(time*3)*3,-30,-33);ctx.stroke();
+    roundRect(ctx,-18,-28,35,30,13,'#e4a06c');
+    const stride=walk?Math.sin(time*17)*5:0;
+    roundRect(ctx,-15+stride,-4,11,10,4,'#e9b584');roundRect(ctx,6-stride,-4,11,10,4,'#f4c999');
+    path(ctx,[[-19,-43],[-21,-61],[-7,-51]],'#efb87f');path(ctx,[[12,-49],[23,-59],[24,-37]],'#efb87f');
+    path(ctx,[[-17,-46],[-18,-56],[-11,-50]],'#d88c78');path(ctx,[[15,-47],[21,-54],[21,-43]],'#d88c78');
+    ctx.beginPath();ctx.ellipse(2,-39,24,20,.08,0,Math.PI*2);ctx.fillStyle='#f1ba80';ctx.fill();
+    ctx.beginPath();ctx.ellipse(12,-32,13,10,0,0,Math.PI*2);ctx.fillStyle='#f7d8aa';ctx.fill();
+    line(ctx,[[-10,-54],[-7,-48]],'#d4915e',3);line(ctx,[[0,-57],[2,-49]],'#d4915e',3);line(ctx,[[10,-55],[11,-49]],'#d4915e',3);
+    const blink=Math.sin(time*.73)>.997;
+    if(blink){line(ctx,[[-2,-39],[2,-39]],'#333345',2);line(ctx,[[15,-39],[19,-39]],'#333345',2);}else{ctx.fillStyle='#333345';ctx.beginPath();ctx.ellipse(0,-40,2.1,3.5,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(17,-40,2.1,3.5,0,0,Math.PI*2);ctx.fill();}
+    path(ctx,[[6,-33],[11,-33],[8.5,-30]],'#a46c69');line(ctx,[[8.5,-30],[8.5,-27],[5,-26]],'#a46c69',1);
+    line(ctx,[[-12,-32],[-27,-34]],'#f7d6ac',1.3);line(ctx,[[-12,-28],[-26,-26]],'#f7d6ac',1.3);line(ctx,[[24,-31],[33,-33]],'#f7d6ac',1.3);
+    roundRect(ctx,-13,-22,32,7,3,'#768bb9');path(ctx,[[-8,-19],[-14,-5],[-1,-9],[1,-19]],'#8aa4cc');
+    if(question){circle(ctx,5,-88,13,'#fff3dc');ctx.font='bold 17px sans-serif';ctx.textAlign='center';ctx.fillStyle='#9e6e59';ctx.fillText('?',5,-82);path(ctx,[[0,-76],[8,-76],[4,-70]],'#fff3dc');}
+    ctx.restore();
+  }
+  function grass(ctx,x,y,s=1,color='#91b6a5'){ctx.save();ctx.translate(x,y);ctx.scale(s,s);line(ctx,[[0,0],[-5,-12]],color,2);line(ctx,[[0,0],[1,-17]],color,2);line(ctx,[[1,0],[7,-10]],color,2);ctx.restore();}
+  function flower(ctx,x,y,time,scale=1){ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(time+x)*.05);ctx.scale(scale,scale);line(ctx,[[0,0],[0,-20]],'#829b8f',2);path(ctx,[[0,-8],[-9,-13],[-5,-5]],'#8eb5a0');circle(ctx,0,-22,4,'#d4bfdc');circle(ctx,-5,-19,4,'#d4bfdc');circle(ctx,5,-19,4,'#d4bfdc');circle(ctx,0,-17,4,'#d4bfdc');circle(ctx,0,-20,2.5,'#f7d99f');ctx.restore();}
+  function lantern(ctx,x,y,t){line(ctx,[[x,y],[x,y-43]],'#7d9090',3);line(ctx,[[x,y-43],[x+18,y-43],[x+18,y-34]],'#7d9090',3);const glow=ctx.createRadialGradient(x+18,y-25,2,x+18,y-25,28);glow.addColorStop(0,'#ffdb9b44');glow.addColorStop(1,'#ffdb9b00');ctx.fillStyle=glow;ctx.fillRect(x-12,y-56,60,60);roundRect(ctx,x+11,y-35,14,20,4,'#e3bd83');roundRect(ctx,x+14,y-32,8,13,2,'#ffe4a9');line(ctx,[[x+9,y-36],[x+27,y-36]],'#7d9090',3);}
+  function drawBellAndGuard(ctx,v,time,level){
+    const target=EscapeRules.ringTarget(level);
+    // A visible bell and an owl gatekeeper make the two-step sound rule readable even when muted.
+    line(ctx,[[260,322],[260,229],[282,229]],'#9c9291',5);
+    ctx.save();ctx.translate(280,234);ctx.rotate(v.bellSwing);
+    line(ctx,[[0,0],[0,8]],'#e1c789',2);
+    path(ctx,[[-14,30],[-10,15],[-6,10],[6,10],[10,15],[14,30]],'#d9b570','#f4d99d',1.5);
+    roundRect(ctx,-17,29,34,5,2,'#edd099');circle(ctx,0,35,4,'#b98e5c');
+    line(ctx,[[0,39],[0,67]],'#c1a386',1.5);circle(ctx,0,69,3,'#d4bb98');
+    if(Math.abs(v.bellSwing)>.07&&!v.muted){
+      for(const side of [-1,1])line(ctx,[[side*22,12],[side*29,18],[side*22,25]],'#fae7ad',2);
+    }
+    ctx.restore();
+    ctx.save();ctx.translate(947,308);
+    const sleepy=v.rings<target,bob=sleepy?Math.sin(time*2)*1.3:0;ctx.translate(0,bob);
+    roundRect(ctx,-22,1,44,8,3,'#a69783');line(ctx,[[-17,9],[-17,17]],'#a69783',3);line(ctx,[[17,9],[17,17]],'#a69783',3);
+    ctx.beginPath();ctx.ellipse(0,-22,23,27,0,0,Math.PI*2);ctx.fillStyle='#b59a87';ctx.fill();
+    path(ctx,[[-20,-33],[-22,-54],[-8,-43],[9,-43],[22,-54],[21,-30]],'#b59a87');
+    circle(ctx,-9,-31,12,'#ead5b9');circle(ctx,10,-31,12,'#ead5b9');
+    if(v.rings===0){line(ctx,[[-15,-31],[-9,-28],[-3,-31]],'#504759',2);line(ctx,[[4,-31],[10,-28],[16,-31]],'#504759',2);}
+    else if(v.rings<target){circle(ctx,-9,-31,3,'#504759');line(ctx,[[4,-31],[10,-28],[16,-31]],'#504759',2);}
+    else{circle(ctx,-9,-31,4,'#504759');circle(ctx,10,-31,4,'#504759');circle(ctx,-10,-32,1,'#fff8de');circle(ctx,9,-32,1,'#fff8de');}
+    path(ctx,[[-4,-23],[5,-23],[.5,-16]],'#d7ab62');
+    line(ctx,[[-16,-13],[-12,-4]],'#8f7a74',4);line(ctx,[[15,-13],[11,-4]],'#8f7a74',4);
+    roundRect(ctx,-17,-16,34,6,3,'#7f93a5');path(ctx,[[3,-12],[8,-1],[15,-4],[11,-14]],'#8fa6b9');
+    ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle=sleepy?'#d6c6e9':'#c8edc7';
+    ctx.fillText(v.rings===0?'Z z':v.rings<target?'嗯…':'请进',0,-65);
+    ctx.restore();
+    roundRect(ctx,906,216,82,19,7,v.rings>=target?'#bdd5bf':'#dbcba9');
+    ctx.font='bold 10px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillStyle='#4d5059';
+    ctx.fillText('铃声 '+Math.min(v.rings,target)+' / '+target,947,229);
+    // The guard lifts a separate barrier; the purple door still requires the key.
+    ctx.save();ctx.translate(826,285);ctx.rotate(-Math.PI/2*v.guardOpen);
+    roundRect(ctx,0,-4,76,8,3,'#b6aa91');for(let i=0;i<5;i++)roundRect(ctx,8+i*14,-4,7,8,1,'#d8cbb0');ctx.restore();
+    roundRect(ctx,822,281,8,41,2,'#8a9190');
+  }
+  function drawFreeze(ctx,v){
+    if(!v.frozen)return;
+    roundRect(ctx,818,205,92,124,10,'#9fe5f81f','#9ce9ff');
+    for(const x of [817,911]){
+      line(ctx,[[x-7,245],[x+7,245]],'#c5f5ff',1.8);line(ctx,[[x,238],[x,252]],'#c5f5ff',1.8);
+      line(ctx,[[x-5,240],[x+5,250]],'#c5f5ff',1.3);line(ctx,[[x-5,250],[x+5,240]],'#c5f5ff',1.3);
+    }
+    roundRect(ctx,806,151,116,24,8,'#c9f0f7');
+    ctx.fillStyle='#30647a';ctx.textAlign='center';ctx.font='bold 11px "Microsoft YaHei",sans-serif';ctx.fillText('定格 · 本镜不计时',864,167);
+  }
+  function drawNewMechanics(ctx,v,time,level){
+    // All three props use the same environment rule: forward blocks, reverse clears.
+    for(const [id,x,name] of [['rocks',303,'桥头落石'],['branches',655,'对岸枯枝'],['crate',783,'门前木箱']]){
+      if(!level.order.includes(id))continue;
+      const amount=v[id],y=mix(245,321,amount);
+      ctx.save();ctx.globalAlpha=.35+.65*amount;
+      if(id==='rocks'){
+        path(ctx,[[x-22,y],[x-26,y-16],[x-11,y-32],[x+9,y-26],[x+23,y-7],[x+17,y+2]],'#8d8a99','#b3adb8',2);
+        line(ctx,[[x-11,y-32],[x-4,y-12],[x+23,y-7]],'#b9b1bc',1.5);
+      }else if(id==='branches'){
+        line(ctx,[[x-27,y-6],[x+23,y-24]],'#b79983',7);
+        line(ctx,[[x-3,y-14],[x-15,y-32]],'#b79983',4);line(ctx,[[x+9,y-19],[x+19,y-7]],'#b79983',4);
+      }else{
+        roundRect(ctx,x-17,y-34,34,33,3,'#ac8d70','#d0b793');
+        line(ctx,[[x-14,y-31],[x+14,y-4]],'#d6bd98',3);line(ctx,[[x+14,y-31],[x-14,y-4]],'#d6bd98',3);
+      }
+      ctx.restore();ctx.font='9px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillStyle=amount>.5?'#f2c7b8':'#c5dfc6';
+      ctx.fillText(name+(amount>.5?' · 挡路':' · 畅通'),x,351);
+    }
+    if(level.doorSequence){
+      roundRect(ctx,826,337,78,19,6,v.doorUnlocked?'#c6dfbe':'#dfcda8');ctx.font='10px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillStyle='#526052';ctx.fillText(v.doorUnlocked?'门内锁已打开':'门内锁未打开',865,350);
+    }
+    if(level.splitBudget){
+      ctx.save();if(level.guard)ctx.translate(-192,0);
+      roundRect(ctx,289,280,26,40,5,'#697c83');circle(ctx,302,291,5,'#c9d9cf');
+      const dx=v.shutter<.5?-14:14;
+      line(ctx,[[302,292],[302+dx,267]],'#d4b89b',4);circle(ctx,302+dx,267,6,v.shutter<.5?'#a9d5b8':'#c7a69b');
+      ctx.font='10px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillStyle='#dce6df';ctx.fillText('远程拉杆',302,251);
+      ctx.restore();
+    }
+    if(level.powered){
+      line(ctx,[[688,305],[688,337],[812,337],[812,270],[831,270]],v.power>.6?'#a4dbbc':'#657580',3);
+      roundRect(ctx,671,268,34,45,5,'#667d83','#b2c8bc');roundRect(ctx,677,277,22,23,3,'#334d56');
+      circle(ctx,698,307,2.5,v.power>.6?'#d0f5a2':'#d29883');
+      ctx.font='10px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillStyle=v.power>.6?'#c7edbb':'#c6c3d1';
+      ctx.fillText(v.power>.6?'电源已接通':v.powerFault?'线路断开':'电箱 · 缺电',688,257);
+      roundRect(ctx,v.cellX-8,v.cellY-13,16,25,3,'#b0dec3','#e0f1d3');roundRect(ctx,v.cellX-4,v.cellY-16,8,3,1,'#e0f1d3');
+      path(ctx,[[v.cellX+1,v.cellY-9],[v.cellX-4,v.cellY+1],[v.cellX,v.cellY+1],[v.cellX-1,v.cellY+8],[v.cellX+5,v.cellY-3],[v.cellX+1,v.cellY-3]],'#4c7c6f');
+    }
+    if(level.dog){
+      for(let i=0;i<8;i++)circle(ctx,750+i*8,328+(i%2)*2,2.4,'#c2b8a8');
+      ctx.save();ctx.translate(956,365);
+      roundRect(ctx,-25,-12,42,19,10,'#a99581');circle(ctx,17,-10,13,'#c0aa8f');
+      path(ctx,[[8,-16],[7,-30],[18,-21]],'#806f68');circle(ctx,28,-10,3,'#463e49');
+      if(v.dogAlert){circle(ctx,19,-14,2.5,'#463e49');ctx.font='bold 18px sans-serif';ctx.fillStyle='#ffd1a8';ctx.fillText('!',4,-36);}
+      else{line(ctx,[[16,-13],[21,-13]],'#554955',2);ctx.font='12px sans-serif';ctx.fillStyle='#d6c8dd';ctx.fillText('z z',1,-30);}
+      ctx.restore();ctx.font='9px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillStyle='#ded3e2';ctx.fillText(level.echoSensitive?'脚步 / 第三声会惊醒':'巡逻犬 · 只听脚步',925,391);
+    }
+    if(level.coded){
+      const lit=!level.powered||v.power>.6;
+      roundRect(ctx,743,204,66,28,5,lit?'#ddd3ed':'#4c465c','#a89cba');
+      ctx.font='bold 16px Consolas,monospace';ctx.textAlign='center';ctx.fillStyle=lit?'#57486b':'#81768e';ctx.fillText(lit?'3142':'····',776,224);
+      ctx.font='9px "Microsoft YaHei",sans-serif';ctx.fillStyle='#ddd4e8';ctx.fillText(v.codeKnown?'密码已记住':'门牌 · 待读取',776,194);
+      roundRect(ctx,760,240,32,34,5,'#6d7086','#c6b8d6');
+      for(let row=0;row<2;row++)for(let col=0;col<3;col++)roundRect(ctx,765+col*7,246+row*7,4,4,1,'#d1c4d9');
+      roundRect(ctx,766,263,20,4,1,v.lockReady?'#b8e8ae':'#d6a3a0');
+      if(v.lockReady){ctx.font='9px "Microsoft YaHei",sans-serif';ctx.fillStyle='#d3f0c8';ctx.fillText('已解锁',776,287);}
+    }
+    if(v.muted){
+      roundRect(ctx,405,181,190,25,8,'#d6e9e8');ctx.fillStyle='#3b6870';ctx.textAlign='center';ctx.font='11px "Microsoft YaHei",sans-serif';ctx.fillText('声轨静音 · 动作保留',500,198);
+    }
+  }
+  function drawScene(canvas,state,animation,time,level,{thumbnail=false}={}) {
+    if(animation?.clip.reversed)time=-time;
+    const ctx=canvas.getContext('2d');if(!ctx)return;
+    const W=canvas.width,H=canvas.height;ctx.setTransform(W/1000,0,0,H/480,0,0);ctx.clearRect(0,0,1000,480);
+    const v=getVisual(state,animation,level);
+    const sky=ctx.createLinearGradient(0,0,0,480);sky.addColorStop(0,'#302941');sky.addColorStop(.55,'#61536e');sky.addColorStop(1,'#9b7b86');ctx.fillStyle=sky;ctx.fillRect(0,0,1000,480);
+    const moonGlow=ctx.createRadialGradient(787,89,13,787,89,140);moonGlow.addColorStop(0,'#e4cbb41a');moonGlow.addColorStop(1,'#e4cbb400');ctx.fillStyle=moonGlow;ctx.fillRect(640,0,300,240);
+    for(const star of stars){ctx.globalAlpha=star.a*(.8+.2*Math.sin(time+star.x));circle(ctx,star.x,star.y,star.r,'#e4d7df');if(star.r>1){line(ctx,[[star.x-3,star.y],[star.x+3,star.y]],'#e4d7df',.7);line(ctx,[[star.x,star.y-3],[star.x,star.y+3]],'#e4d7df',.7);}}ctx.globalAlpha=1;
+    circle(ctx,787,89,31,'#ebd8ba');circle(ctx,777,78,3,'#c9bba866');circle(ctx,799,100,5,'#c9bba844');circle(ctx,776,101,2,'#c9bba866');
+    ctx.fillStyle='#9c829216';ctx.beginPath();ctx.ellipse(210,128,151,13,-.03,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(598,153,132,9,.04,0,Math.PI*2);ctx.fill();
+    path(ctx,[[0,295],[70,257],[131,268],[205,210],[299,252],[354,233],[442,293],[500,250],[566,280],[636,238],[722,264],[815,203],[888,246],[949,231],[1000,265],[1000,480],[0,480]],'#514c67');
+    path(ctx,[[0,329],[90,296],[173,320],[246,269],[335,309],[408,292],[489,330],[554,290],[629,315],[710,277],[793,314],[874,281],[1000,318],[1000,480],[0,480]],'#494c60');
+    for(let i=0;i<9;i++){const x=80+i*107;line(ctx,[[x,290+(i%3)*9],[x,264+(i%3)*9]],'#545369',2);path(ctx,[[x-7,278+(i%3)*9],[x,258+(i%3)*9],[x+7,278+(i%3)*9]],'#545369');}
+    const river=ctx.createLinearGradient(0,310,0,480);river.addColorStop(0,'#6c718a');river.addColorStop(1,'#445f77');ctx.fillStyle=river;ctx.fillRect(0,325,1000,155);
+    for(let i=0;i<16;i++){const y=342+i*9;const x=((i*159+time*9)%1120)-80;line(ctx,[[x,y],[x+22+(i%4)*13,y]],'#aab1c51c',1);}
+    // Two islands keep the route legible while the river and bridge change.
+    path(ctx,[[0,313],[70,309],[140,315],[207,312],[278,318],[334,327],[326,366],[306,379],[312,411],[287,425],[300,480],[0,480]],'#314c59');
+    path(ctx,[[0,336],[104,348],[178,338],[249,352],[326,346],[326,366],[306,379],[312,411],[287,425],[300,480],[0,480]],'#294251');
+    path(ctx,[[610,329],[670,316],[734,319],[796,310],[858,317],[918,306],[1000,309],[1000,480],[646,480],[633,421],[621,405],[626,378]],'#314c59');
+    path(ctx,[[620,351],[704,339],[780,345],[865,334],[937,341],[1000,336],[1000,480],[646,480],[633,421],[621,405],[626,378]],'#294251');
+    path(ctx,[[0,313],[70,309],[140,315],[207,312],[278,318],[334,327],[327,337],[262,330],[206,324],[136,327],[70,321],[0,325]],'#94b4a7');
+    path(ctx,[[610,329],[670,316],[734,319],[796,310],[858,317],[918,306],[1000,309],[1000,323],[918,319],[859,330],[796,323],[735,331],[670,328],[617,341]],'#94b4a7');
+    for(const [x,y,w] of [[38,365,35],[153,385,48],[226,350,25],[254,431,34],[81,437,47],[668,365,35],[755,407,30],[842,363,48],[922,437,35]]){line(ctx,[[x,y],[x+w,y-4]],'#41616b',3);line(ctx,[[x+w*.6,y+15],[x+w*.9,y+12]],'#41616b',2);}
+    for(const [x,y,s] of [[30,309,.8],[95,310,.65],[277,317,.7],[312,324,.7],[662,315,.8],[764,315,.6],[925,305,.8],[978,306,.7]])grass(ctx,x,y,s);
+    for(const [x,y,s] of [[64,311,.9],[111,313,.65],[284,319,.75],[651,320,.65],[954,307,.85]])flower(ctx,x,y,time,s);
+    // Bridge planks fall and reassemble independently, making reversal visible.
+    const bridgeP=ease(v.bridge);
+    for(let i=0;i<10;i++){
+      const x=333+i*27.3;const brokenY=329+Math.sin((i+1)/11*Math.PI)*(100+(i%3)*27);
+      const py=mix(brokenY,330,bridgeP);const angle=(1-bridgeP)*((i%2?1:-1)*(.18+i*.045));
+      ctx.save();ctx.translate(x+12,py);ctx.rotate(angle);ctx.globalAlpha=.55+.45*bridgeP;roundRect(ctx,-12,-4,25,8,2,i%2?'#bca492':'#c9b3a0');line(ctx,[[-7,-1],[8,-1]],'#8f7e75',1);ctx.restore();
+    }
+    for(const x of [326,616]){roundRect(ctx,x-3,292,6,47,2,'#9d9f94');circle(ctx,x,292,4,'#c0c3ae');}
+    ctx.strokeStyle='#b6aaa0';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(326,296);
+    if(v.bridge>.55){ctx.quadraticCurveTo(470,327+(1-v.bridge)*70,616,296);ctx.stroke();for(let i=1;i<6;i++){const x=326+i*48.3;const y=296+Math.sin(i/6*Math.PI)*14;line(ctx,[[x,y],[x,330]],'#a3a092',1.3);}}
+    else{ctx.quadraticCurveTo(378,317,393,355);ctx.stroke();ctx.beginPath();ctx.moveTo(616,296);ctx.quadraticCurveTo(569,316,554,358);ctx.stroke();}
+    if(v.magic>.05){for(let i=0;i<19;i++){const px=333+((i*71)%280),py=326+(1-v.bridge)*80-Math.sin(time*2+i)*22;ctx.globalAlpha=v.magic*(.3+(i%3)*.2);circle(ctx,px,py,1.8,'#e9d7ff');}ctx.globalAlpha=1;}
+    // The doorway is a stable destination; its shutter is a separate puzzle object.
+    const gx=864,gy=320;
+    roundRect(ctx,gx-49,gy-5,98,12,3,'#a2b3aa');roundRect(ctx,gx-41,gy-115,82,118,[40,40,3,3],'#a69ba9');roundRect(ctx,gx-32,gy-105,64,109,[32,32,0,0],'#3a314d');
+    const portal=ctx.createLinearGradient(gx,gy-100,gx,gy);portal.addColorStop(0,v.gate>.2?'#e8d5a0':'#554765');portal.addColorStop(1,v.gate>.2?'#faf0d6':'#79627e');roundRect(ctx,gx-27,gy-99,54,101,[27,27,0,0],portal);
+    if(v.gate<.98){ctx.save();ctx.globalAlpha=1-v.gate;roundRect(ctx,gx-25,gy-97,50,99,[25,25,0,0],'#74637c');line(ctx,[[gx,gy-90],[gx,gy]],'#584e65',2);roundRect(ctx,gx-16,gy-57,9,12,3,'#d1bb8a');circle(ctx,gx-11.5,gy-53,1.5,'#6a5873');line(ctx,[[gx-11.5,gy-52],[gx-11.5,gy-49]],'#6a5873',1.2);ctx.restore();}
+    if(level.shutter){
+      ctx.save();ctx.beginPath();ctx.roundRect(gx-32,gy-105,64,109,[32,32,0,0]);ctx.clip();ctx.translate(0,-105*(1-v.shutter));
+      for(let i=0;i<5;i++)roundRect(ctx,gx-28+i*13,gy-105,5,108,2,'#b4b7bc');line(ctx,[[gx-32,gy-73],[gx+32,gy-73]],'#9297a5',5);line(ctx,[[gx-32,gy-27],[gx+32,gy-27]],'#9297a5',5);ctx.restore();
+      roundRect(ctx,gx-27,gy-142,54,20,8,v.shutter<.2?'#c3dbc0':'#c99991');ctx.font='bold 10px "Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillStyle=v.shutter<.2?'#456b52':'#714c50';ctx.fillText(v.shutter<.2?(level.shutterMode==='permanent'?'常开':`余 ${v.ticks} 镜`):'已关闭',gx,gy-128);
+    }
+    lantern(ctx,796,317,time);lantern(ctx,128,315,time);
+    if(level.guard)drawBellAndGuard(ctx,v,time,level);
+    if(v.keyAlpha>.01){const ky=287+Math.sin(time*2)*3;const keyGlow=ctx.createRadialGradient(728,ky,2,728,ky,25);keyGlow.addColorStop(0,'#edd7982b');keyGlow.addColorStop(1,'#edd79800');ctx.fillStyle=keyGlow;ctx.fillRect(700,ky-27,55,55);drawKey(ctx,718,ky,1.05,v.keyAlpha);}
+    drawCat(ctx,v.catX,329,time,v.walk,v.catAlpha,v.question);
+    if(v.turningKey){ctx.save();ctx.translate(852,268);ctx.rotate(v.keyTurn*Math.PI/2);drawKey(ctx,-12,0,.9);ctx.restore();}
+    else if(v.carriedKey>.01)drawKey(ctx,v.catX+24,280+Math.sin(time*3)*2,.7,v.carriedKey*v.catAlpha);
+    drawNewMechanics(ctx,v,time,level);
+    drawFreeze(ctx,v);
+    // Foreground water covers the passage when the tide is high.
+    const waterY=mix(449,304,ease(v.water));const waveFill=ctx.createLinearGradient(0,waterY,0,480);waveFill.addColorStop(0,'#7eafc4b8');waveFill.addColorStop(1,'#547a95e8');
+    ctx.beginPath();ctx.moveTo(0,waterY);for(let x=0;x<=1000;x+=10)ctx.lineTo(x,waterY+Math.sin(x*.025+time*1.8)*3+Math.sin(x*.013-time)*2);ctx.lineTo(1000,480);ctx.lineTo(0,480);ctx.closePath();ctx.fillStyle=waveFill;ctx.fill();
+    ctx.beginPath();for(let x=0;x<=1000;x+=10){const y=waterY+Math.sin(x*.025+time*1.8)*3+Math.sin(x*.013-time)*2;x?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.strokeStyle='#c3d7df66';ctx.lineWidth=1.5;ctx.stroke();
+    for(let i=0;i<12;i++){const x=(i*137+time*14)%1040-20;const y=waterY+17+(i%5)*17;line(ctx,[[x,y],[x+12+i%4*9,y]],'#c8dce633',1);}
+    // Quiet environmental particles and a soft vignette give the small scene depth.
+    for(let i=0;i<14;i++){const x=(i*113+71)%1000,y=267+Math.sin(time*.6+i*2)*25+(i%3)*14;ctx.globalAlpha=.22+.2*Math.sin(time*1.5+i);circle(ctx,x,y,1.4,'#d8e2b5');}ctx.globalAlpha=1;
+    const vignette=ctx.createRadialGradient(500,230,160,500,230,620);vignette.addColorStop(0,'#1c152a00');vignette.addColorStop(1,'#1c152a60');ctx.fillStyle=vignette;ctx.fillRect(0,0,1000,480);
+    if(!thumbnail){ctx.fillStyle='#d4c8dd55';ctx.font='9px Consolas,monospace';ctx.textAlign='left';ctx.fillText('MOONLIGHT ARCHIVE',26,454);ctx.textAlign='right';ctx.fillText('SCENE / '+String(level.id+1).padStart(2,'0'),974,454);}
+    ctx.setTransform(1,0,0,1,0,0);
+  }
+  function thumbnailState(id,level,reversed=false){id=EscapeRules.clipKind({id});const s=EscapeRules.initialState(level);s.flooded=false;s.bridge=true;s.powerFault=false;
+    if(['rocks','branches','crate'].includes(id))s[id]=!reversed;
+    if(id==='entry'||id==='unlock'){s.cat='right';s.key=true;s.shutterOpen=true;s.entered=true;s.doorUnlocked=id==='unlock';}
+    if(id==='bridge'){s.bridge=!reversed;}
+    if(id==='cross'){s.cat='right';s.key=true;}
+    if(id==='exit'){s.cat='right';s.key=true;s.gateOpen=true;s.shutterOpen=true;s.quietPass=true;if(level.guard)s.bellCount=EscapeRules.ringTarget(level);if(level.powered)s.cell='socket';}
+    if(id==='tide'){s.flooded=!reversed;s.bridge=false;}
+    if(id==='shutter'){s.cat='right';s.key=true;s.shutterOpen=reversed;s.shutterTicks=reversed?2:0;}
+    if(id==='bell'){s.bellCount=0;}
+    if(id==='latch'){s.shutterOpen=true;}
+    if(id==='release'||id==='lever'){s.shutterOpen=false;}
+    if(id==='cell'){s.cell='left';}
+    if(id==='socket'){s.cell='socket';s.cat='right';}
+    if(id==='footsteps'){s.cat='right';s.quietPass=true;}
+    if(id==='readcode'){s.cat='right';s.cell='socket';s.codeKnown=true;}
+    if(id==='keypad'){s.cat='right';s.cell='socket';s.codeKnown=true;s.lockReady=true;}
+    if(id==='blackout'){s.cell='socket';s.powerFault=!reversed;}
+    if(id==='exit'){s.codeKnown=true;s.lockReady=true;}
+    return s;
+  }
+  globalThis.EscapeScene={draw:drawScene,visual:getVisual,thumbnailState};
+})();
+</script>
+<script id="game-ui">
+(() => {
+  const $=id=>document.getElementById(id);
+  const {CLIPS,LEVELS,CHAPTERS,TUTORIALS,initialState,goalReached,previewState,validateEdit,transition,clipDuration,canCut,splitClip:makeParts,hasPower,clipKind,ringTarget}=EscapeRules;
+  const iconPaths={
+    film:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 3v18M17 3v18M3 8h4m-4 8h4M17 8h4m-4 8h4M7 12h10"/>',
+    play:'<path d="m8 5 11 7-11 7Z" fill="currentColor" stroke="none"/>',
+    pause:'<path d="M8 5v14M16 5v14" stroke-width="4"/>',
+    stop:'<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/>',
+    reverse:'<path d="m11 6-8 6 8 6Zm10 0-8 6 8 6Z"/>',
+    forward:'<path d="m3 6 8 6-8 6Zm10 0 8 6-8 6Z"/>',
+    arrowRight:'<path d="M5 12h14m-6-6 6 6-6 6"/>',arrowLeft:'<path d="M19 12H5m6-6-6 6 6 6"/>',
+    close:'<path d="m6 6 12 12M6 18 18 6"/>',
+    monitor:'<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/>',
+    help:'<circle cx="12" cy="12" r="9"/><path d="M9.4 9a2.7 2.7 0 0 1 5.2 1c0 2-2.6 2-2.6 4m0 3h.01"/>',
+    volumeOff:'<path d="M11 4 5 9H2v6h3l6 5Zm6 5 5 6m-5 0 5-6"/>',
+    volume:'<path d="M11 4 5 9H2v6h3l6 5Zm4 4a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>',
+    bulb:'<path d="M8 17v-2a6 6 0 1 1 8 0v2Zm1 4h6M8 17h8"/>',
+    reset:'<path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/>',
+    spark:'<path d="m12 3 2.8 6.2L21 12l-6.2 2.8L12 21l-2.8-6.2L3 12l6.2-2.8Z"/>',
+    grip:'<circle cx="8" cy="5" r="1"/><circle cx="16" cy="5" r="1"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/><circle cx="8" cy="19" r="1"/><circle cx="16" cy="19" r="1"/>',
+    check:'<path d="m5 12 4 4L19 6"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+    bridge:'<path d="M3 20V5m18 15V5M3 8q9 10 18 0M3 19h18M8 12v7m8-7v7"/>',
+    key:'<circle cx="7" cy="9" r="4"/><path d="m10 12 9 9m-3-3 3-3m-6 0 3-3"/>',
+    water:'<path d="M3 8q3-4 6 0t6 0t6 0M3 15q3-4 6 0t6 0t6 0"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
+    cut:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="m8 8 13 13M8 16 21 3"/>',
+    freeze:'<path d="M12 2v20M3 7l18 10M3 17 21 7M8 4l4 4 4-4M8 20l4-4 4 4"/>',
+    copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V3H3v13h5"/>',
+    split:'<path d="M12 2v20M3 5h6v14H3Zm12 0h6v14h-6M7 9l-2 3 2 3m10-6 2 3-2 3"/>',
+    mute:'<path d="M11 4 5 9H2v6h3l6 5Zm6 5 5 6m-5 0 5-6"/>',
+    power:'<path d="m13 2-8 12h6l-1 8 9-13h-7Z"/>',
+    code:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 8h2m6 0h2M7 12h2m6 0h2M7 16h10"/>',
+    bell:'<path d="M5 16h14l-2-3V9a5 5 0 0 0-10 0v4Zm5 4h4M12 2v2"/>',
+    warning:'<path d="m12 3 10 18H2Z"/><path d="M12 9v5m0 3h.01"/>'
+  };
+  function icon(name){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name]||iconPaths.film}</svg>`;}
+  document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
+  let completed=[],tutorialCompleted=[],track='campaign',activeView='home',hasSession=false,lastCampaign=0;
+  try{const saved=JSON.parse(localStorage.getItem('escape-editor-progress-v1')||'[]');if(Array.isArray(saved))completed=[...new Set(saved.filter(n=>Number.isInteger(n)&&n>=0&&n<LEVELS.length))];}catch{}
+  try{const saved=JSON.parse(localStorage.getItem('escape-editor-tutorial-v1')||'[]');if(Array.isArray(saved))tutorialCompleted=[...new Set(saved.filter(n=>Number.isInteger(n)&&n>=0&&n<TUTORIALS.length))];const last=Number(localStorage.getItem('escape-editor-last-level'));if(Number.isInteger(last)&&last>=0&&last<LEVELS.length)lastCampaign=last;}catch{}
+  let level=LEVELS[0],clips=[],removed=[],copySerial=0,world=initialState(level),mode='idle',paused=false,speed=1,animation=null,clipIndex=-1;
+  let attempts=0,hintIndex=-1,failure=null,selected=null,dragged=null,sound=false,audioCtx=null,clock=0,lastTime=0,lastDraw=0,toastTimer=0;
+  let timelineScale=1,sequencePosition=0;
+  const pixelsPerSecond=()=>56*timelineScale;
+  const sequenceTime=seconds=>{const frames=Math.max(0,Math.floor(seconds*24+.0001));return [Math.floor(frames/86400),Math.floor(frames/1440)%60,Math.floor(frames/24)%60,frames%24].map(v=>String(v).padStart(2,'0')).join(':');};
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const busy=()=>mode==='playing'||mode==='preview';
+  const countReversed=()=>clips.filter(c=>c.reversed).length;
+  const countFrozen=()=>clips.filter(c=>c.freeze).length;
+  const countCopies=()=>clips.filter(c=>c.copyOf).length;
+  const countMuted=()=>clips.filter(c=>c.muted).length;
+  const countSplits=()=>new Set([...clips,...removed].filter(c=>c.splitUid).map(c=>c.splitUid)).size;
+  const totalDuration=()=>clips.reduce((sum,c)=>sum+clipDuration(c),0);
+  const startTime=index=>clips.slice(0,index).reduce((sum,c)=>sum+clipDuration(c),0);
+  const pad=v=>String(v).padStart(2,'0');
+  const timecode=seconds=>`00:${pad(Math.floor(seconds))}`;
+  const collection=()=>track==='tutorial'?TUTORIALS:LEVELS;
+  const finalLevel=()=>level.id===collection().length-1;
+  const findClip=uid=>clips.find(c=>c.uid===uid);
+  const label=clip=>CLIPS[clip.id].name+(clip.copyOf?(clip.copyNumber>1?`（副本 ${clip.copyNumber}）`:'（副本）'):'');
+  const pinned=clip=>clip.id===level.fixedFirst||clip.id===level.fixedLast;
+  const canMove=(index,delta)=>{
+    const other=index+delta;
+    return other>=0&&other<clips.length&&!pinned(clips[index])&&!pinned(clips[other]);
+  };
+  function tell(message){$('toast').textContent=message;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2800);}
+  function soundNote(type){
+    if(!sound||!audioCtx)return;
+    try{audioCtx.resume();const notes=type==='success'?[523.25,659.25,783.99]:type==='fail'?[240,180]:type==='reverse'?[540,380]:type==='bell'?[784,1047]:[440];
+      notes.forEach((freq,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain(),at=audioCtx.currentTime+i*.1;o.type='sine';o.frequency.setValueAtTime(freq,at);g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(.045,at+.015);g.gain.exponentialRampToValueAtTime(.001,at+.19);o.connect(g);g.connect(audioCtx.destination);o.start(at);o.stop(at+.2);});}catch{}
+  }
+  function saveProgress(){try{localStorage.setItem('escape-editor-progress-v1',JSON.stringify(completed));localStorage.setItem('escape-editor-tutorial-v1',JSON.stringify(tutorialCompleted));}catch{}}
+  function renderHome(){
+    $('homeCampaignProgress').textContent=`${completed.length} / ${LEVELS.length}`;
+    $('homeTutorialProgress').textContent=`${tutorialCompleted.length} / ${TUTORIALS.length}`;
+    $('startLabel').textContent=completed.length===LEVELS.length?'重温故事':completed.length||hasSession?'继续游戏':'开始游戏';
+    $('homeContinue').textContent=completed.length===LEVELS.length?'四章全部完成 · 任意关卡可重玩':completed.length?`正式关卡已完成 ${completed.length} 幕，继续把小橘送回家。`:'从第一幕开始，剪出属于你的好结局。';
+  }
+  function updateWorkspace(){
+    const home=activeView==='home';
+    for(const [id,active] of [['workspaceHome',home],['workspaceCampaign',!home&&track==='campaign'],['workspaceTutorial',!home&&track==='tutorial']])$(id).setAttribute('aria-pressed',String(active));
+    $('projectPath').textContent=home?'月光归途 / 项目中心':(level.tutorial?'剪辑学堂':'月光归途')+' / '+pad(level.id+1)+' '+level.name;
+  }
+  function openEditor(kind,id){
+    activeView='editor';$('homeScreen').hidden=true;$('gameScreen').hidden=false;$('homeButton').hidden=false;
+    if(id!==undefined||!hasSession||track!==kind){track=kind;loadLevel(id??(kind==='tutorial'?Math.max(0,TUTORIALS.findIndex(l=>!tutorialCompleted.includes(l.id))):lastCampaign));}
+    hasSession=true;fitCanvas();updateWorkspace();window.scrollTo(0,0);$('missionTitle').focus({preventScroll:true});
+  }
+  function showHome(){
+    if(busy())stop();activeView='home';$('homeScreen').hidden=false;$('gameScreen').hidden=true;$('homeButton').hidden=true;renderHome();updateWorkspace();window.scrollTo(0,0);$('startGame').focus({preventScroll:true});
+  }
+  function renderLevels(){
+    const tutorial=track==='tutorial',done=tutorial?tutorialCompleted:completed,list=collection();
+    $('levelProgress').textContent=tutorial?`独立新手教学 · 已完成 ${done.length} / ${list.length}`:`${LEVELS.length} 个正式关卡 · 已完成 ${completed.length} / ${LEVELS.length}`;
+    const tab=l=>{
+      const unlocked=tutorial||l.id===0||completed.includes(l.id-1)||completed.includes(l.id);
+      return `<button class="level-tab ${level.id===l.id?'active':''} ${done.includes(l.id)?'done':''} ${!unlocked?'locked':''}" data-level="${l.id}" aria-current="${level.id===l.id?'step':'false'}" ${!unlocked?'aria-disabled="true"':''} aria-label="${tutorial?'教学':'第'} ${l.id+1} ${tutorial?'课':'关'} ${l.name}${!unlocked?'，尚未解锁':''}" title="${l.name}"><span class="num">${done.includes(l.id)?'✓':pad(l.id+1)}</span><span class="level-name">${l.name}</span><span class="level-length">${l.order.length*3}s</span>${!unlocked?icon('lock'):''}</button>`;
+    };
+    $('levels').classList.toggle('tutorial-levels',tutorial);
+    $('levels').innerHTML=tutorial?TUTORIALS.map(tab).join(''):CHAPTERS.map(ch=>`<details open class="chapter-group ${level.chapter===ch.id?'current-chapter':''}"><summary class="chapter-heading" aria-label="第 ${ch.id+1} 章 ${ch.name}"><span>${icon(ch.tool)}${ch.range} · ${ch.mechanic}</span><small>${ch.name}</small></summary><div class="chapter-levels">${LEVELS.filter(l=>l.chapter===ch.id).map(tab).join('')}</div></details>`).join('');
+    $('levels').querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{
+      if(button.getAttribute('aria-disabled')==='true'){tell('先完成上一幕，就能解锁这段故事。');return;}
+      loadLevel(Number(button.dataset.level));
+    }));
+    const current=$('levels').querySelector('.active');if(current){const parent=$('levels').getBoundingClientRect(),rect=current.getBoundingClientRect();if(rect.bottom>parent.bottom)$('levels').scrollTop+=rect.bottom-parent.bottom+8;else if(rect.top<parent.top)$('levels').scrollTop-=parent.top-rect.top+8;}
+  }
+  function updateToolBudget(){
+    $('toolGuide').hidden=!level.tool;
+    const counts=[['split','切片',countSplits(),level.splitBudget],['cut','剪除',removed.length,level.cutBudget],['freeze','定格',countFrozen(),level.freezeBudget],['copy','复制',countCopies(),level.copyBudget],['mute','静音',countMuted(),level.muteBudget]].filter(c=>c[3]);
+    $('toolBudget').hidden=!counts.length;
+    $('toolBudget').innerHTML=counts.map(([type,name,used,total])=>`<span class="tool-meter"><span class="budget-label">${icon(type)}${name}额度</span><strong>${used} / ${total}</strong></span>`).join('');
+    $('toolBudget').setAttribute('aria-label',counts.map(([,name,used,total])=>`已用 ${used} 次${name}，共 ${total} 次额度`).join('；'));
+    if(level.tool)$('toolGuide').innerHTML=`<span class="tool-heading">${icon(level.tool)}${level.newMechanic?'新机制':'本章'+level.stage} · ${level.toolName}</span><span>${level.toolHelp}</span>`;
+  }
+  function updateWorld(){
+    const chips=[{icon:'bridge',text:world.bridge?'桥已修复':'桥已断裂',positive:world.bridge},{icon:'key',text:world.key?'拿到钥匙':'钥匙未取',positive:world.key}];
+    if(level.flooded)chips.unshift({icon:'water',text:world.flooded?'潮水未退':'潮水已退',positive:!world.flooded,alert:world.flooded});
+    if(level.shutter)chips.push({icon:world.shutterOpen?'clock':'lock',text:world.escaped?'已安全离开':world.shutterOpen?(level.shutterMode==='permanent'?'闸门常开':`闸门余 ${world.shutterTicks} 段`):'闸门关闭',positive:world.shutterOpen,alert:!world.shutterOpen});
+    else chips.push({icon:'lock',text:world.escaped?'安全离开':'出口上锁',positive:world.escaped});
+    if(level.guard)chips.push({icon:'bell',text:`铃声 ${world.bellCount} / ${ringTarget(level)} · ${world.bellCount>=ringTarget(level)?'门卫放行':world.bellCount?'门卫翻身':'门卫熟睡'}`,positive:world.bellCount>=ringTarget(level),alert:world.bellCount<ringTarget(level)});
+    for(const [id,name] of [['rocks','桥头落石'],['branches','对岸枯枝'],['crate','门前木箱']])if(level.order.includes(id))chips.push({icon:'bridge',text:name+(world[id]?'挡路':'已清空'),positive:!world[id],alert:world[id]});
+    if(level.doorSequence){chips.push({icon:'forward',text:world.entered?'已走进闸门':'尚未进闸门',positive:world.entered});chips.push({icon:'key',text:world.doorUnlocked?'门内锁已打开':'门内锁未打开',positive:world.doorUnlocked});}
+    if(level.powered)chips.push({icon:'power',text:hasPower(world)?'电源接通':world.cell==='socket'?'电池就位 · 线路断开':world.cell==='carried'?'电池随身':'电池在左岸',positive:hasPower(world),alert:!hasPower(world)});
+    if(level.order.includes('blackout'))chips.push({icon:'power',text:world.powerFault?'线路断开':'线路完好',positive:!world.powerFault,alert:world.powerFault});
+    if(level.coded){chips.push({icon:'code',text:world.codeKnown?'密码 3142 已记住':'密码尚未读取',positive:world.codeKnown});chips.push({icon:'lock',text:world.lockReady?'电子锁已解开':'电子锁未解开',positive:world.lockReady});}
+    if(level.dog)chips.push({icon:'mute',text:failure?.code==='too-loud'?'第三声惊醒巡逻犬':failure?.code==='dog-awake'?'脚步惊醒巡逻犬':world.quietPass?'已安静通过碎石':'碎石路未通过',positive:world.quietPass,alert:!world.quietPass||failure?.code==='too-loud'});
+    $('worldStates').innerHTML=chips.map(c=>`<span class="world-chip ${c.positive?'positive':''} ${c.alert?'alert':''}">${icon(c.icon)}${c.text}</span>`).join('');
+    $('scene').setAttribute('aria-label',`${level.name}。${chips.map(c=>c.text).join('，')}。小橘${world.escaped?'已离开':world.cat==='left'?'在左岸':'在右岸'}。`);
+    $('reverseBudget').hidden=level.budget===0;
+    const used=countReversed();
+    $('budgetDots').innerHTML=Array.from({length:level.budget},(_,i)=>`<i class="budget-dot ${i<used?'used':''}" aria-hidden="true"></i>`).join('')+`<span class="budget-count">${used} / ${level.budget}</span>`;
+    $('budgetDots').setAttribute('aria-label',`已选 ${used} 段倒放，共 ${level.budget} 次额度`);
+    updateToolBudget();
+  }
+  function updateControls(){
+    const playing=busy();
+    $('playButton').innerHTML=icon(playing?(paused?'play':'pause'):'play')+`<span id="playLabel">${playing?(paused?'继续放映':'暂停放映'):mode==='failure'?'修改后重试':mode==='success'?'再放一次':'放映试试'}</span>`;
+    $('playButton').setAttribute('aria-label',playing?(paused?'继续放映':'暂停放映'):'放映剪辑');
+    $('stopButton').disabled=!playing&&mode!=='scrub';$('hintButton').disabled=playing;
+    $('monitorStatus').classList.toggle('running',playing&&!paused);
+    $('statusText').textContent=mode==='scrub'?'时间线定位':mode==='preview'?(paused?'预览暂停':'素材预览'):mode==='playing'?(paused?'已暂停':'正在放映'):mode==='failure'?'停在错误镜头':mode==='success'?'剪辑完成':'等待剪辑';
+    $('takeCount').textContent=`TAKE ${pad(mode==='idle'?attempts+1:Math.max(1,attempts))}`;
+    $('timeline').classList.toggle('is-busy',playing);
+    $('timeline').querySelectorAll('.clip').forEach((card,i)=>{
+      card.draggable=!playing&&!pinned(clips[i]);
+      card.classList.toggle('is-active',playing&&clips[i].uid===animation?.clip.uid);
+      card.classList.toggle('is-failed',mode==='failure'&&i===clipIndex);
+      card.querySelectorAll('button,select').forEach(btn=>{btn.disabled=playing||btn.dataset.unavailable==='true';});
+    });
+    $('cutTray').querySelectorAll('button').forEach(button=>button.disabled=playing);
+    $('effectsTrack').querySelectorAll('button').forEach(button=>button.disabled=playing);
+    $('clipInspector').querySelectorAll('button,select').forEach(button=>button.disabled=playing||button.dataset.unavailable==='true');
+    $('ruler').setAttribute('aria-disabled',String(playing));
+  }
+  function updateFeedback(){
+    const title=$('feedbackTitle'),body=$('feedbackBody');title.className='feedback-title';$('sceneResult').hidden=true;$('nextButton').hidden=true;
+    if(mode==='failure'){
+      title.classList.add('failed');title.innerHTML=icon('warning')+failure.title;body.textContent=failure.message;
+      $('sceneResult').hidden=false;$('sceneResult').className='scene-result failed';$('resultWord').textContent='CUT!';$('resultLine').textContent='停一下，这个顺序还差一点。';
+    }else if(mode==='success'){
+      title.classList.add('success');title.innerHTML=icon('check')+(level.tutorial?(finalLevel()?'新手教学全部完成':'这一课，学会了。'):finalLevel()?`${LEVELS.length} 幕全部剪辑完成`:'这个结局，很好。');
+      body.textContent=level.tutorial?level.lessonSuccess:`第 ${attempts} 次放映，小橘安全离开。${finalLevel()?'倒放、剪除、定格与复制配合完成，16 个大关卡全部结束。':level.id%4===3?'本章四关已完成，下一章使用「'+CHAPTERS[level.chapter+1].mechanic+'」。':'继续用本章机制，试试下一种剪法。'}`;
+      $('sceneResult').hidden=false;$('sceneResult').className='scene-result success';$('resultWord').textContent='GOOD CUT!';$('resultLine').textContent=finalLevel()?'所有故事，都有了好结局。':'小橘平安到家了。';
+      if(level.tutorial)$('resultLine').textContent=level.goal==='rewind'?'小橘回到起点，钥匙也归位了。':level.lessonSuccess;
+      $('nextButton').hidden=false;$('nextButton').innerHTML=(level.tutorial?(finalLevel()?'进入正式关卡':'下一课'):finalLevel()?'返回开始界面':'下一幕')+icon('arrowRight');
+    }else if(mode==='scrub'){
+      title.innerHTML=icon('monitor')+'时间线定位';body.textContent='正在查看标尺上的这一刻。点击「放映试试」从头验证剪辑；定位不会记录通关。';
+    }else if(mode==='preview'){
+      title.innerHTML=icon('film')+'先看一眼素材';body.textContent='独立预览从示例状态开始，不影响剪辑；正式放映时，每一镜承接上一镜的结果。';
+    }else if(mode==='playing'){
+      title.innerHTML=icon(animation?.clip.freeze?'freeze':'play')+`镜头 ${clipIndex+1} / ${clips.length}`;
+      body.textContent=animation?.clip.freeze?'定格夹正在保护闸门。本镜结束时不会扣除剩余镜数，角色仍可行动。':animation?.clip.muted?'本镜声轨已静音，角色动作仍会执行。':'每个片段都会承接前一个的结果。看看这次会发生什么。';
+    }else{
+      title.innerHTML=icon(level.tool||'spark')+(level.newMechanic?'新机制 · '+level.toolName:'本章'+level.stage+' · '+level.toolName);
+      body.textContent=level.toolHelp;
+    }
+    $('hintText').hidden=hintIndex<0;$('hintText').textContent=hintIndex<0?'':level.hints[hintIndex];
+    $('hintLabel').textContent=hintIndex<0?'给我一点提示':hintIndex<level.hints.length-1?'再具体一点':'提示已全部展开';
+    if(mode==='failure'||mode==='success'){const panel=document.querySelector('.mission-scroll');panel.scrollTop=panel.scrollHeight;}
+  }
+  function thumbnail(canvas,id,reversed,sample=.6){
+    const source=document.createElement('canvas');source.width=1000;source.height=480;
+    const clip={id,reversed},state=previewState(clip,level),result=transition(state,clip,level);EscapeScene.draw(source,state,{clip,from:state,to:result.state,ok:result.ok,progress:sample},1.5,level,{thumbnail:true});
+    const crops={bridge:[255,244,430,129],cross:[505,244,430,129],exit:[575,193,430,129],tide:[240,286,430,129],shutter:[600,172,400,120],bell:[150,196,200,90],lever:[225,230,250,90],latch:[225,230,250,90],release:[225,230,250,90],footsteps:[710,287,290,87],cell:[98,255,260,78],socket:[608,245,260,78]};
+    Object.assign(crops,{readcode:[681,176,240,72],keypad:[697,221,240,72],blackout:[616,231,290,87]});
+    if(level.guard&&['lever','latch','release'].includes(id))crops[id][0]-=192;
+    Object.assign(crops,{aftershock:crops.bridge,rocks:[230,238,210,95],branches:[596,237,210,95],crate:[707,234,210,95],entry:[700,222,230,105],unlock:[742,207,210,95]});
+    const c=canvas.getContext('2d');c.drawImage(source,...crops[id],0,0,canvas.width,canvas.height);
+  }
+  function effect(clip){
+    if(clip.muted)return clip.id==='bell'?'只摇动门铃，不增加铃声次数':'安静走过碎石，巡逻犬保持熟睡';
+    if(clip.id==='bell')return clip.reversed?'收回一声铃，门卫恢复之前的状态':'响铃一次，累计 '+ringTarget(level)+' 声叫醒门卫';
+    if(clip.id==='shutter'&&clip.reversed&&level.shutterMode==='permanent')return '打开闸门，保持通行';
+    return clip.reversed?CLIPS[clip.id].backward:CLIPS[clip.id].forward;
+  }
+  function toolButtons(clip){
+    const name=label(clip),buttons=[];
+    if(level.splitBudget&&CLIPS[clip.id].parts)buttons.push(`<button class="edit-tool split-button" aria-label="切开${name}">${icon('split')}切成两段</button>`);
+    if(clip.splitFrom&&clip.part===0)buttons.push(`<button class="edit-tool merge-button" aria-label="合回${CLIPS[clip.splitFrom].name}整段">${icon('reset')}合回整段</button>`);
+    if(canCut(level,clip))buttons.push(`<button class="edit-tool cut-button" aria-label="剪除${name}">${icon('cut')}剪除</button>`);
+    if(level.freezeBudget&&(level.freezable||[]).includes(clip.id))buttons.push(`<button class="edit-tool freeze-button" aria-label="${clip.freeze?'取消定格':'定格'}${name}中的闸门" aria-pressed="${!!clip.freeze}">${icon('freeze')}${clip.freeze?'已定格闸门':'定格闸门'}</button>`);
+    if(level.copyBudget){
+      if(clip.copyOf)buttons.push(`<button class="edit-tool uncopy-button" aria-label="撤销${name}">${icon('reset')}撤销副本</button>`);
+      else if((level.copyable||[]).includes(clip.id))buttons.push(`<button class="edit-tool copy-button" aria-label="复制${name}">${icon('copy')}复制</button>`);
+    }
+    if(level.muteBudget&&(level.muteable||[]).includes(clip.id))buttons.push(`<button class="edit-tool mute-button" aria-label="${clip.muted?'取消静音':'静音'}${name}" aria-pressed="${!!clip.muted}">${icon('mute')}${clip.muted?'已静音':'静音'}</button>`);
+    return buttons.join('')||(level.cutBudget?'<span class="tool-locked">必需镜头</span>':'');
+  }
+  function renderCutTray(){
+    $('cutTray').hidden=!level.cutBudget;
+    if(!level.cutBudget){$('cutTray').innerHTML='';return;}
+    $('cutTray').innerHTML=`<span class="tray-label">${icon('cut')}废片区</span>`+(removed.length?removed.map(c=>`<span class="cut-item">${CLIPS[c.id].name}<button data-restore="${c.uid}" aria-label="放回${CLIPS[c.id].name}">${icon('reset')}放回</button></span>`).join(''):'<span class="tray-empty">剪除的镜头会放在这里，随时可以取回。</span>');
+    $('cutTray').querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>restoreClip(button.dataset.restore)));
+  }
+  function drawPlayhead(follow=false){
+    const x=sequencePosition*pixelsPerSecond(),view=$('timelineViewport');
+    $('timelinePlayhead').style.left=x+'px';$('timelineTimeCode').textContent=sequenceTime(sequencePosition);
+    $('ruler').setAttribute('aria-valuenow',sequencePosition.toFixed(2));$('ruler').setAttribute('aria-valuetext',sequenceTime(sequencePosition));
+    if(follow&&view.clientWidth){if(x>view.scrollLeft+view.clientWidth-36)view.scrollLeft=x-view.clientWidth*.65;else if(x<view.scrollLeft+8)view.scrollLeft=Math.max(0,x-25);}
+  }
+  function layoutTimeline(){
+    const pps=pixelsPerSecond(),duration=totalDuration(),major=pps>=35?3:pps>=16?6:12;
+    $('timelineContent').style.width=Math.ceil(duration*pps+24)+'px';$('timelineContent').style.setProperty('--second-width',pps+'px');
+    $('timeline').querySelectorAll('.clip').forEach((card,i)=>card.style.width=clipDuration(clips[i])*pps+'px');
+    $('effectsTrack').querySelectorAll('.effect-segment').forEach((bar,i)=>bar.style.width=clipDuration(clips[i])*pps+'px');
+    $('ruler').innerHTML=Array.from({length:Math.ceil(duration)+1},(_,second)=>`<i class="ruler-tick ${second%major===0?'major':''} ${second===duration?'ruler-end':''}" style="left:${second*pps}px"></i>${second%major===0?`<span style="left:${second*pps}px">${timecode(second)}</span>`:''}`).join('');
+    $('ruler').setAttribute('aria-valuemax',String(duration));
+    $('timelineZoom').value=String(Math.round(timelineScale*100));$('zoomLabel').textContent=Math.round(timelineScale*100)+'%';drawPlayhead();
+  }
+  function zoomTimeline(scale){
+    const view=$('timelineViewport'),left=view.scrollLeft/pixelsPerSecond();timelineScale=Math.max(.1,Math.min(2,scale));layoutTimeline();view.scrollLeft=left*pixelsPerSecond();
+  }
+  function selectClip(uid,scroll=false){
+    if(!findClip(uid))return;selected=uid;
+    $('timeline').querySelectorAll('.clip').forEach(card=>{const active=card.dataset.uid===uid;card.classList.toggle('is-selected',active);card.setAttribute('aria-pressed',String(active));});
+    $('effectsTrack').querySelectorAll('button').forEach(button=>button.classList.toggle('is-selected',button.dataset.directionUid===uid));
+    renderInspector();updateControls();
+    if(scroll){const card=$('timeline').querySelector(`[data-uid="${uid}"]`),view=$('timelineViewport');if(card.offsetLeft<view.scrollLeft)view.scrollLeft=card.offsetLeft;else if(card.offsetLeft+card.offsetWidth>view.scrollLeft+view.clientWidth)view.scrollLeft=card.offsetLeft+card.offsetWidth-view.clientWidth;}
+  }
+  function renderInspector(){
+    const clip=findClip(selected);if(!clip){$('clipInspector').innerHTML='';return;}
+    const i=clips.indexOf(clip),name=label(clip),fixed=pinned(clip);
+    $('selectionSummary').textContent=`${pad(i+1)} / ${name}`;
+    $('clipInspector').innerHTML=`<div class="inspector-description"><span class="inspector-kicker">片段 ${pad(i+1)} · ${sequenceTime(startTime(i))} — ${sequenceTime(startTime(i)+clipDuration(clip))}</span><h3>${name}</h3><p>${effect(clip)}</p></div><div class="inspector-controls"><button class="clip-preview" aria-label="预览${name}${clip.reversed?'（倒放）':''}">${icon('play')}预览</button><div class="clip-actions"><span class="move-actions"><button class="move-button move-left" aria-label="将${name}向左移动" title="向左移动" data-unavailable="${!canMove(i,-1)}">${icon('arrowLeft')}</button><button class="move-button move-right" aria-label="将${name}向右移动" title="向右移动" data-unavailable="${!canMove(i,1)}">${icon('arrowRight')}</button></span></div>${fixed?`<span class="inspector-fixed">${icon('lock')}固定${clip.id===level.fixedLast?'片尾':'片头'}</span>`:`<label class="position-control">位置<select class="position-select" aria-label="将${name}移至指定位置">${clips.map((target,j)=>`<option value="${j}" ${i===j?'selected':''} ${pinned(target)?'disabled':''}>第 ${j+1} 段</option>`).join('')}</select></label>`}<div class="clip-tools">${toolButtons(clip)}</div></div>`;
+    const panel=$('clipInspector');
+    panel.querySelector('.clip-preview').addEventListener('click',()=>preview(clip.uid));
+    panel.querySelector('.move-left').addEventListener('click',()=>moveClip(clip.uid,-1));panel.querySelector('.move-right').addEventListener('click',()=>moveClip(clip.uid,1));
+    panel.querySelector('.position-select')?.addEventListener('change',event=>moveTo(clip.uid,Number(event.target.value)));
+    for(const [className,action] of [['cut-button',cutClip],['freeze-button',freezeClip],['copy-button',copyClip],['uncopy-button',removeCopy],['split-button',splitAction],['mute-button',muteClip]])panel.querySelector('.'+className)?.addEventListener('click',()=>action(clip.uid));
+    panel.querySelector('.merge-button')?.addEventListener('click',()=>mergeAction(clip.splitUid));
+  }
+  function renderTimeline(focusUid=null){
+    const count=clips.length;selected=findClip(focusUid||selected)?.uid||clips[0]?.uid;
+    $('editorMeta').textContent=`${count} 段 · ${totalDuration()} 秒 · 24 FPS`;
+    $('sequenceName').textContent=(level.tutorial?'教学':'序列')+' '+pad(level.id+1)+' / '+level.name;
+    $('timeline').innerHTML=clips.map((clip,i)=>{
+      const def=CLIPS[clip.id],name=label(clip),fixed=clip.id===level.fixedFirst?'固定片头':clip.id===level.fixedLast?'固定片尾':'';
+      return `<article class="clip ${clip.uid===selected?'is-selected':''} ${clip.reversed?'is-reversed':''} ${clip.freeze?'is-frozen':''} ${clip.muted?'is-muted':''} ${pinned(clip)?'is-pinned':''}" role="button" tabindex="0" aria-pressed="${clip.uid===selected}" draggable="${!busy()&&!pinned(clip)}" data-id="${clip.id}" data-uid="${clip.uid}" aria-label="选择第 ${i+1} 段 ${name}，${clip.reversed?'倒放':'正放'}${clip.freeze?'，定格':''}${fixed?'，'+fixed:''}" title="${name} · ${effect(clip)}\n单击选择，双击预览；左右方向键换序。">
+        <div class="clip-top"><span class="clip-top-left"><span class="clip-num">${pad(i+1)}</span><h3 class="clip-title">${name}</h3></span><span class="clip-duration">${clipDuration(clip)}s</span></div><div class="clip-filmstrip"><canvas width="300" height="110" aria-hidden="true"></canvas><canvas width="300" height="110" aria-hidden="true"></canvas></div></article>`;
+    }).join('');
+    $('effectsTrack').innerHTML=clips.map(clip=>`<button type="button" class="effect-segment direction-toggle ${clip.uid===selected?'is-selected':''} ${clip.reversed?'reversed':''} ${clip.freeze?'frozen':''}" data-direction-uid="${clip.uid}" aria-pressed="${clip.reversed}" aria-label="${label(clip)}：当前${clip.reversed?'倒放':'正放'}，切换为${clip.reversed?'正放':'倒放'}" title="点击切换「${label(clip)}」的播放方向${clip.freeze?' · 已定格':''}${clip.copyOf?' · 副本':''}${pinned(clip)?' · 位置固定，方向可切换':''}">${icon(clip.reversed?'reverse':'forward')}<span class="direction-name">${clip.reversed?'倒放':'正放'}</span><span class="direction-flags" aria-hidden="true">${clip.freeze?icon('freeze'):''}${clip.copyOf?icon('copy'):''}${pinned(clip)?icon('lock'):''}${clip.muted?icon('mute'):''}</span></button>`).join('');
+    $('effectsTrack').querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{
+      if(busy())return;const uid=button.dataset.directionUid;selectClip(uid);reverseClip(uid);
+      $('effectsTrack').querySelector(`[data-direction-uid="${uid}"]`)?.focus({preventScroll:true});
+    }));
+    $('timeline').querySelectorAll('.clip').forEach(card=>{
+      const uid=card.dataset.uid,clip=findClip(uid);card.querySelectorAll('canvas').forEach((canvas,i)=>thumbnail(canvas,clip.id,clip.reversed,i ? .8 : .2));
+      card.addEventListener('focus',()=>selectClip(uid));card.addEventListener('click',()=>selectClip(uid));card.addEventListener('dblclick',()=>preview(uid));
+      card.addEventListener('dragstart',event=>{
+        if(busy()||pinned(clip)){event.preventDefault();return;}
+        dragged=uid;selectClip(uid);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',uid);card.classList.add('dragging');
+      });
+      card.addEventListener('dragover',event=>{
+        if(busy()||!dragged||dragged===uid||pinned(clip))return;
+        event.preventDefault();event.dataTransfer.dropEffect='move';card.classList.add('drop-target');
+      });
+      card.addEventListener('dragleave',event=>{if(!card.contains(event.relatedTarget))card.classList.remove('drop-target');});
+      card.addEventListener('drop',event=>{
+        event.preventDefault();if(busy()||!dragged||dragged===uid||pinned(clip))return;
+        const from=clips.findIndex(c=>c.uid===dragged),to=clips.findIndex(c=>c.uid===uid);
+        if(from<0||to<0||pinned(clips[from]))return;
+        makeEditable();const [item]=clips.splice(from,1);clips.splice(to,0,item);dragged=null;afterEdit(item.uid);soundNote('move');tell(`「${label(item)}」已移到第 ${to+1} 段`);
+      });
+      card.addEventListener('dragend',()=>{dragged=null;$('timeline').querySelectorAll('.clip').forEach(c=>c.classList.remove('dragging','drop-target'));});
+      card.addEventListener('keydown',event=>{if(event.target!==card)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();moveClip(uid,event.key==='ArrowLeft'?-1:1);}else if(event.key==='Enter'){event.preventDefault();preview(uid);}});
+    });
+    layoutTimeline();renderInspector();renderCutTray();updateControls();
+    if(focusUid){selectClip(selected,true);$('timeline').querySelector(`[data-uid="${selected}"]`)?.focus({preventScroll:true});}
+  }
+  function progress(value,total){
+    const fraction=Math.max(0,Math.min(1,total?value/total:0));$('progressFill').style.width=`${fraction*100}%`;
+    $('progressBar').setAttribute('aria-valuenow',String(Math.round(fraction*100)));
+    $('timeCode').textContent=`${timecode(Math.min(value,total))} / ${timecode(total)}`;
+    const offset=mode==='preview'?startTime(Math.max(0,clips.findIndex(c=>c.uid===animation?.clip.uid))):0;
+    sequencePosition=Math.max(0,Math.min(totalDuration(),offset+value));drawPlayhead(mode==='playing'&&!paused);
+  }
+  function seekSequence(seconds){
+    if(busy()){tell('先停止放映，再用标尺定位。');return;}
+    const target=Math.max(0,Math.min(totalDuration(),seconds));let state=initialState(level),start=0;
+    for(let i=0;i<clips.length;i++){
+      const clip={...clips[i]},duration=clipDuration(clip),result=transition(state,clip,level);
+      if(target<=start+duration||!result.ok||i===clips.length-1){
+        const p=Math.max(0,Math.min(1,(target-start)/duration));mode='scrub';paused=true;clipIndex=i;failure=null;
+        animation={clip,from:{...state},to:result.state,ok:result.ok,error:result.ok?null:result,progress:p,elapsed:p*duration,duration};
+        world=p>=1?{...result.state}:{...state};selected=clip.uid;
+        $('subtitle').textContent='定位预览 · '+label(clip)+(clip.reversed?'（倒放）':'')+(result.ok?'':' · '+result.title);$('transportText').textContent='时间线定位';
+        updateWorld();selectClip(clip.uid);updateFeedback();updateControls();progress(Math.min(target,start+duration),totalDuration());drawPlayhead(true);return;
+      }
+      state=result.state;start+=duration;
+    }
+  }
+  function renderAll(){
+    renderLevels();$('missionNumber').textContent=`${level.tutorial?'LESSON':'CASE'} ${pad(level.id+1)} / ${pad(collection().length)}`;
+    $('missionTitle').textContent=level.name;$('missionDescription').textContent=level.description;$('sceneCaption').textContent=level.caption;
+    $('introTitle').textContent=level.tutorial?'项目：剪辑学堂':'项目：月光归途';
+    $('introSubtitle').textContent=level.tutorial?'六个独立练习 · 随时重温':'四章 · 十六个序列';
+    $('libraryPath').textContent=level.tutorial?'学堂 / 教学序列':'归途 / 正式序列';updateWorkspace();
+    $('chapterLesson').textContent=level.tutorial?'独立教学 · '+level.toolName:'第 '+(level.chapter+1)+' 章 · '+CHAPTERS[level.chapter].mechanic+' / '+level.stage;
+    $('lessonGuide').hidden=!level.tutorial;
+    $('lessonGuide').innerHTML=level.tutorial?`<span class="lesson-label">这节课，跟着做</span><ol>${level.steps.map(step=>`<li>${step}</li>`).join('')}</ol>`:'';
+    updateWorld();renderTimeline();updateFeedback();updateControls();
+  }
+  function loadLevel(id){
+    level=collection()[id]||collection()[0];clips=level.order.map(id=>({id,uid:id,reversed:false,freeze:false}));removed=[];copySerial=0;
+    if(!level.tutorial){lastCampaign=level.id;try{localStorage.setItem('escape-editor-last-level',String(lastCampaign));}catch{}}
+    world=initialState(level);mode='idle';paused=false;animation=null;clipIndex=-1;attempts=0;hintIndex=-1;failure=null;selected=null;dragged=null;
+    $('subtitle').textContent=level.opening;$('transportText').textContent='剪辑预览';$('monitorLabel').textContent='节目监视器 / PROGRAM';
+    $('timelineViewport').scrollLeft=0;sequencePosition=0;renderAll();progress(0,totalDuration());
+    document.querySelector('.mission-scroll').scrollTop=0;
+  }
+  function makeEditable(){
+    if(mode==='idle')return;
+    mode='idle';animation=null;paused=false;world=initialState(level);failure=null;clipIndex=-1;
+    $('subtitle').textContent=level.opening;$('transportText').textContent='剪辑预览';updateWorld();updateFeedback();updateControls();progress(0,totalDuration());
+  }
+  function afterEdit(focusUid=null){$('subtitle').textContent=level.opening;renderTimeline(focusUid);updateWorld();updateFeedback();progress(0,totalDuration());}
+  function moveClip(uid,delta){
+    if(busy())return;const from=clips.findIndex(c=>c.uid===uid);if(from<0||!canMove(from,delta))return;
+    makeEditable();const to=from+delta;[clips[from],clips[to]]=[clips[to],clips[from]];afterEdit(uid);soundNote('move');tell(`「${label(findClip(uid))}」已移到第 ${to+1} 段`);
+  }
+  function moveTo(uid,to){
+    if(busy()||!Number.isInteger(to))return;const from=clips.findIndex(c=>c.uid===uid);
+    if(from<0||to<0||to>=clips.length||from===to||pinned(clips[from])||pinned(clips[to]))return;
+    makeEditable();const [item]=clips.splice(from,1);clips.splice(to,0,item);afterEdit(uid);soundNote('move');tell(`「${label(item)}」已移到第 ${to+1} 段`);
+  }
+  function reverseClip(uid){
+    if(busy())return;const clip=findClip(uid);if(!clip||!CLIPS[clip.id].reversible)return;
+    if(!clip.reversed&&countReversed()>=level.budget){tell('倒放额度已用完。先取消另一段的倒放，就能返还额度。');return;}
+    makeEditable();clip.reversed=!clip.reversed;afterEdit();soundNote('reverse');$('subtitle').textContent=clip.reversed?`倒过来看，「${label(clip)}」会发生什么？`:'片段已恢复正放。';
+  }
+  function cutClip(uid){
+    if(busy()||!level.cutBudget)return;const index=clips.findIndex(c=>c.uid===uid),clip=clips[index];
+    if(!clip||!canCut(level,clip))return;
+    if(removed.length>=level.cutBudget){tell('剪除额度已用完。先从废片区放回一段。');return;}
+    makeEditable();clips.splice(index,1);removed.push({...clip,reversed:false,freeze:false,muted:false,restoreIndex:index});afterEdit();soundNote('move');tell(`已剪除「${label(clip)}」。它不会再发生，可从废片区放回。`);
+  }
+  function restoreClip(uid){
+    if(busy())return;const index=removed.findIndex(c=>c.uid===uid);if(index<0)return;
+    makeEditable();const [clip]=removed.splice(index,1);const last=level.fixedLast?clips.length-1:clips.length;
+    clips.splice(Math.max(level.fixedFirst?1:0,Math.min(clip.restoreIndex,last)),0,clip);delete clip.restoreIndex;afterEdit(uid);tell('镜头已放回，剪除额度已返还。');
+  }
+  function freezeClip(uid){
+    if(busy()||!level.freezeBudget)return;const clip=findClip(uid);if(!clip||!level.freezable.includes(clip.id))return;
+    if(!clip.freeze&&countFrozen()>=level.freezeBudget){tell('定格夹已经用在另一镜。先取消那一镜的定格。');return;}
+    makeEditable();clip.freeze=!clip.freeze;afterEdit(uid);soundNote('reverse');tell(clip.freeze?'本镜将定格闸门，角色照常行动。':'已取下定格夹，额度返还。');
+  }
+  function copyClip(uid){
+    if(busy()||!level.copyBudget)return;const clip=findClip(uid);if(!clip||clip.copyOf||!level.copyable.includes(clip.id))return;
+    if(countCopies()>=level.copyBudget){tell('复制额度已用完。先撤销现有副本，再复制其他行动。');return;}
+    if(clip.reversed&&countReversed()>=level.budget){tell('倒放额度已用完。先取消一段倒放，再复制这个倒放镜头。');return;}
+    makeEditable();const copyNumber=1+Math.max(0,...clips.filter(c=>c.copyOf===clip.uid).map(c=>c.copyNumber||1));
+    const copy={...clip,uid:`${clip.id}-copy-${++copySerial}`,copyOf:clip.uid,copyNumber,freeze:false,muted:false};
+    clips.splice(clips.indexOf(clip)+1,0,copy);afterEdit(copy.uid);soundNote('move');tell('副本已加入时间线，可独立移动。重复动作不会复制物品。');
+  }
+  function removeCopy(uid){
+    if(busy())return;const index=clips.findIndex(c=>c.uid===uid);if(index<0||!clips[index].copyOf)return;
+    makeEditable();clips.splice(index,1);afterEdit();tell('副本已撤销，复制额度返还。');
+  }
+  function splitAction(uid){
+    if(busy()||!level.splitBudget)return;const clip=findClip(uid);
+    if(!clip||!CLIPS[clip.id].parts||clip.copyOf)return;
+    if(countSplits()>=level.splitBudget){tell('切片额度已用完。先把现有的半镜合回整段。');return;}
+    makeEditable();const parts=makeParts(clip);clips.splice(clips.indexOf(clip),1,...parts);afterEdit(parts[0].uid);
+    tell('已按动作中点切开。前后半镜可分别排序，合回整段可撤销。');
+  }
+  function mergeAction(sourceUid){
+    if(busy())return;
+    const first=clips.find(c=>c.splitUid===sourceUid&&c.part===0);if(!first)return;
+    makeEditable();const index=clips.indexOf(first),source={id:first.splitFrom,uid:sourceUid,reversed:false,freeze:false,muted:false};
+    const before=clips.slice(0,index).filter(c=>c.splitUid!==sourceUid).length;
+    clips=clips.filter(c=>c.splitUid!==sourceUid);removed=removed.filter(c=>c.splitUid!==sourceUid);
+    clips.splice(before,0,source);afterEdit(source.uid);tell('前后半镜已合回原片；废片中的半镜也已收回，额度返还。');
+  }
+  function muteClip(uid){
+    if(busy()||!level.muteBudget)return;const clip=findClip(uid);if(!clip||!level.muteable.includes(clip.id))return;
+    if(!clip.muted&&countMuted()>=level.muteBudget){tell('静音额度已用完。先取消另一镜的静音。');return;}
+    makeEditable();clip.muted=!clip.muted;afterEdit(uid);tell(clip.muted?'本镜声音已移除，动作仍然保留。':'本镜声音已恢复，静音额度返还。');
+  }
+  function preview(uid){
+    if(busy())return;makeEditable();const clip={...findClip(uid)},source=previewState(clip,level),id=clipKind(clip);
+    const result=transition(source,clip,level);mode='preview';paused=false;world=source;animation={clip,from:{...source},to:result.state,ok:result.ok,error:result.ok?null:result,elapsed:0,progress:0,duration:clipDuration(clip)};
+    $('subtitle').textContent=`素材预览 · ${label(clip)}${clip.reversed?'（倒放）':''}${clip.freeze?' · 闸门定格':''}${clip.muted?' · 声轨静音':''}${result.ok?'':' · '+result.title}`;
+    $('transportText').textContent=clip.reversed?'独立预览 · 倒放':'独立预览 · 正放';updateWorld();updateFeedback();updateControls();progress(0,clipDuration(clip));if(id==='bell'&&!clip.muted)soundNote(clip.reversed?'reverse':'bell');
+    if(clips.length>4)$('scene').scrollIntoView({block:'center',behavior:'smooth'});
+  }
+  function subtitleFor(clip){
+    if(clip.reversed)return '倒放 · '+CLIPS[clip.id].backward+(clip.freeze?'。闸门本镜不计时。':'。');
+    const descriptions={bridge:clip.reversed?'让碎片回到它们原来的地方。':'桥面在这一刻坍塌。',cross:world.key?'钥匙已经拿走。重复动作不会多出一把。':'过桥，拿到那把发光的钥匙。',exit:'带上钥匙，回家。',tide:clip.reversed?'潮水向后退去，河岸露了出来。':'潮水漫过河岸，冲散了桥梁。',shutter:clip.reversed?(level.shutterMode==='permanent'?'闸门打开，出口可以通行。':'闸门打开了。接下来只有两段时间。'):'闸门落下，出口被封住。',bell:world.bellCount?'第二声铃响，守夜人醒来了。':'第一声铃响，他只是翻了个身。'};
+    Object.assign(descriptions,{lever:'前半镜拉开闸门，后半镜松手关门。',latch:'只留下拉闸这一半，门会一直开着。',release:'手一松，闸门又落了下来。',footsteps:clip.muted?'脚步声被剪掉，小橘安静穿过碎石。':'碎石发出声响，巡逻犬听见了。',cell:'把左岸的唯一电池带在身上。',socket:'电池装进电箱，闸门有电了。'});
+    Object.assign(descriptions,{readcode:'门牌上的 3142，记在小橘心里。',keypad:'输入记住的密码，电子锁解开了。',blackout:clip.reversed?'倒转断电的一刻，让线路恢复。':'线路断开，灯光熄灭。记住的密码仍然保留。'});
+    if(clip.id==='socket'&&world.powerFault)descriptions.socket='电池已经就位，但线路还没有恢复。';
+    if(clip.id==='bell'&&world.bellCount>=2&&level.echoSensitive)descriptions.bell='第三声铃响，巡逻犬听见了。';
+    if(clip.id==='bell'&&clip.muted)descriptions.bell='门铃在摇动，但这一镜没有声音。';
+    descriptions.bell='第 '+(world.bellCount+1)+' 声铃，本关需要 '+ringTarget(level)+' 声。';
+    Object.assign(descriptions,{rocks:clip.reversed?'落石回到山坡，桥头畅通。':'石头落下，挡住了桥头。',branches:clip.reversed?'枯枝回到树上，对岸露出通路。':'枯枝落下，封住对岸通路。',crate:clip.reversed?'木箱回到高处，门前空出来了。':'木箱滑落，堵住门前。',entry:'穿过打开的闸门，走到门锁前。',unlock:'转动钥匙，解开门内的锁。'});
+    return descriptions[clipKind(clip)]+(clip.freeze?' 闸门本镜不计时。':'');
+  }
+  function beginClip(){
+    const clip={...clips[clipIndex]},result=transition(world,clip,level);
+    animation={clip,from:{...world},to:result.state,ok:result.ok,error:result.ok?null:result,elapsed:0,progress:0,duration:result.ok?clipDuration(clip):1.7};
+    $('subtitle').textContent=subtitleFor(clip);$('transportText').textContent=`镜头 ${pad(clipIndex+1)} / ${pad(clips.length)}`;
+    updateFeedback();updateControls();if(clip.id==='bell'&&result.ok&&!clip.muted)soundNote(clip.reversed?'reverse':'bell');
+  }
+  function play(){
+    if(busy()){paused=!paused;updateControls();return;}
+    const error=validateEdit(level,clips,removed);if(error){tell(error);return;}
+    mode='playing';paused=false;world=initialState(level);failure=null;clipIndex=0;attempts++;updateWorld();beginClip();soundNote('play');
+    if(clips.length>4)$('scene').scrollIntoView({block:'center',behavior:'smooth'});
+  }
+  function stop(){if(!busy()&&mode!=='scrub')return;makeEditable();$('subtitle').textContent='剪辑保留了。调整好，再试一次。';renderTimeline();}
+  function completeClip(){
+    const finished=animation;
+    if(mode==='preview'){
+      mode='idle';animation=null;world=initialState(level);$('subtitle').textContent='预览结束。把片段放进你的故事里。';$('transportText').textContent='剪辑预览';
+      updateWorld();updateFeedback();updateControls();progress(0,totalDuration());return;
+    }
+    world={...finished.to};
+    if(!finished.ok){mode='failure';failure=finished.error;animation.progress=1;$('subtitle').textContent=failure.title;updateWorld();updateFeedback();updateControls();soundNote('fail');return;}
+    updateWorld();clipIndex++;
+    if(clipIndex<clips.length){beginClip();return;}
+    animation=null;
+    if(goalReached(level,world,clips,removed)){
+      mode='success';const done=level.tutorial?tutorialCompleted:completed;if(!done.includes(level.id)){done.push(level.id);saveProgress();}renderLevels();
+      $('subtitle').textContent=level.tutorial?level.lessonSuccess:finalLevel()?`谢谢你，把 ${LEVELS.length} 个故事都剪成了好结局。`:'再小的一段改变，也能换来一个好结局。';
+      $('transportText').textContent='放映完成';progress(totalDuration(),totalDuration());updateFeedback();updateControls();soundNote('success');
+    }else{mode='failure';failure={title:level.tutorial?'再看看这一课的目标':'还没有到达出口',message:level.goal==='rewind'?'这一课要让小橘退回左岸，并把钥匙归还右岸。':level.goal==='cut'?'本课需要使用剪除取出落石，再安全离开。':'让小橘拿到钥匙，并在最后安全离开。'};updateFeedback();updateControls();}
+  }
+  function fitCanvas(){const rect=$('scene').getBoundingClientRect(),ratio=Math.min(window.devicePixelRatio||1,2);$('scene').width=Math.round(Math.max(640,rect.width)*ratio);$('scene').height=Math.round($('scene').width*.48);}
+  const homeSamples=[];
+  {let state=initialState(LEVELS[0]);for(const clip of [{id:'bridge',reversed:true},{id:'cross'},{id:'exit'},{id:'exit',reversed:true},{id:'cross',reversed:true},{id:'bridge'}]){const result=transition(state,clip,LEVELS[0]);homeSamples.push({clip,from:state,to:result.state,ok:result.ok});state=result.state;}}
+  let homeClock=0;
+  function frame(now){
+    const dt=lastTime?Math.min(now-lastTime,100):0;lastTime=now;if(!paused)clock+=dt/1000;
+    if(activeView==='home'){
+      homeClock+=dt/1000;
+      if(now-lastDraw>=1000/30){const index=Math.floor(homeClock/3)%homeSamples.length,sample=homeSamples[index];EscapeScene.draw($('homeScene'),sample.from,{...sample,progress:reducedMotion ? .55 : (homeClock%3)/3},reducedMotion?1.5:homeClock,LEVELS[0]);$('homeDirection').textContent=(sample.clip.reversed?'◀◀ 倒放':'▶▶ 正放')+' · '+CLIPS[sample.clip.id].name;lastDraw=now;}
+      requestAnimationFrame(frame);return;
+    }
+    if(busy()&&!paused&&animation){
+      animation.elapsed+=dt/1000*speed;animation.progress=Math.min(1,animation.elapsed/animation.duration);
+      const seconds=clipDuration(animation.clip);
+      const total=mode==='preview'?seconds:totalDuration(),current=mode==='preview'?animation.progress*seconds:startTime(clipIndex)+animation.progress*seconds;
+      progress(current,total);if(animation.progress>=1)completeClip();
+    }
+    if(now-lastDraw>=1000/30){EscapeScene.draw($('scene'),world,animation,reducedMotion?1.5:clock,level);lastDraw=now;}
+    requestAnimationFrame(frame);
+  }
+  $('playButton').addEventListener('click',play);$('stopButton').addEventListener('click',stop);
+  $('resetButton').addEventListener('click',()=>{const oldAttempts=attempts;loadLevel(level.id);attempts=oldAttempts;updateControls();tell('素材与工具额度已恢复初始状态。');});
+  $('hintButton').addEventListener('click',()=>{if(busy())return;hintIndex=Math.min(hintIndex+1,level.hints.length-1);updateFeedback();const panel=document.querySelector('.mission-scroll');panel.scrollTop=panel.scrollHeight;});
+  $('nextButton').addEventListener('click',()=>{if(finalLevel()){if(level.tutorial)openEditor('campaign',completed.includes(lastCampaign)?Math.max(0,LEVELS.findIndex(l=>!completed.includes(l.id))):lastCampaign);else showHome();}else loadLevel(level.id+1);});
+  $('startGame').addEventListener('click',()=>openEditor('campaign'));
+  $('startTutorial').addEventListener('click',()=>openEditor('tutorial'));
+  $('homeButton').addEventListener('click',showHome);
+  $('workspaceHome').addEventListener('click',showHome);$('workspaceCampaign').addEventListener('click',()=>openEditor('campaign'));$('workspaceTutorial').addEventListener('click',()=>openEditor('tutorial'));
+  $('timelineZoom').addEventListener('input',event=>zoomTimeline(Number(event.target.value)/100));
+  $('zoomOut').addEventListener('click',()=>zoomTimeline(timelineScale-.15));$('zoomIn').addEventListener('click',()=>zoomTimeline(timelineScale+.15));
+  $('fitTimeline').addEventListener('click',()=>{zoomTimeline(($('timelineViewport').clientWidth-24)/Math.max(1,totalDuration())/56);$('timelineViewport').scrollLeft=0;});
+  const seekFromPointer=event=>seekSequence((event.clientX-$('ruler').getBoundingClientRect().left)/pixelsPerSecond());
+  $('ruler').addEventListener('pointerdown',event=>{if(busy()){tell('先停止放映，再用标尺定位。');return;}event.preventDefault();$('ruler').focus({preventScroll:true});$('ruler').setPointerCapture(event.pointerId);seekFromPointer(event);});
+  $('ruler').addEventListener('pointermove',event=>{if($('ruler').hasPointerCapture(event.pointerId)&&event.buttons===1)seekFromPointer(event);});
+  $('ruler').addEventListener('pointerup',event=>{if($('ruler').hasPointerCapture(event.pointerId))$('ruler').releasePointerCapture(event.pointerId);});
+  $('ruler').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();seekSequence(event.key==='Home'?0:event.key==='End'?totalDuration():sequencePosition+(event.key==='ArrowLeft'?-.5:.5));}});
+  $('timelineViewport').addEventListener('dragover',event=>{if(!dragged||busy())return;const rect=$('timelineViewport').getBoundingClientRect();if(event.clientX>rect.right-35)$('timelineViewport').scrollLeft+=18;else if(event.clientX<rect.left+35)$('timelineViewport').scrollLeft-=18;});
+  $('speedButton').addEventListener('click',()=>{speed=speed===1?2:1;$('speedButton').textContent=`${speed}×`;$('speedButton').setAttribute('aria-label',`播放速度 ${speed} 倍`);});
+  $('soundButton').addEventListener('click',()=>{
+    try{if(!audioCtx){const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio){tell('当前浏览器不支持音效，仍可正常游玩。');return;}audioCtx=new Audio();}
+      sound=!sound;$('soundButton').setAttribute('aria-pressed',String(sound));$('soundButton').innerHTML=icon(sound?'volume':'volumeOff')+`<span id="soundLabel">音效${sound?'开':'关'}</span>`;if(sound)soundNote('play');
+    }catch{tell('音效暂不可用，仍可正常游玩。');}
+  });
+  $('helpButton').addEventListener('click',()=>{if(busy()&&!paused){paused=true;updateControls();}$('helpDialog').showModal();});
+  $('closeHelp').addEventListener('click',()=>$('helpDialog').close());$('startEditing').addEventListener('click',()=>$('helpDialog').close());
+  $('helpDialog').addEventListener('click',event=>{if(event.target===$('helpDialog')){const r=$('helpDialog').getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)$('helpDialog').close();}});
+  document.addEventListener('keydown',event=>{if($('helpDialog').open||activeView==='home')return;if(event.code==='Space'&&!event.target.closest('button,input,textarea,select')){event.preventDefault();play();}else if(event.key==='Escape'){stop();}});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&busy()&&!paused){paused=true;updateControls();}});
+  window.addEventListener('resize',()=>{fitCanvas();if(hasSession)layoutTimeline();});
+  renderHome();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
