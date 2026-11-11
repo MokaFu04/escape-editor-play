@@ -126,10 +126,13 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
 
 /* Keep cutting next to its clip, with a visible destination for drag-to-cut. */
 .nle .clip{container-type:inline-size;container-name:timeline-clip}
-.nle .clip-cut-button{position:absolute;right:3px;bottom:3px;z-index:3;display:flex;align-items:center;justify-content:center;gap:3px;width:58px;max-width:calc(100% - 6px);height:28px;min-height:28px;padding:3px;border:1px solid #ffd092;border-radius:4px;background:#9b4921;color:#fff4df;font-family:inherit;font-size:12px;font-weight:600;line-height:1;cursor:pointer;box-shadow:0 1px 5px #11182799;overflow:hidden}
-.nle .clip-cut-button svg{width:14px;height:14px;flex:none;pointer-events:none}.clip-cut-label{pointer-events:none;white-space:nowrap}
-.nle .clip-cut-button:hover:not(:disabled){background:#bc5a28;border-color:#fff0bf}.nle .clip-cut-button:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
-@container timeline-clip (max-width:72px){.clip-cut-label{display:none}.nle .clip-cut-button{width:28px}}
+.clip-inline-tools{position:absolute;right:3px;bottom:3px;z-index:3;display:flex;justify-content:flex-end;gap:4px;max-width:calc(100% - 6px)}
+.nle .clip-edit-button{display:flex;align-items:center;justify-content:center;gap:3px;min-width:58px;max-width:100%;height:28px;min-height:28px;padding:3px 5px;border:1px solid #ffd092;border-radius:4px;background:#9b4921;color:#fff4df;font-family:inherit;font-size:12px;font-weight:600;line-height:1;cursor:pointer;box-shadow:0 1px 5px #11182799;overflow:hidden}
+.nle .clip-edit-button svg{width:14px;height:14px;flex:none;pointer-events:none}.clip-tool-label{pointer-events:none;white-space:nowrap}
+.nle .clip-cut-button:hover:not(:disabled){background:#bc5a28;border-color:#fff0bf}.nle .clip-edit-button:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.nle .clip-freeze-button{background:#28505c;border-color:#87deed;color:#e4fcff}.nle .clip-freeze-button.is-applied{background:#286d7e;border-color:#cbfbff;box-shadow:inset 0 0 0 1px #c7faff80}
+.nle .clip-copy-button,.nle .clip-uncopy-button{background:#5e477c;border-color:#d5b3ff;color:#f6eeff}
+@container timeline-clip (max-width:72px){.clip-tool-label{display:none}.nle .clip-edit-button{width:28px;min-width:0;padding:3px}}
 .nle .cut-tray{min-height:44px;align-items:center;gap:10px;border:1px dashed #b68b5a;background:#352c25;padding:7px 12px;transition:background .12s,border-color .12s,box-shadow .12s}
 .cut-usage{font:12px Consolas,monospace;color:#f4c484;white-space:nowrap}.cut-drop-hint{font-size:12px;color:#e5c69e;line-height:1.5}
 .nle .cut-tray[data-drop-state="ready"]{border-color:#ffd493;background:#473523}
@@ -151,12 +154,22 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
 .budget-grid:is([data-tools="2"],[data-tools="3"]) .budget-card-title{gap:3px;font-size:12px}.budget-grid:is([data-tools="2"],[data-tools="3"]) .budget-card-title svg{width:12px;height:12px}.budget-grid:is([data-tools="2"],[data-tools="3"]) .budget-card-title small{display:none}
 .budget-grid:is([data-tools="2"],[data-tools="3"]) .budget-remaining{line-height:24px}.budget-grid:is([data-tools="2"],[data-tools="3"]) .budget-remaining strong{font-size:22px}
 @media(max-width:900px){.budget-panel{padding:8px}.budget-grid{gap:5px}.budget-card{padding:5px}.budget-card-title{font-size:12px}.budget-panel .budget-remaining strong{font-size:22px}}
+
+/* Primary transport sits below the picture; editing has a nearby shortcut. */
+.monitor-bottom{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;height:54px;min-height:54px;padding:6px 10px}
+.monitor-progress{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden}.monitor-progress .transport-label{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.monitor-progress .mini-progress{min-width:18px}
+.monitor-playback{display:flex;align-items:center;justify-content:center;gap:6px}.monitor-playback .play-button{min-width:126px;height:40px;min-height:40px;padding:7px 12px;border:1px solid #9bc5fa;border-radius:5px;background:#416caa;color:#f6faff;font-size:14px;font-weight:650;box-shadow:0 2px 8px #10151d55}.monitor-playback .play-button svg{width:18px;height:18px}
+.monitor-playback .stop-button{width:34px;height:34px;border:1px solid #6d809b;border-radius:4px;background:#2d3b50;color:#dceaff}.monitor-playback .stop-button svg{width:15px;height:15px}
+.monitor-timing{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}
+.nle .editor-heading{flex:1;gap:10px}.nle .timeline-play-shortcut{min-width:110px;height:34px;min-height:34px;flex:none;padding:5px 8px}.nle .editor-controls{flex:none}
+.nle .timeline-play-shortcut span{display:inline;font:inherit;color:inherit}.nle .timeline-play-shortcut svg{width:16px;height:16px;flex:none}
+@media(max-width:1180px){.monitor-bottom{height:58px;min-height:58px;gap:6px}.monitor-progress .transport-label{display:none}.monitor-timing{flex-direction:column;align-items:flex-end;justify-content:center;gap:2px}.monitor-timing .time-code{font-size:10px}.monitor-timing .speed-button{height:22px;min-height:22px;padding:1px 5px}.monitor-playback .play-button{min-width:106px;padding:6px 8px}.nle .timeline-play-shortcut{min-width:98px;font-size:12px}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="topbar-inner">
   <div class="brand"><span class="brand-mark" data-icon="film"></span>逃生剪辑师 <small>ESCAPE EDITOR</small></div>
-  <div class="top-actions"><span class="badge">本地项目 · 1.0.1</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
+  <div class="top-actions"><span class="badge">本地项目 · 1.0.2</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
 </div></header>
 <div class="workspace-strip"><div class="project-path"><span data-icon="film"></span><span id="projectPath">月光归途 / 项目中心</span></div><nav class="workspace-tabs" aria-label="切换工作区"><button id="workspaceHome" aria-pressed="true">项目中心</button><button id="workspaceCampaign" aria-pressed="false">正式剪辑</button><button id="workspaceTutorial" aria-pressed="false">剪辑学堂</button></nav><span class="workspace-format">SEQUENCE · 24 FPS</span></div>
 <main id="homeScreen" class="home-screen" aria-label="游戏开始界面">
@@ -176,7 +189,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     <section class="monitor" aria-label="影片监视器">
       <div class="monitor-top"><span class="monitor-label"><span data-icon="monitor"></span><span id="monitorLabel">主监视器 / MAIN MONITOR</span></span><span class="monitor-status" id="monitorStatus"><i class="status-dot"></i><span id="statusText">等待剪辑</span></span></div>
       <div class="screen"><canvas id="scene" width="1000" height="480" aria-label="月光下的断桥，小橘在左岸，钥匙和出口在右岸">动画场景：请使用下方的片段按钮进行剪辑；右侧状态会描述播放结果。</canvas><div class="scene-caption" id="sceneCaption">第一幕 · 月光断桥</div><div class="scene-corner">CAM 01 · 24 FPS</div><div class="scene-result" id="sceneResult" hidden><div class="result-word" id="resultWord"></div><p id="resultLine"></p></div><div class="subtitle" id="subtitle">这座桥，已经断了。</div></div>
-      <div class="monitor-bottom"><span class="transport-label"><span data-icon="film"></span><span id="transportText">剪辑预览</span></span><div class="mini-progress" role="progressbar" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><span id="progressFill"></span></div><span class="time-code" id="timeCode">00:00 / 00:09</span><button class="speed-button" id="speedButton" title="切换播放速度" aria-label="播放速度 1 倍">1×</button></div>
+      <div class="monitor-bottom"><div class="monitor-progress"><span class="transport-label"><span data-icon="film"></span><span id="transportText">剪辑预览</span></span><div class="mini-progress" role="progressbar" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><span id="progressFill"></span></div></div><div class="monitor-playback"><button id="stopButton" class="stop-button" aria-label="停止播放，回到剪辑" aria-keyshortcuts="Escape" title="停止 / Esc" disabled><span data-icon="stop"></span></button><button id="playButton" class="play-button" aria-keyshortcuts="Space" title="放映 / 暂停 · Space"><span data-icon="play"></span><span id="playLabel">放映试试</span></button></div><div class="monitor-timing"><span class="time-code" id="timeCode">00:00 / 00:09</span><button class="speed-button" id="speedButton" title="切换播放速度" aria-label="播放速度 1 倍">1×</button></div></div>
     </section>
     <aside class="mission" aria-label="本关目标与状态"><div class="panel-title"><span data-icon="monitor"></span><span>任务与额度</span><span class="budget-legend">剩余 / 总额</span></div>
       <section class="budget-panel" aria-label="剪辑额度，显示剩余次数与总额"><div class="budget-grid" id="budgetGrid"><div class="budget-card" id="reverseBudget"></div><div class="tool-budget" id="toolBudget" hidden></div></div></section>
@@ -187,7 +200,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     </aside>
   </div>
   <section class="editor nle" aria-labelledby="editorTitle">
-    <div class="editor-head"><div class="editor-heading"><span class="sequence-icon" data-icon="film"></span><h2 id="editorTitle">时间线</h2><span class="sequence-name" id="sequenceName"></span><span class="editor-meta" id="editorMeta"></span></div><div class="editor-controls"><button id="resetButton" class="reset-button"><span data-icon="reset"></span>重置序列</button><button id="stopButton" class="stop-button" aria-label="停止播放，回到剪辑" title="停止 / Esc" disabled><span data-icon="stop"></span></button><button id="playButton" class="play-button"><span data-icon="play"></span><span id="playLabel">放映试试</span></button></div></div>
+    <div class="editor-head"><div class="editor-heading"><span class="sequence-icon" data-icon="film"></span><h2 id="editorTitle">时间线</h2><button id="timelinePlayButton" class="play-button timeline-play-shortcut" title="放映 / 暂停 · Space"><span data-icon="play"></span><span>放映试试</span></button><span class="sequence-name" id="sequenceName"></span><span class="editor-meta" id="editorMeta"></span></div><div class="editor-controls"><button id="resetButton" class="reset-button"><span data-icon="reset"></span>重置序列</button></div></div>
     <div class="timeline-toolbar"><output id="timelineTimeCode" class="timeline-timecode" aria-label="时间线当前位置">00:00:00:00</output><span class="toolbar-divider"></span><span class="selection-tool" title="选中片段后拖拽换序"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m5 2 14 12-7 1-3 7z"/></svg></span><span class="selection-summary" id="selectionSummary">选择片段</span><div class="timeline-zoom"><button id="zoomOut" aria-label="缩小时间线" title="缩小">−</button><label class="sr-only" for="timelineZoom">时间线缩放</label><input id="timelineZoom" type="range" min="10" max="200" step="1" value="100"><button id="zoomIn" aria-label="放大时间线" title="放大">+</button><output id="zoomLabel">100%</output><button id="fitTimeline" class="fit-timeline">适配全部</button></div></div>
     <div class="timeline-workspace"><div class="track-headers" aria-hidden="true"><div class="ruler-header">轨道</div><div class="video-track-header"><strong>V1</strong><span>主画面</span><span data-icon="film"></span></div><div class="effects-track-header"><strong>DIR</strong><span>播放方向</span></div></div><div class="timeline-viewport" id="timelineViewport" tabindex="0" aria-label="时间线滚动区域，可横向滚动"><div class="timeline-content" id="timelineContent"><div class="ruler" id="ruler" role="slider" tabindex="0" aria-label="时间标尺，点击或使用左右方向键预览" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"></div><div class="timeline" id="timeline" aria-label="影片时间线"></div><div class="effects-track" id="effectsTrack" aria-label="各片段的播放方向，点击正放或倒放切换"></div><div class="timeline-playhead" id="timelinePlayhead" aria-hidden="true"><i></i></div></div></div></div>
     <div id="clipInspector" class="clip-inspector" aria-label="选中片段属性"></div>
@@ -196,7 +209,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   <footer class="footer"><span><span data-icon="spark"></span>本地工作区 · 让每一镜通往好结局</span><span class="keyboard-help"><kbd>Space</kbd> 播放 / 暂停 <span style="margin-left:7px"><kbd>←</kbd><kbd>→</kbd> 移动片段</span><span class="direction-help">点击素材下方正放 / 倒放可切换方向</span></span></footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
-<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。下方的文字说明它会改变什么；预览不影响本关状态。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要留下退潮、完整桥面与畅通道路。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。空格播放或暂停，Esc 停止。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—3 关：倒放，修复环境。第 4—6 关：剪除，让坏事不发生。第 7—9 关：定格，闸门停一镜、角色继续走。第 10—12 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习变化、综合考核。两种进度独立保存，第五章筹备中。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>已有障碍要修复，未发生的可以剪掉</h3><p>点击镜头上的橙色「剪除」，或把镜头拖入下方废片区；点击「放回」即可撤销。右侧固定显示剩余 / 总额，取消操作会返还对应额度。剪除不会改变关卡初始状态；倒放才会清除已有障碍。定格可取消，副本可撤销。限时按镜数计算，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关 12 段原片可剪成 13 镜：门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
+<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。下方的文字说明它会改变什么；预览不影响本关状态。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要留下退潮、完整桥面与畅通道路。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。画面下方中央与时间线左侧都可放映或暂停；也可按空格，Esc 停止。通关后短暂显示成功提示，自动进入下一关；本组最后一关保留完成结果。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—3 关：倒放，修复环境。第 4—6 关：剪除，让坏事不发生。第 7—9 关：定格，闸门停一镜、角色继续走。第 10—12 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习变化、综合考核。两种进度独立保存，第五章筹备中。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>已有障碍要修复，未发生的可以剪掉</h3><p>点击镜头上的橙色「剪除」，或把镜头拖入下方废片区；点击「放回」即可撤销。右侧固定显示剩余 / 总额，取消操作会返还对应额度。剪除不会改变关卡初始状态；倒放才会清除已有障碍。在对应镜头上点击「定格」或「复制」；已定格的镜头可再点取消，副本上点「撤销」会返还额度。限时按镜数计算，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关 12 段原片可剪成 13 镜：门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
 <script id="game-campaign">
 (() => {
   const CHAPTERS = [
@@ -289,10 +302,10 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       steps:['点击落石镜头上的「剪除」，也可把镜头拖到下方废片区。','在废片区点击「放回」，再试用另一种方式剪除。','让取钥匙与离开按顺序放映。'],hints:['本课需要实际使用剪除；镜头上的橙色按钮或拖入废片区均可。','剪除落石 → 取钥匙 → 离开。'],lessonSuccess:'剪除不会清除初始障碍，但能阻止尚未发生的坏事。'},
     {name:'让闸门多等一镜',short:'定格',tool:'freeze',toolName:'定格',order:['unlock','entry','shutter','exit'],budget:4,freezeBudget:1,initialBridge:true,shutter:true,doorSequence:true,initial:{cat:'right',key:true},
       description:'小橘已持钥匙到达右岸。倒放落锁打开闸门，再进门、转钥匙、离开；给进门或转钥匙定格一镜。',opening:'闸门只等两镜，但小橘需要做三个动作。',
-      steps:['把「出口落锁」排到第一段，切换成倒放。','按进门 → 转钥匙 → 离开排序。','在进门或转钥匙上使用定格，再放映。'],hints:['定格只停闸门计时，不停小橘的动作。','开闸 → 进门（定格） → 转钥匙 → 离开。'],lessonSuccess:'暂停与倍速不改变闸门计时，定格才会借来一镜。'},
+      steps:['把「出口落锁」排到第一段，切换成倒放。','按进门 → 转钥匙 → 离开排序。','点击进门或转钥匙镜头上的「定格」，再放映。'],hints:['定格只停闸门计时，不停小橘的动作。','开闸 → 进门（定格） → 转钥匙 → 离开。'],lessonSuccess:'暂停与倍速不改变闸门计时，定格才会借来一镜。'},
     {name:'把有用的一声再放一次',short:'复制',tool:'copy',toolName:'复制',order:['bell','cross','exit'],budget:4,copyBudget:1,initialBridge:true,guard:true,ringsRequired:2,
       description:'门卫需要两声铃才放行。复制「摇响门铃」，让原片和副本都正放，再取钥匙离开。',opening:'复制的是一次行动，方向由你决定。',
-      steps:['复制一份门铃，让时间线出现四段。','原片和副本都用正放；倒放会收回一声铃。','放映两声铃 → 取钥匙 → 离开。'],hints:['原片一声 + 副本一声 = 两声。','门铃 → 门铃副本 → 取钥匙 → 离开。'],lessonSuccess:'六课完成！现在可以进入四章正式挑战，每章三关，逐步组合剪辑本领。'}
+      steps:['点击门铃镜头上的「复制」，让时间线出现四段。','原片和副本都用正放；倒放会收回一声铃。','放映两声铃 → 取钥匙 → 离开。'],hints:['原片一声 + 副本一声 = 两声。','门铃 → 门铃副本 → 取钥匙 → 离开。'],lessonSuccess:'六课完成！现在可以进入四章正式挑战，每章三关，逐步组合剪辑本领。'}
   ];
   const TUTORIALS=lessons.map((data,id)=>({id,tutorial:true,flooded:false,shutter:false,chapter:-1,stage:'新手练习',newMechanic:true,required:['cross','entry','unlock','bell','exit'],freezable:['entry','unlock'],copyable:['bell','cross'],...data,caption:'剪辑学堂 · '+(id+1)+' / '+lessons.length,toolHelp:data.description}));
   globalThis.EscapeCampaign={CHAPTERS,LEVELS,TUTORIALS};
@@ -1107,6 +1120,16 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   let level=LEVELS[0],clips=[],removed=[],copySerial=0,world=initialState(level),mode='idle',paused=false,speed=1,animation=null,clipIndex=-1;
   let attempts=0,hintIndex=-1,failure=null,selected=null,dragged=null,sound=false,audioCtx=null,clock=0,lastTime=0,lastDraw=0,toastTimer=0;
   let timelineScale=1,sequencePosition=0;
+  let nextLevelTimer=null;
+  function cancelAutoAdvance(){if(nextLevelTimer!==null){clearTimeout(nextLevelTimer);nextLevelTimer=null;}}
+  function scheduleAutoAdvance(){
+    cancelAutoAdvance();if(finalLevel())return;
+    const finishedLevel=level,finishedTrack=track;
+    nextLevelTimer=setTimeout(()=>{
+      nextLevelTimer=null;
+      if(activeView==='editor'&&mode==='success'&&track===finishedTrack&&level===finishedLevel)loadLevel(finishedLevel.id+1);
+    },1200);
+  }
   const pixelsPerSecond=()=>56*timelineScale;
   const sequenceTime=seconds=>{const frames=Math.max(0,Math.floor(seconds*24+.0001));return [Math.floor(frames/86400),Math.floor(frames/1440)%60,Math.floor(frames/24)%60,frames%24].map(v=>String(v).padStart(2,'0')).join(':');};
   const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1153,6 +1176,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     hasSession=true;fitCanvas();updateWorkspace();window.scrollTo(0,0);$('missionTitle').focus({preventScroll:true});
   }
   function showHome(){
+    cancelAutoAdvance();
     if(busy())stop();activeView='home';$('homeScreen').hidden=false;$('gameScreen').hidden=true;$('homeButton').hidden=true;renderHome();updateWorkspace();window.scrollTo(0,0);$('startGame').focus({preventScroll:true});
   }
   function renderLevels(){
@@ -1205,8 +1229,11 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   }
   function updateControls(){
     const playing=busy();
-    $('playButton').innerHTML=icon(playing?(paused?'play':'pause'):'play')+`<span id="playLabel">${playing?(paused?'继续放映':'暂停放映'):mode==='failure'?'修改后重试':mode==='success'?'再放一次':'放映试试'}</span>`;
-    $('playButton').setAttribute('aria-label',playing?(paused?'继续放映':'暂停放映'):'放映剪辑');
+    const playLabel=playing?(paused?'继续放映':'暂停放映'):mode==='failure'?'修改后重试':mode==='success'?'再放一次':'放映试试';
+    for(const id of ['playButton','timelinePlayButton']){
+      $(id).innerHTML=icon(playing?(paused?'play':'pause'):'play')+`<span ${id==='playButton'?'id="playLabel"':''}>${playLabel}</span>`;
+      $(id).setAttribute('aria-label',(id==='timelinePlayButton'?'时间线：':'')+(playing?(paused?'继续放映':'暂停放映'):'放映剪辑'));
+    }
     $('stopButton').disabled=!playing&&mode!=='scrub';$('hintButton').disabled=playing;
     $('monitorStatus').classList.toggle('running',playing&&!paused);
     $('statusText').textContent=mode==='scrub'?'时间线定位':mode==='preview'?(paused?'预览暂停':'素材预览'):mode==='playing'?(paused?'已暂停':'正在放映'):mode==='failure'?'停在错误镜头':mode==='success'?'剪辑完成':'等待剪辑';
@@ -1234,7 +1261,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       body.textContent=level.tutorial?level.lessonSuccess:`第 ${attempts} 次放映，小橘安全离开。${finalLevel()?'倒放、剪除、定格与复制配合完成，12 个关卡全部结束。第五章筹备中。':level.stage==='综合考核'?'本章三关已完成，下一章使用「'+CHAPTERS[level.chapter+1].mechanic+'」。':'继续用本章机制，试试下一种剪法。'}`;
       $('sceneResult').hidden=false;$('sceneResult').className='scene-result success';$('resultWord').textContent='GOOD CUT!';$('resultLine').textContent=finalLevel()?'所有故事，都有了好结局。':'小橘平安到家了。';
       if(level.tutorial)$('resultLine').textContent=level.goal==='rewind'?'小橘回到起点，钥匙也归位了。':level.lessonSuccess;
-      $('nextButton').hidden=false;$('nextButton').innerHTML=(level.tutorial?(finalLevel()?'进入正式关卡':'下一课'):finalLevel()?'返回开始界面':'下一幕')+icon('arrowRight');
+      if(!finalLevel())$('resultLine').textContent+=' 即将自动进入'+(level.tutorial?'下一课。':'下一关。');
+      $('nextButton').hidden=false;$('nextButton').innerHTML=(level.tutorial?(finalLevel()?'进入正式关卡':'立即进入下一课'):finalLevel()?'返回开始界面':'立即进入下一关')+icon('arrowRight');
     }else if(mode==='scrub'){
       title.innerHTML=icon('monitor')+'时间线定位';body.textContent='正在查看标尺上的这一刻。点击「放映试试」从头验证剪辑；定位不会记录通关。';
     }else if(mode==='preview'){
@@ -1270,13 +1298,26 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(level.splitBudget&&CLIPS[clip.id].parts)buttons.push(`<button class="edit-tool split-button" aria-label="切开${name}">${icon('split')}切成两段</button>`);
     if(clip.splitFrom&&clip.part===0)buttons.push(`<button class="edit-tool merge-button" aria-label="合回${CLIPS[clip.splitFrom].name}整段">${icon('reset')}合回整段</button>`);
     if(canCut(level,clip))buttons.push(`<button class="edit-tool cut-button" data-unavailable="${removed.length>=level.cutBudget}" title="${cutBlockedReason(clip)||'剪除后可从废片区放回'}" aria-label="剪除${name}">${icon('cut')}剪除</button>`);
-    if(level.freezeBudget&&(level.freezable||[]).includes(clip.id))buttons.push(`<button class="edit-tool freeze-button" aria-label="${clip.freeze?'取消定格':'定格'}${name}中的闸门" aria-pressed="${!!clip.freeze}">${icon('freeze')}${clip.freeze?'已定格闸门':'定格闸门'}</button>`);
+    if(level.freezeBudget&&(level.freezable||[]).includes(clip.id))buttons.push(`<button class="edit-tool freeze-button" data-unavailable="${!clip.freeze&&countFrozen()>=level.freezeBudget}" aria-label="${clip.freeze?'取消定格':'定格'}${name}中的闸门" aria-pressed="${!!clip.freeze}">${icon('freeze')}${clip.freeze?'已定格闸门':'定格闸门'}</button>`);
     if(level.copyBudget){
       if(clip.copyOf)buttons.push(`<button class="edit-tool uncopy-button" aria-label="撤销${name}">${icon('reset')}撤销副本</button>`);
-      else if((level.copyable||[]).includes(clip.id))buttons.push(`<button class="edit-tool copy-button" aria-label="复制${name}">${icon('copy')}复制</button>`);
+      else if((level.copyable||[]).includes(clip.id))buttons.push(`<button class="edit-tool copy-button" data-unavailable="${countCopies()>=level.copyBudget||(clip.reversed&&countReversed()>=level.budget)}" aria-label="复制${name}">${icon('copy')}复制</button>`);
     }
     if(level.muteBudget&&(level.muteable||[]).includes(clip.id))buttons.push(`<button class="edit-tool mute-button" aria-label="${clip.muted?'取消静音':'静音'}${name}" aria-pressed="${!!clip.muted}">${icon('mute')}${clip.muted?'已静音':'静音'}</button>`);
     return buttons.join('')||(level.cutBudget?'<span class="tool-locked">必需镜头</span>':'');
+  }
+  function inlineToolButtons(clip){
+    const buttons=[],name=label(clip);
+    function button(action,text,unavailable=false,active=false,title=''){
+      return `<button type="button" class="clip-edit-button clip-${action}-button ${active?'is-applied':''}" data-action="${action}" draggable="false" data-unavailable="${unavailable}" ${action==='freeze'?`aria-pressed="${!!clip.freeze}"`:''} aria-label="${action==='uncopy'?'撤销副本':action==='freeze'&&clip.freeze?'取消定格':text}镜头：${name}" title="${title}">${icon(action==='uncopy'?'reset':action)}<span class="clip-tool-label">${text}</span></button>`;
+    }
+    if(canCut(level,clip))buttons.push(button('cut','剪除',removed.length>=level.cutBudget,false,cutBlockedReason(clip)||'剪除这段镜头，也可拖入废片区'));
+    if(level.freezeBudget&&(level.freezable||[]).includes(clip.id))buttons.push(button('freeze',clip.freeze?'已定格':'定格',!clip.freeze&&countFrozen()>=level.freezeBudget,!!clip.freeze,clip.freeze?'点击取消定格，返还额度':countFrozen()>=level.freezeBudget?'定格额度已用完，先取消另一镜的定格':'定格闸门，角色继续行动'));
+    if(level.copyBudget){
+      if(clip.copyOf)buttons.push(button('uncopy','撤销',false,false,'撤销这个副本，返还复制额度'));
+      else if((level.copyable||[]).includes(clip.id))buttons.push(button('copy','复制',countCopies()>=level.copyBudget||(clip.reversed&&countReversed()>=level.budget),false,countCopies()>=level.copyBudget?'复制额度已用完，先撤销现有副本':clip.reversed&&countReversed()>=level.budget?'倒放额度已用完，先取消一段倒放':'复制一段镜头，副本可独立剪辑'));
+    }
+    return buttons.length?`<div class="clip-inline-tools">${buttons.join('')}</div>`:'';
   }
   function renderCutTray(){
     $('cutTray').hidden=!level.cutBudget;
@@ -1349,7 +1390,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     $('timeline').innerHTML=clips.map((clip,i)=>{
       const def=CLIPS[clip.id],name=label(clip),fixed=clip.id===level.fixedFirst?'固定片头':clip.id===level.fixedLast?'固定片尾':'';
       return `<article class="clip ${clip.uid===selected?'is-selected':''} ${clip.reversed?'is-reversed':''} ${clip.freeze?'is-frozen':''} ${clip.muted?'is-muted':''} ${pinned(clip)?'is-pinned':''}" role="group" tabindex="0" aria-current="${clip.uid===selected}" draggable="${!busy()&&!pinned(clip)}" data-id="${clip.id}" data-uid="${clip.uid}" aria-label="选择第 ${i+1} 段 ${name}，${clip.reversed?'倒放':'正放'}${clip.freeze?'，定格':''}${fixed?'，'+fixed:''}" title="${name} · ${effect(clip)}\n单击选择，双击预览；左右方向键换序。">
-        <div class="clip-top"><span class="clip-top-left"><span class="clip-num">${pad(i+1)}</span><h3 class="clip-title">${name}</h3></span><span class="clip-duration">${clipDuration(clip)}s</span></div><div class="clip-filmstrip"><canvas width="300" height="110" aria-hidden="true"></canvas><canvas width="300" height="110" aria-hidden="true"></canvas></div>${canCut(level,clip)?`<button type="button" class="clip-cut-button" draggable="false" data-unavailable="${removed.length>=level.cutBudget}" aria-label="剪除镜头：${name}" title="${cutBlockedReason(clip)||'剪除这段镜头，也可拖入废片区'}">${icon('cut')}<span class="clip-cut-label">剪除</span></button>`:''}</article>`;
+        <div class="clip-top"><span class="clip-top-left"><span class="clip-num">${pad(i+1)}</span><h3 class="clip-title">${name}</h3></span><span class="clip-duration">${clipDuration(clip)}s</span></div><div class="clip-filmstrip"><canvas width="300" height="110" aria-hidden="true"></canvas><canvas width="300" height="110" aria-hidden="true"></canvas></div>${inlineToolButtons(clip)}</article>`;
     }).join('');
     $('effectsTrack').innerHTML=clips.map(clip=>`<button type="button" class="effect-segment direction-toggle ${clip.uid===selected?'is-selected':''} ${clip.reversed?'reversed':''} ${clip.freeze?'frozen':''}" data-direction-uid="${clip.uid}" aria-pressed="${clip.reversed}" aria-label="${label(clip)}：当前${clip.reversed?'倒放':'正放'}，切换为${clip.reversed?'正放':'倒放'}" title="点击切换「${label(clip)}」的播放方向${clip.freeze?' · 已定格':''}${clip.copyOf?' · 副本':''}${pinned(clip)?' · 位置固定，方向可切换':''}">${icon(clip.reversed?'reverse':'forward')}<span class="direction-name">${clip.reversed?'倒放':'正放'}</span><span class="direction-flags" aria-hidden="true">${clip.freeze?icon('freeze'):''}${clip.copyOf?icon('copy'):''}${pinned(clip)?icon('lock'):''}${clip.muted?icon('mute'):''}</span></button>`).join('');
     $('effectsTrack').querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{
@@ -1361,9 +1402,15 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       card.addEventListener('focus',()=>selectClip(uid));
       card.addEventListener('click',event=>{if(!event.target.closest('button'))selectClip(uid);});
       card.addEventListener('dblclick',event=>{if(!event.target.closest('button'))preview(uid);});
-      const cutButton=card.querySelector('.clip-cut-button');
-      cutButton?.addEventListener('click',event=>{event.stopPropagation();cutClip(uid);});
-      cutButton?.addEventListener('dblclick',event=>event.stopPropagation());
+      card.querySelectorAll('.clip-edit-button').forEach(button=>{
+        button.addEventListener('click',event=>{
+          event.stopPropagation();const action=button.dataset.action;
+          ({cut:cutClip,freeze:freezeClip,copy:copyClip,uncopy:removeCopy})[action](uid);
+          const focusUid=action==='copy'?selected:action==='uncopy'?clip.copyOf:uid,focusAction=action==='copy'?'uncopy':action==='uncopy'?'copy':action;
+          $('timeline').querySelector(`[data-uid="${focusUid}"] .clip-${focusAction}-button`)?.focus({preventScroll:true});
+        });
+        button.addEventListener('dblclick',event=>event.stopPropagation());
+      });
       card.addEventListener('dragstart',event=>{
         if(busy()||pinned(clip)||event.target.closest('button')){event.preventDefault();return;}
         dragged=uid;selectClip(uid);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',uid);card.classList.add('dragging');
@@ -1395,6 +1442,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   }
   function seekSequence(seconds){
     if(busy()){tell('先停止放映，再用标尺定位。');return;}
+    cancelAutoAdvance();
     const target=Math.max(0,Math.min(totalDuration(),seconds));let state=initialState(level),start=0;
     for(let i=0;i<clips.length;i++){
       const clip={...clips[i]},duration=clipDuration(clip),result=transition(state,clip,level);
@@ -1420,6 +1468,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     updateWorld();renderTimeline();updateFeedback();updateControls();
   }
   function loadLevel(id){
+    cancelAutoAdvance();
     level=collection()[id]||collection()[0];clips=level.order.map(id=>({id,uid:id,reversed:false,freeze:false}));removed=[];copySerial=0;
     if(!level.tutorial){lastCampaign=level.id;try{EscapeProgress.write(localStorage,LEVELS,completed,lastCampaign);}catch{}}
     world=initialState(level);mode='idle';paused=false;animation=null;clipIndex=-1;attempts=0;hintIndex=-1;failure=null;selected=null;dragged=null;
@@ -1428,6 +1477,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     document.querySelector('.mission-scroll').scrollTop=0;
   }
   function makeEditable(){
+    cancelAutoAdvance();
     if(mode==='idle')return;
     mode='idle';animation=null;paused=false;world=initialState(level);failure=null;clipIndex=-1;
     $('subtitle').textContent=level.opening;$('transportText').textContent='剪辑预览';updateWorld();updateFeedback();updateControls();progress(0,totalDuration());
@@ -1521,6 +1571,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     updateFeedback();updateControls();if(clip.id==='bell'&&result.ok&&!clip.muted)soundNote(clip.reversed?'reverse':'bell');
   }
   function play(){
+    cancelAutoAdvance();
     if(busy()){paused=!paused;updateControls();return;}
     const error=validateEdit(level,clips,removed);if(error){tell(error);return;}
     mode='playing';paused=false;world=initialState(level);failure=null;clipIndex=0;attempts++;updateWorld();beginClip();soundNote('play');
@@ -1541,7 +1592,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(goalReached(level,world,clips,removed)){
       mode='success';const done=level.tutorial?tutorialCompleted:completed;if(!done.includes(level.id)){done.push(level.id);saveProgress();}renderLevels();
       $('subtitle').textContent=level.tutorial?level.lessonSuccess:finalLevel()?`谢谢你，把 ${LEVELS.length} 个故事都剪成了好结局。`:'再小的一段改变，也能换来一个好结局。';
-      $('transportText').textContent='放映完成';progress(totalDuration(),totalDuration());updateFeedback();updateControls();soundNote('success');
+      $('transportText').textContent='放映完成';progress(totalDuration(),totalDuration());updateFeedback();updateControls();soundNote('success');scheduleAutoAdvance();
     }else{mode='failure';failure={title:level.tutorial?'再看看这一课的目标':'还没有到达出口',message:level.goal==='rewind'?'这一课要让小橘退回左岸，并把钥匙归还右岸。':level.goal==='cut'?'本课需要使用剪除取出落石，再安全离开。':'让小橘拿到钥匙，并在最后安全离开。'};updateFeedback();updateControls();}
   }
   function fitCanvas(){const rect=$('scene').getBoundingClientRect(),ratio=Math.min(window.devicePixelRatio||1,2);$('scene').width=Math.round(Math.max(640,rect.width)*ratio);$('scene').height=Math.round($('scene').width*.48);}
@@ -1574,7 +1625,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     const reason=cutBlockedReason(clip);clearClipDrag();
     if(reason){tell(reason);return;}cutClip(uid);
   });
-  $('playButton').addEventListener('click',play);$('stopButton').addEventListener('click',stop);
+  $('playButton').addEventListener('click',play);$('timelinePlayButton').addEventListener('click',play);$('stopButton').addEventListener('click',stop);
   $('resetButton').addEventListener('click',()=>{const oldAttempts=attempts;loadLevel(level.id);attempts=oldAttempts;updateControls();tell('素材与工具额度已恢复初始状态。');});
   $('hintButton').addEventListener('click',()=>{if(busy())return;hintIndex=Math.min(hintIndex+1,level.hints.length-1);updateFeedback();const panel=document.querySelector('.mission-scroll');panel.scrollTop=panel.scrollHeight;});
   $('nextButton').addEventListener('click',()=>{if(finalLevel()){if(level.tutorial)openEditor('campaign',completed.includes(lastCampaign)?Math.max(0,LEVELS.findIndex(l=>!completed.includes(l.id))):lastCampaign);else showHome();}else loadLevel(level.id+1);});
