@@ -1,5 +1,6 @@
 {
   "name": "逃生剪辑师",
   "version": "1.1.3",
-  "sha256": "b1250853faf0b48d627e270f60443db06d4422d93d6db36898cd6fbbb0872b29"
+  "sha256": "b1250853faf0b48d627e270f60443db06d4422d93d6db36898cd6fbbb0872b29",
+  "sourceCommit": "fd8bdacc275bc43019ee863c6fda712bc2582d19"
 }
