@@ -213,7 +213,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
 <body>
 <header class="topbar"><div class="topbar-inner">
   <div class="brand"><span class="brand-mark" data-icon="film"></span>小橘剪辑室 <small>XIAOJU STUDIO</small></div>
-  <div class="top-actions"><span class="badge">本地项目 · 1.2</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="gmButton" class="quiet-button" aria-haspopup="dialog" aria-controls="gmDialog" aria-expanded="false" aria-keyshortcuts="G" title="GM 关卡跳转（G）">GM</button><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
+  <div class="top-actions"><span class="badge">本地项目 · 1.2.1</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="gmButton" class="quiet-button" aria-haspopup="dialog" aria-controls="gmDialog" aria-expanded="false" aria-keyshortcuts="G" title="GM 关卡跳转（G）">GM</button><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
 </div></header>
 <div class="workspace-strip"><div class="project-path"><span data-icon="film"></span><span id="projectPath">月光归途 / 项目中心</span></div><nav class="workspace-tabs" aria-label="切换工作区"><button id="workspaceHome" aria-pressed="true">项目中心</button><button id="workspaceCampaign" aria-pressed="false">正式剪辑</button><button id="workspaceTutorial" aria-pressed="false">剪辑学堂</button></nav><span class="workspace-format">SEQUENCE · 24 FPS</span></div>
 <main id="homeScreen" class="home-screen" aria-label="游戏开始界面">
@@ -280,7 +280,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   const openingKinds=order=>['bridge','tide','rocks','branches','crate'].filter(kind=>order.some(id=>(id==='aftershock'?'bridge':id)===kind));
   const raw = [
     {name:'断桥救猫',short:'断桥',order:['exit','cross','bridge'],budget:1,
-      description:'修桥、取钥匙、离开；结尾要保留完整通路。每个镜头都能正放或倒放：倒放取钥匙会归还钥匙、退回左岸。',
+      description:'修桥、取钥匙、离开；过桥后身后的断桥不影响开门。每个镜头都能正放或倒放：倒放取钥匙会归还钥匙、退回左岸，返回时仍需桥面完整。',
       opening:'这座桥，已经断了。',hints:['过桥之前要先恢复桥梁。','倒放「桥梁坍塌」，再把它移到取钥匙之前。','修桥（倒放） → 过桥取钥匙 → 开门离开。']},
     {name:'潮水来信',short:'退潮',order:['cross','bridge','exit','tide'],budget:2,flooded:true,
       description:'仍然只用排序和倒放。潮水会冲散桥梁：先退潮，再让碎片回到桥面。',
@@ -302,7 +302,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       opening:'剪掉镜头，不等于改写初始状态。',hints:['剪除保留关卡开始时的状态；落石本来就在那里。','倒放落石，剪掉枯枝和木箱。','剪除枯枝、木箱；退潮 → 修桥 → 清石 → 取钥匙 → 离开。']},
     {name:'两段坍塌之间',short:'取舍考核',order:['cross','aftershock','crate','branches','bridge','rocks','tide','exit'],budget:4,cutBudget:2,flooded:true,blocked:['rocks','branches'],
       description:'剪除章考核。潮水留在主轨时高水位开场，剪除后低水位开场。断桥、落石、枯枝与木箱都和片段联动；两段坍塌影响同一座桥。',
-      opening:'先看片头，再决定哪些镜头留下。',hints:['环境片段留在主轨就保留片头障碍，剪掉对应片段就恢复安全状态。','两段坍塌共用一座桥：剪掉一段仍是断桥，两段全剪才以完整桥面开场；也可保留一段倒放修桥。','一种剪法：剪除潮水、桥梁再塌；修桥 → 木箱倒放 → 枯枝倒放 → 落石倒放 → 取钥匙 → 离开。准备镜头可按条件调整先后。']},
+      opening:'先看片头，再决定哪些镜头留下。',hints:['环境片段留在主轨就保留片头障碍，剪掉对应片段就恢复安全状态。','两段坍塌共用一座桥：剪掉一段仍是断桥，两段全剪才以完整桥面开场；先修桥取钥匙，再让身后的桥坍塌，也能离开。','一种剪法：剪除潮水、桥梁再塌；修桥 → 木箱倒放 → 枯枝倒放 → 落石倒放 → 取钥匙 → 离开。准备镜头可按条件调整先后。']},
     {name:'借来一镜',short:'定格',order:['shutter','unlock','cross','entry','bridge','exit'],budget:2,freezeBudget:1,shutter:true,doorSequence:true,
       description:'新机制：定格。开闸后要进门、转钥匙、离开，共三镜；闸门只留两镜，给进门或转钥匙夹上定格夹。',
       opening:'让闸门停一镜，让小橘继续走。',hints:['先修桥取钥匙，再开闸；暂停放映不会增加闸门时间。','「走进闸门」或「转动钥匙」可定格，其中一镜不扣闸门计时。','修桥 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
@@ -557,7 +557,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
           next.cat='right';next.escaped=false;next.gateOpen=false;next.key=true;next.entered=!!level.doorSequence;break;
         }
         if(!state.key || state.cat!=='right') return fail('key-missing','小橘还没拿到钥匙','开门之前，要先过桥拿到右岸的钥匙。');
-        if(state.flooded||!state.bridge||state.rocks||state.branches)return fail('ending-blocked','结尾的通路还没接好','离开时仍要保持低水位、完整桥面和畅通道路。检查环境镜头的最后一次变化，留下完整的归途。');
+        // The river, bridge, rocks and branches are behind the right-bank key point.
+        // Crossing (in either direction) checks that route; exiting checks the gate area.
         if(state.crate)return fail('crate-blocked','门前被木箱堵住了',obstacleHelp('crate'));
         if(level.doorSequence&&!state.doorUnlocked)return fail('door-locked','门内的锁还没打开','走进闸门并转动钥匙，再离开。定格只停止闸门计时，不会替你完成行动。');
         if(level.powered&&!hasPower(state))return fail('power-missing','出口还没有供电','携带电池过桥，接通电箱，并恢复断开的线路。');
