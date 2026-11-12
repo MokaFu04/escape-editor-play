@@ -77,6 +77,19 @@ dialog{background:var(--panel);border:1px solid var(--line);border-radius:20px;p
 @media(max-width:760px){.nle .editor-head{padding:8px 10px}.nle .sequence-name{display:none}.nle .reset-button{font-size:10px}.nle .play-button{min-width:91px;font-size:10px}.timeline-toolbar{flex-wrap:wrap;padding:8px 10px;gap:8px}.timeline-timecode{font-size:14px;min-width:108px}.timeline-zoom{width:100%;justify-content:flex-end}.timeline-zoom input{flex:1;max-width:none}.timeline-workspace{grid-template-columns:64px minmax(0,1fr)}.video-track-header{padding:12px 8px}.effects-track-header{padding:0 6px;gap:4px}.effects-track-header>span{font-size:8px}.nle .ruler{display:block}.nle .timeline{display:flex;gap:0}.clip-inspector{gap:11px;padding:12px}.inspector-description{width:100%}.inspector-controls{width:100%}.nle .clip-actions{gap:6px}.nle .position-control{font-size:10px}.nle .tool-guide{gap:4px;padding:10px 12px}.editor-statusbar{font-size:9px}.nle .clip-top{font-size:9px}}
 </style>
 <style id="workspace-style">/* The complete editor workspace. Pixel scenes retain nearest-neighbor sampling. */
+/* GM only routes to existing levels; ordinary unlock and completion rules remain. */
+.gm-dialog{width:760px;max-width:calc(100vw - 28px);max-height:calc(100dvh - 32px);padding:20px;box-sizing:border-box}
+.gm-dialog[open]{display:flex;flex-direction:column;gap:12px}
+.gm-dialog .dialog-head{flex:none}.gm-dialog .dialog-head h2{font-size:21px}
+.gm-description,.gm-shortcuts{flex:none;font-size:13px;line-height:1.6;color:#b5c4d9;margin:0}
+.gm-shortcuts{font-size:12px;color:#9eafc6}.gm-shortcuts kbd{padding:2px 5px;border:1px solid #62728b;border-radius:3px;color:#d6e7ff}
+.gm-levels{min-height:0;overflow-y:auto;display:grid;gap:16px;padding:2px 6px 2px 2px}
+.gm-group h3{font-size:14px;line-height:1.5;color:#b6d2fa;margin:0 0 7px;font-weight:600}
+.gm-level-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.gm-level-button{display:grid;grid-template-columns:25px minmax(0,1fr);align-items:center;gap:8px;min-height:58px;padding:9px 10px;text-align:left;background:#2d3542;color:#e1e9f5;border:1px solid #4b5a70;border-radius:4px}
+.gm-level-button:hover{background:#354965}.gm-level-button[aria-current="true"]{border-color:#93bfff;background:#344d70}
+.gm-number{font:14px Consolas,monospace;color:#a5caff}.gm-name{font-size:13px;line-height:1.4;overflow-wrap:anywhere}.gm-name small{display:block;font-size:11px;color:#a4b3c8;margin-top:3px}
+@media(max-width:600px){.gm-dialog{padding:14px}.gm-dialog .dialog-head h2{font-size:18px}.gm-level-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gm-level-button{grid-template-columns:20px minmax(0,1fr);padding:8px 7px;gap:5px}}
 canvas[data-render-style="pixel"]{image-rendering:pixelated}
 :root{color-scheme:dark;--paper:#17191d;--panel:#24262b;--ink:#d6d9e0;--muted:#9198a6;--line:#393d45;--accent:#79aaff;--accent-soft:#2d3c53;--success:#94cfad;--danger:#efb098;--radius:3px;background:var(--paper);color:var(--ink)}
 body{background:#17191d}button:hover:not(:disabled){filter:brightness(1.12)}button:focus-visible,article:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible{outline:2px solid #8abaff;outline-offset:-2px}button:disabled{opacity:.38}*{scrollbar-color:#626975 #202228;scrollbar-width:thin}
@@ -155,6 +168,12 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
 .budget-grid:is([data-tools="2"],[data-tools="3"]) .budget-remaining{line-height:24px}.budget-grid:is([data-tools="2"],[data-tools="3"]) .budget-remaining strong{font-size:22px}
 @media(max-width:900px){.budget-panel{padding:8px}.budget-grid{gap:5px}.budget-card{padding:5px}.budget-card-title{font-size:12px}.budget-panel .budget-remaining strong{font-size:22px}}
 
+/* Opening conditions describe the story start; cut notes describe this edit only. */
+.inspector-description h3{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+.clip-opening{font-size:12px;font-weight:400;color:#b8cce7}
+.inspector-controls{max-width:100%}
+.inspector-controls .inspector-cut-note{flex-basis:100%;font-size:12px;line-height:1.45;color:#e9c99f;margin:0;text-align:right}
+
 /* Primary transport sits below the picture; editing has a nearby shortcut. */
 .monitor-bottom{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;height:54px;min-height:54px;padding:6px 10px}
 .monitor-progress{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden}.monitor-progress .transport-label{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.monitor-progress .mini-progress{min-width:18px}
@@ -169,7 +188,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
 <body>
 <header class="topbar"><div class="topbar-inner">
   <div class="brand"><span class="brand-mark" data-icon="film"></span>逃生剪辑师 <small>ESCAPE EDITOR</small></div>
-  <div class="top-actions"><span class="badge">本地项目 · 1.0.3</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
+  <div class="top-actions"><span class="badge">本地项目 · 1.1.1</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="gmButton" class="quiet-button" aria-haspopup="dialog" aria-controls="gmDialog" aria-expanded="false" aria-keyshortcuts="G" title="GM 关卡跳转（G）">GM</button><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
 </div></header>
 <div class="workspace-strip"><div class="project-path"><span data-icon="film"></span><span id="projectPath">月光归途 / 项目中心</span></div><nav class="workspace-tabs" aria-label="切换工作区"><button id="workspaceHome" aria-pressed="true">项目中心</button><button id="workspaceCampaign" aria-pressed="false">正式剪辑</button><button id="workspaceTutorial" aria-pressed="false">剪辑学堂</button></nav><span class="workspace-format">SEQUENCE · 24 FPS</span></div>
 <main id="homeScreen" class="home-screen" aria-label="游戏开始界面">
@@ -206,10 +225,16 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     <div id="clipInspector" class="clip-inspector" aria-label="选中片段属性"></div>
     <div class="tool-guide" id="toolGuide" hidden></div><div class="cut-tray" id="cutTray" role="group" aria-label="废片区，可拖入镜头剪除，也可放回镜头" hidden></div>
   </section>
-  <footer class="footer"><span><span data-icon="spark"></span>本地工作区 · 让每一镜通往好结局</span><span class="keyboard-help"><kbd>Space</kbd> 播放 / 暂停 <span style="margin-left:7px"><kbd>←</kbd><kbd>→</kbd> 移动片段</span><span class="direction-help">点击素材下方正放 / 倒放可切换方向</span></span></footer>
+  <footer class="footer"><span><span data-icon="spark"></span>本地工作区 · 让每一镜通往好结局</span><span class="keyboard-help"><kbd>Space</kbd> 播放 / 暂停 <span style="margin-left:7px"><kbd>←</kbd><kbd>→</kbd> 移动片段</span><span style="margin-left:7px"><kbd>G</kbd> GM 选关</span><span class="direction-help">点击素材下方正放 / 倒放可切换方向</span></span></footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
-<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。下方的文字说明它会改变什么；预览不影响本关状态。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要留下退潮、完整桥面与畅通道路。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。画面下方中央与时间线左侧都可放映或暂停；也可按空格，Esc 停止。通关后短暂显示成功提示，自动进入下一关；本组最后一关保留完成结果。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—3 关：倒放，修复环境。第 4—6 关：剪除，让坏事不发生。第 7—9 关：定格，闸门停一镜、角色继续走。第 10—12 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习变化、综合考核。两种进度独立保存，第五章筹备中。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>已有障碍要修复，未发生的可以剪掉</h3><p>点击镜头上的橙色「剪除」，或把镜头拖入下方废片区；点击「放回」即可撤销。右侧固定显示剩余 / 总额，取消操作会返还对应额度。剪除不会改变关卡初始状态；倒放才会清除已有障碍。在对应镜头上点击「定格」或「复制」；已定格的镜头可再点取消，副本上点「撤销」会返还额度。限时按镜数计算，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关 12 段原片可剪成 13 镜：门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
+<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。属性栏会说明片头状态、镜头效果与剪除影响；独立预览使用示例状态，不影响本关。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要保持低水位、完整桥面与畅通道路。环境已经安全时，倒放会保持安全状态，仍占用一次倒放额度。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。画面下方中央与时间线左侧都可放映或暂停；也可按空格，Esc 停止。通关后短暂显示成功提示，自动进入下一关；本组最后一关保留完成结果。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—3 关：倒放，修复环境。第 4—6 关：剪除，让坏事不发生。第 7—9 关：定格，闸门停一镜、角色继续走。第 10—12 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习变化、综合考核。两种进度独立保存，第五章筹备中。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>环境片段决定片头，剪掉或倒放都能改写</h3><p>点击镜头上的橙色「剪除」，或把镜头拖入下方废片区；点击「放回」即可撤销。右侧固定显示剩余 / 总额，取消操作会返还对应额度。潮水片段留在主轨时，片头显示高水位，倒放后退到低水位；剪除潮水会立即让片头变为低水位，放回则恢复高水位。坍塌、落石、枯枝、木箱也按此规则联动：片段在主轨，片头有障碍；剪除后片头恢复安全，放回后重新出现。两段坍塌共用一座桥，全部剪除才以完整桥面开场。在对应镜头上点击「定格」或「复制」；已定格的镜头可再点取消，副本上点「撤销」会返还额度。限时按镜数计算，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关提供 12 段原片，复制和剪除会改变成片长度。门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销，额度无需用满。满足行动条件和结尾目标的不同剪法都能通关。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
+<dialog id="gmDialog" class="gm-dialog" aria-labelledby="gmTitle" aria-describedby="gmDescription">
+  <div class="dialog-head"><h2 id="gmTitle">GM · 自由选关</h2><button id="closeGM" class="close-dialog" aria-label="关闭 GM 面板"><span data-icon="close"></span></button></div>
+  <p id="gmDescription" class="gm-description">点击即可进入任意已制作关卡，包括尚未解锁的关卡。切关会重置当前剪辑，不会自动标记通关。</p>
+  <div id="gmLevels" class="gm-levels"></div>
+  <p class="gm-shortcuts"><kbd>G</kbd> / <kbd>Esc</kbd> 关闭 · 放映时打开会暂停，关闭后可继续放映。第五章筹备中。</p>
+</dialog>
 <script id="game-campaign">
 (() => {
   const CHAPTERS = [
@@ -220,6 +245,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     {id:4,key:'chapter-5',status:'planned',slots:3,theme:null,name:'新的故事',tool:null,mechanic:null,range:'待续',sceneIds:[],summary:'下一章筹备中。'}
   ];
   const stages=['应用','练习变化','综合考核'];
+  const openingKinds=order=>['bridge','tide','rocks','branches','crate'].filter(kind=>order.some(id=>(id==='aftershock'?'bridge':id)===kind));
   const raw = [
     {name:'断桥救猫',short:'断桥',order:['exit','cross','bridge'],budget:1,
       description:'修桥、取钥匙、离开；结尾要保留完整通路。每个镜头都能正放或倒放：倒放取钥匙会归还钥匙、退回左岸。',
@@ -234,17 +260,17 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       description:'倒放章考核。6 段素材，四处环境变化；清理桥头与对岸枯枝，接好完整通路。',
       opening:'把分散的准备，接成一条回家的路。',hints:['本关仍然只有排序和倒放。','潮水、断桥、落石、枯枝都要恢复；取钥匙在准备之后。','退潮 → 修桥 → 清石 → 收回枯枝 → 取钥匙 → 离开。']},
     {name:'不必发生的落石',short:'剪除',order:['cross','rocks','branches','bridge','exit'],budget:2,cutBudget:1,blocked:['branches'],
-      description:'新机制：剪除。桥头原本没有落石，播放落石反而封路；把这一镜取出，用倒放修桥、收回枯枝。',
-      opening:'已经存在的障碍要修复，还没发生的坏事可以删掉。',hints:['先分清：枯枝已经挡路，落石还没有掉下来。','倒放额度只够修桥与收回枯枝，剪除「落石封路」。','剪除落石；修桥 → 收回枯枝 → 取钥匙 → 离开。']},
+      description:'新机制：剪除。环境片段留在主轨，片头就显示对应障碍；剪除后立即恢复安全状态。用一次剪除和两次倒放，处理断桥、落石与枯枝。',
+      opening:'剪掉一件坏事，片头就少一道障碍。',hints:['断桥、落石、枯枝都在片头。任选一段剪除，另外两段倒放恢复。','例如剪除「落石封路」，用两次倒放修桥与收回枯枝。','剪除落石；修桥 → 收回枯枝 → 取钥匙 → 离开。']},
     {name:'剪掉两次意外',short:'双剪',order:['branches','cross','bridge','rocks','tide','exit'],budget:2,cutBudget:2,flooded:true,
-      description:'练习剪除。两处道路原本畅通，落石和枯枝却会随后落下。剪掉这两次意外，留下退潮与修桥。',
-      opening:'这次，有两件坏事不必发生。',hints:['落石、枯枝的初始状态都畅通。','两次倒放留给潮水和桥梁，两次剪除留给落石和枯枝。','剪除落石、枯枝；退潮 → 修桥 → 取钥匙 → 离开。']},
+      description:'练习剪除。潮水留在主轨时，片头为高水位；剪掉后立即变为低水位。断桥、落石和枯枝也与对应片段联动，用两次剪除和两次倒放安排通路。',
+      opening:'剪掉潮水，或把它倒回退潮时。',hints:['潮水、断桥、落石、枯枝都可剪除或倒放；先用剪除减少片头障碍，再安排剩余镜头。','剪掉两件坏事，留下的环境镜头可以倒放；先保证通路，再取钥匙。','一种剪法：剪除潮水、落石；修桥 → 枯枝倒放 → 取钥匙 → 离开。剪掉落石、枯枝也可以。']},
     {name:'留下需要修复的',short:'取舍',order:['crate','cross','branches','rocks','bridge','tide','exit'],budget:3,cutBudget:2,flooded:true,blocked:['rocks'],
       description:'落石已经挡路，不能靠删除它的镜头消除。枯枝和木箱尚未落下：分清要修复的状态与要剪掉的事件。',
       opening:'剪掉镜头，不等于改写初始状态。',hints:['剪除保留关卡开始时的状态；落石本来就在那里。','倒放落石，剪掉枯枝和木箱。','剪除枯枝、木箱；退潮 → 修桥 → 清石 → 取钥匙 → 离开。']},
     {name:'两段坍塌之间',short:'取舍考核',order:['cross','aftershock','crate','branches','bridge','rocks','tide','exit'],budget:4,cutBudget:2,flooded:true,blocked:['rocks','branches'],
-      description:'剪除章考核。8 段原片、两次剪除；两段坍塌影响同一座桥，保留一段修复，剪去另一段与落箱。',
-      opening:'两段桥梁镜头，只需要一段修复。',hints:['桥梁坍塌与桥梁再塌改变的是同一座桥。','剪除木箱和一段坍塌；另一段坍塌倒放。','剪除木箱、桥梁再塌；退潮 → 修桥 → 清石 → 收回枯枝 → 取钥匙 → 离开。']},
+      description:'剪除章考核。潮水留在主轨时高水位开场，剪除后低水位开场。断桥、落石、枯枝与木箱都和片段联动；两段坍塌影响同一座桥。',
+      opening:'先看片头，再决定哪些镜头留下。',hints:['环境片段留在主轨就保留片头障碍，剪掉对应片段就恢复安全状态。','两段坍塌共用一座桥：剪掉一段仍是断桥，两段全剪才以完整桥面开场；也可保留一段倒放修桥。','一种剪法：剪除潮水、桥梁再塌；修桥 → 木箱倒放 → 枯枝倒放 → 落石倒放 → 取钥匙 → 离开。准备镜头可按条件调整先后。']},
     {name:'借来一镜',short:'定格',order:['shutter','unlock','cross','entry','bridge','exit'],budget:2,freezeBudget:1,shutter:true,doorSequence:true,
       description:'新机制：定格。开闸后要进门、转钥匙、离开，共三镜；闸门只留两镜，给进门或转钥匙夹上定格夹。',
       opening:'让闸门停一镜，让小橘继续走。',hints:['先修桥取钥匙，再开闸；暂停放映不会增加闸门时间。','「走进闸门」或「转动钥匙」可定格，其中一镜不扣闸门计时。','修桥 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
@@ -255,20 +281,20 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       description:'组合已经学过的剪除与定格。桥头原本畅通，剪掉落石镜头；门内三个必需行动不能剪，只能借来一镜。',
       opening:'坏事可以剪掉，必需的行动要留下。',hints:['落石镜头可以剪；进门、转钥匙和离开都是必需行动。','用剪除保护通路，用定格延长门内窗口。','剪除落石；退潮 → 修桥 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
     {name:'门外准备，门内从容',short:'时间考核',order:['unlock','branches','rocks','entry','shutter','cross','tide','bridge','exit'],budget:4,cutBudget:1,freezeBudget:1,flooded:true,blocked:['branches'],shutter:true,doorSequence:true,
-      description:'定格章考核。9 段原片；枯枝需要倒放、落石应该剪除。把全部准备留在开闸前，再用定格通过门内三镜。',
-      opening:'长片也能分成准备与通过两个部分。',hints:['门外完成退潮、修桥、收回枯枝、取钥匙。','剪除落石，定格只留给进门或转钥匙。','剪除落石；退潮 → 修桥 → 收回枯枝 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+      description:'定格章考核。潮水留在主轨时高水位开场，剪除后低水位开场；断桥、落石和枯枝同样可以剪除或倒放，把准备放在开闸前。',
+      opening:'先处理潮水，把时间留给门内的行动。',hints:['先保证低水位、完整桥面与畅通道路，再取钥匙；剪除会同步改变片头障碍。','剪除可以给潮水、坍塌、落石或枯枝；定格可夹在进门或转钥匙上。','一种剪法：剪除潮水；修桥 → 收回枯枝 → 落石倒放 → 取钥匙 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
     {name:'再叫一次',short:'复制',order:['bell','unlock','rocks','cross','entry','shutter','bridge','exit'],budget:2,cutBudget:1,freezeBudget:1,copyBudget:1,guard:true,ringsRequired:2,shutter:true,doorSequence:true,
       description:'新机制：复制。门卫听到两声铃才放行，原片只有一声。复制摇铃动作；取钥匙副本不会产生另一把钥匙。',
-      opening:'一声不够，就让这个动作再发生一次。',hints:['复制增加行动次数，不增加物品数量。','复制门铃；提前叫醒门卫，再开闸通过。其余操作沿用前三章。','剪除落石、复制门铃；修桥 → 取钥匙 → 两声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+      opening:'一声不够，就让这个动作再发生一次。',hints:['复制增加行动次数，不增加物品数量。','复制门铃；提前叫醒门卫，再开闸通过。落石或坍塌可任选一段剪除。','剪除落石、复制门铃；修桥 → 取钥匙 → 两声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
     {name:'第三声的回应',short:'三声',order:['unlock','bell','cross','rocks','tide','shutter','entry','bridge','exit'],budget:3,cutBudget:1,freezeBudget:1,copyBudget:2,guard:true,ringsRequired:3,flooded:true,shutter:true,doorSequence:true,
-      description:'练习复制。今天门卫需要三声铃：两枚复制券都用在门铃上，三个实例独立排序。开闸前先把门卫叫醒。',
-      opening:'看清目标次数，再决定复制几次。',hints:['状态栏明确显示本关要听到 3 声铃。','原片一声，加两个副本，共三声；都安排在开闸前。','剪除落石；退潮 → 修桥 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
+      description:'练习复制。潮水、断桥、落石都与主轨片段联动，可以剪除其中一段，倒放其余环境镜头。门卫需要三声铃，开闸前完成通路准备。',
+      opening:'先让潮水退去，再叫醒守夜人。',hints:['门卫需要 3 声铃；原片一声，加两个副本。','剪除潮水、落石或坍塌都能减少对应的片头障碍。三声铃放在开闸前，定格留给进门或转钥匙。','一种剪法：剪除潮水；修桥 → 落石倒放 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
     {name:'把回声放在门外',short:'回声位置',order:['shutter','bell','branches','unlock','rocks','entry','cross','bridge','tide','exit'],budget:4,cutBudget:1,freezeBudget:1,copyBudget:2,guard:true,ringsRequired:3,flooded:true,blocked:['branches'],shutter:true,doorSequence:true,
       description:'复制变式。11 镜成片里，铃声插入门内会占用窗口。将三声铃与环境准备放在开闸前，保护定格得到的一镜。',
       opening:'重复什么很重要，放在哪里也一样重要。',hints:['副本和原片一样会消耗闸门镜数。','三声铃全部放在开闸前；两段门内行动只有一枚定格夹。','剪除落石；退潮 → 修桥 → 收回枯枝 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']},
     {name:'天亮之前',short:'最终剪辑',order:['shutter','bell','aftershock','unlock','crate','entry','cross','branches','rocks','bridge','tide','exit'],budget:6,cutBudget:1,freezeBudget:1,copyBudget:2,guard:true,ringsRequired:3,flooded:true,blocked:['rocks','branches','crate'],shutter:true,doorSequence:true,
-      description:'最终考核：12 段原片，用倒放修路、剪除重复坍塌、定格门内行动、复制两次门铃，完成 13 镜归途。',
-      opening:'四种本领，这次一起把小橘送回家。',hints:['先分成环境准备、叫醒门卫、门内通行三组。','保留一段坍塌倒放，剪掉另一段；三声铃放在开闸前，门内行动定格一镜。','剪除桥梁再塌；退潮 → 修桥 → 清石 → 收回枯枝 → 收回木箱 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。']}
+      description:'最终考核：12 段原片，潮水留在主轨时高水位开场，剪除后低水位开场。断桥、落石、枯枝与木箱同样与片段联动，组合工具恢复通路；剪除额度可以不用。',
+      opening:'用你选择的剪法，把小橘送回家。',hints:['分成通路准备、叫醒门卫、门内通行三组；环境片段可剪除或倒放，两段坍塌共用一座桥。','剪除可给任意环境障碍镜头；保留两段坍塌时，也可以先正放一段再倒放修复。三声铃放在开闸前，进门或转钥匙定格一镜。','一种剪法：剪除桥梁再塌；潮水倒放 → 修桥 → 清石 → 收回枯枝 → 收回木箱 → 取钥匙 → 三声铃 → 开闸 → 进门（定格） → 转钥匙 → 离开。这只是一个示例。']}
   ];
   // sceneIds retain the source identity so reordering chapters never renumbers saves.
   // A planned chapter has no playable rows; fill its three sceneIds and mark ready
@@ -280,7 +306,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     chapter.sceneIds.forEach((sourceId,position)=>{
     const data=raw[sourceId],id=LEVELS.length,stage=stages[position];
     if(!data)throw new Error('Missing scene definition: '+sourceId);
-    LEVELS.push({id,key:data.key||'scene-'+String(sourceId+1).padStart(2,'0'),legacyId:sourceId<16?sourceId:null,theme:chapter.theme,flooded:false,shutter:false,fixedLast:chapter.tool!=='reverse'?'exit':undefined,...data,description:data.description.replace('新机制：','本章机制：'),chapter:chapter.id,stage,newMechanic:false,
+    LEVELS.push({id,key:data.key||'scene-'+String(sourceId+1).padStart(2,'0'),legacyId:sourceId<16?sourceId:null,theme:chapter.theme,flooded:false,shutter:false,fixedLast:chapter.tool!=='reverse'?'exit':undefined,...data,openingFromClips:openingKinds(data.order),description:data.description.replace('新机制：','本章机制：'),chapter:chapter.id,stage,newMechanic:false,
       caption:'第 '+(id+1)+' 幕 · '+chapter.name+' / '+stage,tool:chapter.tool,toolName:chapter.mechanic,
       toolHelp:data.description.replace('新机制：','本章机制：'),required:['cross','entry','unlock','bell','exit'],
       freezable:data.freezeBudget?['entry','unlock']:[],copyable:data.copyBudget?['bell','cross']:[],
@@ -298,8 +324,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       description:'这次从「已经离开」开始。倒放离开让小橘退回右岸，再倒放取钥匙：先归还钥匙，再退回左岸。',opening:'这一课的目标，是回到出发之前。',
       steps:['将「开门离开」移到第一段，并切换到倒放。','把「过桥取钥匙」也切换为倒放。','放映后，小橘要在左岸，钥匙要回到右岸。'],hints:['先从出口退回，才能归还钥匙。','离开（倒放） → 取钥匙（倒放）。这课不要求逃生。'],lessonSuccess:'行动倒放会撤回结果，也需要正确的起点。'},
     {name:'删去这次意外',short:'剪除',tool:'cut',toolName:'剪除',order:['rocks','cross','exit'],budget:3,cutBudget:1,initialBridge:true,goal:'cut',
-      description:'桥头原本畅通。用「剪除」取出落石镜头，让小橘直接取钥匙并离开。',opening:'不必发生的坏事，可以从影片里取走。',
-      steps:['点击落石镜头上的「剪除」，也可把镜头拖到下方废片区。','在废片区点击「放回」，再试用另一种方式剪除。','让取钥匙与离开按顺序放映。'],hints:['本课需要实际使用剪除；镜头上的橙色按钮或拖入废片区均可。','剪除落石 → 取钥匙 → 离开。'],lessonSuccess:'剪除不会清除初始障碍，但能阻止尚未发生的坏事。'},
+      description:'落石片段留在主轨时，片头落石挡路。用「剪除」取出这段，落石立即回到山坡，让小橘取钥匙并离开。',opening:'剪掉落石镜头，片头的路就通了。',
+      steps:['点击落石镜头上的「剪除」，也可把镜头拖到下方废片区。','在废片区点击「放回」，再试用另一种方式剪除。','让取钥匙与离开按顺序放映。'],hints:['本课需要实际使用剪除；镜头上的橙色按钮或拖入废片区均可。','剪除落石 → 取钥匙 → 离开。'],lessonSuccess:'环境片段决定片头障碍：剪掉后恢复安全，放回后重新出现。'},
     {name:'让闸门多等一镜',short:'定格',tool:'freeze',toolName:'定格',order:['unlock','entry','shutter','exit'],budget:4,freezeBudget:1,initialBridge:true,shutter:true,doorSequence:true,initial:{cat:'right',key:true},
       description:'小橘已持钥匙到达右岸。倒放落锁打开闸门，再进门、转钥匙、离开；给进门或转钥匙定格一镜。',opening:'闸门只等两镜，但小橘需要做三个动作。',
       steps:['把「出口落锁」排到第一段，切换成倒放。','按进门 → 转钥匙 → 离开排序。','点击进门或转钥匙镜头上的「定格」，再放映。'],hints:['定格只停闸门计时，不停小橘的动作。','开闸 → 进门（定格） → 转钥匙 → 离开。'],lessonSuccess:'暂停与倍速不改变闸门计时，定格才会借来一镜。'},
@@ -307,7 +333,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       description:'门卫需要两声铃才放行。复制「摇响门铃」，让原片和副本都正放，再取钥匙离开。',opening:'复制的是一次行动，方向由你决定。',
       steps:['点击门铃镜头上的「复制」，让时间线出现四段。','原片和副本都用正放；倒放会收回一声铃。','放映两声铃 → 取钥匙 → 离开。'],hints:['原片一声 + 副本一声 = 两声。','门铃 → 门铃副本 → 取钥匙 → 离开。'],lessonSuccess:'六课完成！现在可以进入四章正式挑战，每章三关，逐步组合剪辑本领。'}
   ];
-  const TUTORIALS=lessons.map((data,id)=>({id,tutorial:true,flooded:false,shutter:false,chapter:-1,stage:'新手练习',newMechanic:true,required:['cross','entry','unlock','bell','exit'],freezable:['entry','unlock'],copyable:['bell','cross'],...data,caption:'剪辑学堂 · '+(id+1)+' / '+lessons.length,toolHelp:data.description}));
+  const TUTORIALS=lessons.map((data,id)=>({id,tutorial:true,flooded:false,shutter:false,chapter:-1,stage:'新手练习',newMechanic:true,required:['cross','entry','unlock','bell','exit'],freezable:['entry','unlock'],copyable:['bell','cross'],...data,openingFromClips:openingKinds(data.order),caption:'剪辑学堂 · '+(id+1)+' / '+lessons.length,toolHelp:data.description}));
   globalThis.EscapeCampaign={CHAPTERS,LEVELS,TUTORIALS};
 })();
 </script>
@@ -348,7 +374,15 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   function splitClip(clip){
     return (CLIPS[clip.id]?.parts||[]).map((id,part)=>({id,uid:(clip.uid||clip.id)+'-part-'+part,splitFrom:clip.id,splitUid:clip.uid||clip.id,part,reversed:false,freeze:false,muted:false}));
   }
-  function initialState(level) { return {bridge:!!level.initialBridge, flooded:!!level.flooded, cat:'left', key:false, escaped:false, gateOpen:false, shutterOpen:!level.shutter||!!level.initialShutterOpen, shutterTicks:0,bellCount:0,cell:'left',quietPass:false,leverPulled:false,powerFault:!!level.initialPowerFault,codeKnown:false,lockReady:false,rocks:(level.blocked||[]).includes('rocks'),branches:(level.blocked||[]).includes('branches'),crate:(level.blocked||[]).includes('crate'),entered:false,doorUnlocked:false,...level.initial}; }
+  function initialState(level,clips=level.order) {
+    const state={bridge:!!level.initialBridge, flooded:!!level.flooded, cat:'left', key:false, escaped:false, gateOpen:false, shutterOpen:!level.shutter||!!level.initialShutterOpen, shutterTicks:0,bellCount:0,cell:'left',quietPass:false,leverPulled:false,powerFault:!!level.initialPowerFault,codeKnown:false,lockReady:false,rocks:(level.blocked||[]).includes('rocks'),branches:(level.blocked||[]).includes('branches'),crate:(level.blocked||[]).includes('crate'),entered:false,doorUnlocked:false,...level.initial};
+    for(const kind of level.openingFromClips||[]){
+      const present=clips.some(clip=>clipKind(typeof clip==='string'?{id:clip}:clip)===kind);
+      if(kind==='bridge')state.bridge=!present;
+      else state[kind==='tide'?'flooded':kind]=present;
+    }
+    return state;
+  }
   function goalReached(level,state,clips=[],removed=[]){
     if(level.goal==='rewind')return !state.escaped&&state.cat==='left'&&!state.key;
     if(level.goal==='cut')return state.escaped&&removed.some(c=>c.id==='rocks');
@@ -387,6 +421,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   function transition(state, clip, level) {
     const next={...state};
     const fail=(code,title,message)=>({ok:false,code,title,message,state:{...state}});
+    const floodHelp=()=>level.openingFromClips?.includes('tide')&&canCut(level,{id:'tide'})?'潮水片段留在主轨，片头就从高水位开始。先倒放退潮，或剪除潮水让片头改为低水位，再恢复桥梁。':initialState(level).flooded?'片头已经是高水位。先倒放潮水，再恢复桥梁。':'涨潮镜头把河岸淹了。先倒放退潮，再恢复桥梁。';
+    const obstacleHelp=id=>level.openingFromClips?.includes(id)?'「'+CLIPS[id].name+'」留在主轨，片头就会挡路。'+(canCut(level,{id})?'可剪除这段镜头让片头恢复畅通，或倒放它再通行。':'先倒放这段镜头恢复通路，再通行。'):initialState(level)[id]?'片头的障碍需要倒放对应镜头恢复。':'「'+CLIPS[id].name+'」正放后挡住了路。先恢复通路，再从头放映。';
     if(state.escaped&&!(clip.id==='exit'&&clip.reversed)) return fail('already-escaped','小橘已经离开','要继续剪辑这段经历，先倒放「开门离开」，让小橘回到场景。');
     if(!CLIPS[clip.id]) return fail('unknown','找不到片段','请重新选择本关。');
     if(clip.freeze&&(!(level.freezeBudget>0)||!(level.freezable||[]).includes(clip.id))) return fail('freeze-unavailable','这里不能使用定格夹','只可在本关指定的行动镜头上定格闸门。');
@@ -398,7 +434,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
         next[clip.id]=!clip.reversed;
         break;
       case 'bridge':
-        if(clip.reversed && state.flooded) return fail('bridge-flooded','潮水还在冲刷桥梁','先让潮水退去，碎片才能重新组成桥。');
+        if(clip.reversed && state.flooded) return fail('bridge-flooded','潮水还在冲刷桥梁',floodHelp());
         next.bridge=!!clip.reversed;
         break;
       case 'tide':
@@ -407,15 +443,15 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
         break;
       case 'cross':
         if(clip.reversed&&(state.cat!=='right'||!state.key||state.entered))return fail('return-not-ready','还不能归还钥匙','倒放取钥匙要从持钥匙的右岸开始；在闸门内时，先倒放进门退出闸门。');
-        if(state.flooded) return fail('cross-flooded','前面都是水','河岸还被淹着。让潮水退去，再让小橘出发。');
+        if(state.flooded) return fail('cross-flooded','前面都是水',floodHelp());
         if(!state.bridge) return fail('bridge-missing','路在这里断掉了','小橘过不去。试着把修复桥梁的片段放在前面。');
-        if(state.rocks||state.branches)return fail('route-blocked',state.rocks?'桥头被落石挡住了':'对岸被枯枝挡住了','已有障碍需要倒放对应镜头来清除；剪除只会阻止事件发生，不会改变初始状态。');
+        if(state.rocks||state.branches)return fail('route-blocked',state.rocks?'桥头被落石挡住了':'对岸被枯枝挡住了',obstacleHelp(state.rocks?'rocks':'branches'));
         next.cat=clip.reversed?'left':'right'; next.key=!clip.reversed;if(clip.reversed)next.quietPass=false;
         break;
       case 'entry':
         if(clip.reversed&&!state.entered)return fail('entry-not-entered','小橘还没进闸门','先走进闸门，才能倒放这一镜退出门内。可点击素材画面观看独立倒放预览。');
         if(state.cat!=='right'||!state.key)return fail('entry-not-ready','还没到达闸门前','先过桥拿到钥匙，再走进闸门。');
-        if(state.crate)return fail('crate-blocked','门前被木箱堵住了','先倒放木箱滑落，或者剪掉尚未发生的落箱事件。');
+        if(state.crate)return fail('crate-blocked','门前被木箱堵住了',obstacleHelp('crate'));
         if(!state.shutterOpen)return fail('entry-gate-closed','闸门还没有打开','倒放「出口落锁」打开闸门，再走进门内。');
         next.entered=!clip.reversed;
         break;
@@ -489,8 +525,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
           next.cat='right';next.escaped=false;next.gateOpen=false;next.key=true;next.entered=!!level.doorSequence;break;
         }
         if(!state.key || state.cat!=='right') return fail('key-missing','小橘还没拿到钥匙','开门之前，要先过桥拿到右岸的钥匙。');
-        if(state.flooded||!state.bridge||state.rocks||state.branches)return fail('ending-blocked','结尾的通路还没接好','离开时仍要保留退潮、完整桥面和畅通道路。检查环境镜头的最后一次变化，留下完整的归途。');
-        if(state.crate)return fail('crate-blocked','门前被木箱堵住了','清除门前木箱，才能离开。');
+        if(state.flooded||!state.bridge||state.rocks||state.branches)return fail('ending-blocked','结尾的通路还没接好','离开时仍要保持低水位、完整桥面和畅通道路。检查环境镜头的最后一次变化，留下完整的归途。');
+        if(state.crate)return fail('crate-blocked','门前被木箱堵住了',obstacleHelp('crate'));
         if(level.doorSequence&&!state.doorUnlocked)return fail('door-locked','门内的锁还没打开','走进闸门并转动钥匙，再离开。定格只停止闸门计时，不会替你完成行动。');
         if(level.powered&&!hasPower(state))return fail('power-missing','出口还没有供电','携带电池过桥，接通电箱，并恢复断开的线路。');
         if(level.coded&&!state.lockReady)return fail('code-locked','电子锁还没解开','先读取门牌获得密码，再输入密码解开电子锁。');
@@ -1195,6 +1231,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   const timecode=seconds=>`00:${pad(Math.floor(seconds))}`;
   const collection=()=>track==='tutorial'?TUTORIALS:LEVELS;
   const finalLevel=()=>level.id===collection().length-1;
+  const allLevelsComplete=()=>(level.tutorial?tutorialCompleted:completed).length===collection().length;
+  const lessonMessage=()=>finalLevel()&&!allLevelsComplete()?'这一课已完成，还可以回到其他课程练习。':level.lessonSuccess;
   const findClip=uid=>clips.find(c=>c.uid===uid);
   const label=clip=>CLIPS[clip.id].name+(clip.copyOf?(clip.copyNumber>1?`（副本 ${clip.copyNumber}）`:'（副本）'):'');
   const pinned=clip=>clip.id===level.fixedFirst||clip.id===level.fixedLast;
@@ -1229,6 +1267,28 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     cancelAutoAdvance();
     if(busy())stop();activeView='home';$('homeScreen').hidden=false;$('gameScreen').hidden=true;$('homeButton').hidden=true;renderHome();updateWorkspace();window.scrollTo(0,0);$('startGame').focus({preventScroll:true});
   }
+  function renderGM(){
+    const button=(target,kind)=>{
+      const current=hasSession&&track===kind&&level.id===target.id,done=(kind==='tutorial'?tutorialCompleted:completed).includes(target.id);
+      return `<button type="button" class="gm-level-button" data-gm-track="${kind}" data-gm-level="${target.id}" aria-current="${current}" aria-label="跳转${kind==='tutorial'?'教学第':'第'} ${target.id+1} ${kind==='tutorial'?'课':'关'} ${target.name}"><span class="gm-number">${pad(target.id+1)}</span><span class="gm-name">${target.name}<small>${current?'当前关卡 · ':''}${done?'已通关':'未通关'}</small></span></button>`;
+    };
+    const chapters=CHAPTERS.filter(ch=>ch.status==='ready').map(ch=>`<section class="gm-group"><h3>第 ${ch.id+1} 章 · ${ch.name}</h3><div class="gm-level-grid">${LEVELS.filter(l=>l.chapter===ch.id).map(l=>button(l,'campaign')).join('')}</div></section>`).join('');
+    $('gmLevels').innerHTML=chapters+`<section class="gm-group"><h3>剪辑学堂 · 独立教学</h3><div class="gm-level-grid">${TUTORIALS.map(l=>button(l,'tutorial')).join('')}</div></section>`;
+    $('gmLevels').querySelectorAll('[data-gm-level]').forEach(el=>el.addEventListener('click',()=>{
+      const kind=el.dataset.gmTrack,id=Number(el.dataset.gmLevel),target=(kind==='tutorial'?TUTORIALS:LEVELS)[id];
+      if(!target)return;
+      $('gmDialog').close();openEditor(kind,id);tell(`GM 已切换至${kind==='tutorial'?'教学第':'第'} ${id+1} ${kind==='tutorial'?'课':'关'}「${target.name}」。`);
+    }));
+  }
+  function toggleGM(){
+    const dialog=$('gmDialog');
+    if(dialog.open){dialog.close();return;}
+    if($('helpDialog').open)return;
+    cancelAutoAdvance();
+    if(busy()&&!paused){paused=true;updateControls();}
+    renderGM();dialog.showModal();$('gmButton').setAttribute('aria-expanded','true');
+    $('gmLevels').scrollTop=0;
+  }
   function renderLevels(){
     const tutorial=track==='tutorial',done=tutorial?tutorialCompleted:completed,list=collection();
     $('levelProgress').textContent=tutorial?`独立新手教学 · 已完成 ${done.length} / ${list.length}`:`${LEVELS.length} 个正式关卡 · 已完成 ${completed.length} / ${LEVELS.length}`;
@@ -1258,11 +1318,11 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   }
   function updateWorld(){
     const chips=[{icon:'bridge',text:world.bridge?'桥已修复':'桥已断裂',positive:world.bridge},{icon:'key',text:world.key?'拿到钥匙':'钥匙未取',positive:world.key}];
-    if(level.flooded)chips.unshift({icon:'water',text:world.flooded?'潮水未退':'潮水已退',positive:!world.flooded,alert:world.flooded});
+    if(level.order.includes('tide')||world.flooded)chips.unshift({icon:'water',text:world.flooded?'高水位 · 通路被淹':'低水位 · 河岸露出',positive:!world.flooded,alert:world.flooded});
     if(level.shutter)chips.push({icon:world.shutterOpen?'clock':'lock',text:world.escaped?'已安全离开':world.shutterOpen?(level.shutterMode==='permanent'?'闸门常开':`闸门余 ${world.shutterTicks} 段`):'闸门关闭',positive:world.shutterOpen,alert:!world.shutterOpen});
     else chips.push({icon:'lock',text:world.escaped?'安全离开':'出口上锁',positive:world.escaped});
     if(level.guard)chips.push({icon:'bell',text:`铃声 ${world.bellCount} / ${ringTarget(level)} · ${world.bellCount>=ringTarget(level)?'门卫放行':world.bellCount?'门卫翻身':'门卫熟睡'}`,positive:world.bellCount>=ringTarget(level),alert:world.bellCount<ringTarget(level)});
-    for(const [id,name] of [['rocks','桥头落石'],['branches','对岸枯枝'],['crate','门前木箱']])if(level.order.includes(id))chips.push({icon:'bridge',text:name+(world[id]?'挡路':'已清空'),positive:!world[id],alert:world[id]});
+    for(const [id,name] of [['rocks','桥头落石'],['branches','对岸枯枝'],['crate','门前木箱']])if(level.order.includes(id))chips.push({icon:'bridge',text:name+(world[id]?'挡路':'未挡路'),positive:!world[id],alert:world[id]});
     if(level.doorSequence){chips.push({icon:'forward',text:world.entered?'已走进闸门':'尚未进闸门',positive:world.entered});chips.push({icon:'key',text:world.doorUnlocked?'门内锁已打开':'门内锁未打开',positive:world.doorUnlocked});}
     if(level.powered)chips.push({icon:'power',text:hasPower(world)?'电源接通':world.cell==='socket'?'电池就位 · 线路断开':world.cell==='carried'?'电池随身':'电池在左岸',positive:hasPower(world),alert:!hasPower(world)});
     if(level.order.includes('blackout'))chips.push({icon:'power',text:world.powerFault?'线路断开':'线路完好',positive:!world.powerFault,alert:world.powerFault});
@@ -1305,12 +1365,13 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     const title=$('feedbackTitle'),body=$('feedbackBody');title.className='feedback-title';$('sceneResult').hidden=true;$('nextButton').hidden=true;
     if(mode==='failure'){
       title.classList.add('failed');title.innerHTML=icon('warning')+failure.title;body.textContent=failure.message;
-      $('sceneResult').hidden=false;$('sceneResult').className='scene-result failed';$('resultWord').textContent='CUT!';$('resultLine').textContent='停一下，这个顺序还差一点。';
+      $('sceneResult').hidden=false;$('sceneResult').className='scene-result failed';$('resultWord').textContent='CUT!';$('resultLine').textContent='停一下，这段剪辑还差一点。';
     }else if(mode==='success'){
-      title.classList.add('success');title.innerHTML=icon('check')+(level.tutorial?(finalLevel()?'新手教学全部完成':'这一课，学会了。'):finalLevel()?`${LEVELS.length} 幕全部剪辑完成`:'这个结局，很好。');
-      body.textContent=level.tutorial?level.lessonSuccess:`第 ${attempts} 次放映，小橘安全离开。${finalLevel()?'倒放、剪除、定格与复制配合完成，12 个关卡全部结束。第五章筹备中。':level.stage==='综合考核'?'本章三关已完成，下一章使用「'+CHAPTERS[level.chapter+1].mechanic+'」。':'继续用本章机制，试试下一种剪法。'}`;
-      $('sceneResult').hidden=false;$('sceneResult').className='scene-result success';$('resultWord').textContent='GOOD CUT!';$('resultLine').textContent=finalLevel()?'所有故事，都有了好结局。':'小橘平安到家了。';
-      if(level.tutorial)$('resultLine').textContent=level.goal==='rewind'?'小橘回到起点，钥匙也归位了。':level.lessonSuccess;
+      const allDone=allLevelsComplete(),chapterDone=!level.tutorial&&LEVELS.filter(l=>l.chapter===level.chapter).every(l=>completed.includes(l.id));
+      title.classList.add('success');title.innerHTML=icon('check')+(level.tutorial?(allDone?'新手教学全部完成':'这一课，学会了。'):allDone?`${LEVELS.length} 幕全部剪辑完成`:'这个结局，很好。');
+      body.textContent=level.tutorial?lessonMessage():`第 ${attempts} 次放映，小橘安全离开。${finalLevel()?(allDone?`你用自己的剪法完成了 ${LEVELS.length} 个故事。第五章筹备中。`:'这一幕已完成，可以回到其他关卡继续剪辑。'):level.stage==='综合考核'&&chapterDone?'本章三关已完成，下一章使用「'+CHAPTERS[level.chapter+1].mechanic+'」。':'继续用本章机制，试试下一种剪法。'}`;
+      $('sceneResult').hidden=false;$('sceneResult').className='scene-result success';$('resultWord').textContent='GOOD CUT!';$('resultLine').textContent=allDone?'所有故事，都有了好结局。':'小橘平安到家了。';
+      if(level.tutorial)$('resultLine').textContent=level.goal==='rewind'?'小橘回到起点，钥匙也归位了。':lessonMessage();
       if(!finalLevel())$('resultLine').textContent+=' 即将自动进入'+(level.tutorial?'下一课。':'下一关。');
       $('nextButton').hidden=false;$('nextButton').innerHTML=(level.tutorial?(finalLevel()?'进入正式关卡':'立即进入下一课'):finalLevel()?'返回开始界面':'立即进入下一关')+icon('arrowRight');
     }else if(mode==='scrub'){
@@ -1343,11 +1404,22 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(clip.id==='shutter'&&clip.reversed&&level.shutterMode==='permanent')return '打开闸门，保持通行';
     return clip.reversed?CLIPS[clip.id].backward:CLIPS[clip.id].forward;
   }
+  function clipContext(clip){
+    const start=initialState(level,clips),kind=clipKind(clip),linked=level.openingFromClips?.includes(kind);
+    const other=clips.some(c=>c.uid!==clip.uid&&clipKind(c)===kind);
+    if(kind==='tide')return {opening:start.flooded?'高水位，河岸已淹':'低水位，河岸露出',cut:linked?'片头立即改为低水位；放回后恢复高水位。':start.flooded?'片头高水位仍保留。':'本镜不再引起涨潮。'};
+    if(kind==='bridge')return {opening:start.bridge?'桥面完好':'桥已断裂',cut:linked?(other?'另一段坍塌仍在主轨，片头仍是断桥。':'片头恢复完整桥面；放回坍塌镜头后恢复断桥。'):start.bridge?'片头完好的桥保留。':'片头已有的断桥不会消失。',shared:level.order.filter(id=>clipKind({id})==='bridge').length>1?'两段镜头改变同一座桥。':''};
+    const obstacleNames={rocks:'落石',branches:'枯枝',crate:'木箱'};
+    if(obstacleNames[kind])return {opening:obstacleNames[kind]+(start[kind]?'已经挡路':'尚未落下'),cut:linked?(other?'同类镜头仍在主轨，片头障碍仍保留。':'片头的'+obstacleNames[kind]+'回到原位，通路恢复畅通；放回后重新挡路。'):start[kind]?'片头已有的'+obstacleNames[kind]+'仍会挡路。':'阻止本次'+obstacleNames[kind]+'落下。'};
+    if(kind==='shutter')return {opening:start.shutterOpen?'闸门已打开':'闸门已关闭',cut:'本镜不再改变闸门，片头状态保留。'};
+    return null;
+  }
+  function cutImpact(clip){return clipContext(clip)?.cut||'本镜不再播放，片头已有状态保留。';}
   function toolButtons(clip){
     const name=label(clip),buttons=[];
     if(level.splitBudget&&CLIPS[clip.id].parts)buttons.push(`<button class="edit-tool split-button" aria-label="切开${name}">${icon('split')}切成两段</button>`);
     if(clip.splitFrom&&clip.part===0)buttons.push(`<button class="edit-tool merge-button" aria-label="合回${CLIPS[clip.splitFrom].name}整段">${icon('reset')}合回整段</button>`);
-    if(canCut(level,clip))buttons.push(`<button class="edit-tool cut-button" data-unavailable="${removed.length>=level.cutBudget}" title="${cutBlockedReason(clip)||'剪除后可从废片区放回'}" aria-label="剪除${name}">${icon('cut')}剪除</button>`);
+    if(canCut(level,clip))buttons.push(`<button class="edit-tool cut-button" data-unavailable="${removed.length>=level.cutBudget}" title="${cutBlockedReason(clip)||cutImpact(clip)+'可从废片区放回。'}" aria-label="剪除${name}">${icon('cut')}剪除</button>`);
     if(level.freezeBudget&&(level.freezable||[]).includes(clip.id))buttons.push(`<button class="edit-tool freeze-button" data-unavailable="${!clip.freeze&&countFrozen()>=level.freezeBudget}" aria-label="${clip.freeze?'取消定格':'定格'}${name}中的闸门" aria-pressed="${!!clip.freeze}">${icon('freeze')}${clip.freeze?'已定格闸门':'定格闸门'}</button>`);
     if(level.copyBudget){
       if(clip.copyOf)buttons.push(`<button class="edit-tool uncopy-button" aria-label="撤销${name}">${icon('reset')}撤销副本</button>`);
@@ -1361,7 +1433,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     function button(action,text,unavailable=false,active=false,title=''){
       return `<button type="button" class="clip-edit-button clip-${action}-button ${active?'is-applied':''}" data-action="${action}" draggable="false" data-unavailable="${unavailable}" ${action==='freeze'?`aria-pressed="${!!clip.freeze}"`:''} aria-label="${action==='uncopy'?'撤销副本':action==='freeze'&&clip.freeze?'取消定格':text}镜头：${name}" title="${title}">${icon(action==='uncopy'?'reset':action)}<span class="clip-tool-label">${text}</span></button>`;
     }
-    if(canCut(level,clip))buttons.push(button('cut','剪除',removed.length>=level.cutBudget,false,cutBlockedReason(clip)||'剪除这段镜头，也可拖入废片区'));
+    if(canCut(level,clip))buttons.push(button('cut','剪除',removed.length>=level.cutBudget,false,cutBlockedReason(clip)||cutImpact(clip)+'也可拖入废片区。'));
     if(level.freezeBudget&&(level.freezable||[]).includes(clip.id))buttons.push(button('freeze',clip.freeze?'已定格':'定格',!clip.freeze&&countFrozen()>=level.freezeBudget,!!clip.freeze,clip.freeze?'点击取消定格，返还额度':countFrozen()>=level.freezeBudget?'定格额度已用完，先取消另一镜的定格':'定格闸门，角色继续行动'));
     if(level.copyBudget){
       if(clip.copyOf)buttons.push(button('uncopy','撤销',false,false,'撤销这个副本，返还复制额度'));
@@ -1372,7 +1444,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   function renderCutTray(){
     $('cutTray').hidden=!level.cutBudget;
     if(!level.cutBudget){$('cutTray').innerHTML='';return;}
-    $('cutTray').innerHTML=`<span class="tray-label">${icon('cut')}废片区 <span class="cut-usage">${removed.length} / ${level.cutBudget}</span></span><span class="cut-drop-hint" role="status"></span>`+removed.map(c=>`<span class="cut-item">${CLIPS[c.id].name}<button data-restore="${c.uid}" aria-label="放回${CLIPS[c.id].name}">${icon('reset')}放回</button></span>`).join('');
+    $('cutTray').innerHTML=`<span class="tray-label">${icon('cut')}废片区 <span class="cut-usage">${removed.length} / ${level.cutBudget}</span></span><span class="cut-drop-hint" role="status"></span>`+removed.map(c=>`<span class="cut-item" title="${cutImpact(c)}">${CLIPS[c.id].name}<button data-restore="${c.uid}" aria-label="放回${CLIPS[c.id].name}">${icon('reset')}放回</button></span>`).join('');
     $('cutTray').querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>restoreClip(button.dataset.restore)));
     updateCutDropState();
   }
@@ -1422,9 +1494,9 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   }
   function renderInspector(){
     const clip=findClip(selected);if(!clip){$('clipInspector').innerHTML='';return;}
-    const i=clips.indexOf(clip),name=label(clip),fixed=pinned(clip);
+    const i=clips.indexOf(clip),name=label(clip),fixed=pinned(clip),context=clipContext(clip);
     $('selectionSummary').textContent=`${pad(i+1)} / ${name}`;
-    $('clipInspector').innerHTML=`<div class="inspector-description"><span class="inspector-kicker">片段 ${pad(i+1)} · ${sequenceTime(startTime(i))} — ${sequenceTime(startTime(i)+clipDuration(clip))}</span><h3>${name}</h3><p>${effect(clip)}</p></div><div class="inspector-controls"><button class="clip-preview" aria-label="预览${name}${clip.reversed?'（倒放）':''}">${icon('play')}预览</button><div class="clip-actions"><span class="move-actions"><button class="move-button move-left" aria-label="将${name}向左移动" title="向左移动" data-unavailable="${!canMove(i,-1)}">${icon('arrowLeft')}</button><button class="move-button move-right" aria-label="将${name}向右移动" title="向右移动" data-unavailable="${!canMove(i,1)}">${icon('arrowRight')}</button></span></div>${fixed?`<span class="inspector-fixed">${icon('lock')}固定${clip.id===level.fixedLast?'片尾':'片头'}</span>`:`<label class="position-control">位置<select class="position-select" aria-label="将${name}移至指定位置">${clips.map((target,j)=>`<option value="${j}" ${i===j?'selected':''} ${pinned(target)?'disabled':''}>第 ${j+1} 段</option>`).join('')}</select></label>`}<div class="clip-tools">${toolButtons(clip)}</div></div>`;
+    $('clipInspector').innerHTML=`<div class="inspector-description"><span class="inspector-kicker">片段 ${pad(i+1)} · ${sequenceTime(startTime(i))} — ${sequenceTime(startTime(i)+clipDuration(clip))}</span><h3>${name}${context?`<span class="clip-opening">片头：${context.opening}</span>`:''}</h3><p>${effect(clip)}${context?.shared?' · '+context.shared:''}</p></div><div class="inspector-controls"><button class="clip-preview" aria-label="预览${name}${clip.reversed?'（倒放）':''}">${icon('play')}预览</button><div class="clip-actions"><span class="move-actions"><button class="move-button move-left" aria-label="将${name}向左移动" title="向左移动" data-unavailable="${!canMove(i,-1)}">${icon('arrowLeft')}</button><button class="move-button move-right" aria-label="将${name}向右移动" title="向右移动" data-unavailable="${!canMove(i,1)}">${icon('arrowRight')}</button></span></div>${fixed?`<span class="inspector-fixed">${icon('lock')}固定${clip.id===level.fixedLast?'片尾':'片头'}</span>`:`<label class="position-control">位置<select class="position-select" aria-label="将${name}移至指定位置">${clips.map((target,j)=>`<option value="${j}" ${i===j?'selected':''} ${pinned(target)?'disabled':''}>第 ${j+1} 段</option>`).join('')}</select></label>`}<div class="clip-tools">${toolButtons(clip)}</div>${canCut(level,clip)?`<p class="inspector-cut-note">剪除：${cutImpact(clip)}</p>`:''}</div>`;
     const panel=$('clipInspector');
     panel.querySelector('.clip-preview').addEventListener('click',()=>preview(clip.uid));
     panel.querySelector('.move-left').addEventListener('click',()=>moveClip(clip.uid,-1));panel.querySelector('.move-right').addEventListener('click',()=>moveClip(clip.uid,1));
@@ -1493,7 +1565,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   function seekSequence(seconds){
     if(busy()){tell('先停止放映，再用标尺定位。');return;}
     cancelAutoAdvance();
-    const target=Math.max(0,Math.min(totalDuration(),seconds));let state=initialState(level),start=0;
+    const target=Math.max(0,Math.min(totalDuration(),seconds));let state=initialState(level,clips),start=0;
     for(let i=0;i<clips.length;i++){
       const clip={...clips[i]},duration=clipDuration(clip),result=transition(state,clip,level);
       if(target<=start+duration||!result.ok||i===clips.length-1){
@@ -1521,7 +1593,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     cancelAutoAdvance();
     level=collection()[id]||collection()[0];clips=level.order.map(id=>({id,uid:id,reversed:false,freeze:false}));removed=[];copySerial=0;
     if(!level.tutorial){lastCampaign=level.id;try{EscapeProgress.write(localStorage,LEVELS,completed,lastCampaign);}catch{}}
-    world=initialState(level);mode='idle';paused=false;animation=null;clipIndex=-1;attempts=0;hintIndex=-1;failure=null;selected=null;dragged=null;
+    world=initialState(level,clips);mode='idle';paused=false;animation=null;clipIndex=-1;attempts=0;hintIndex=-1;failure=null;selected=null;dragged=null;
     $('subtitle').textContent=level.opening;$('transportText').textContent='剪辑预览';$('monitorLabel').textContent='节目监视器 / PROGRAM';
     $('timelineViewport').scrollLeft=0;sequencePosition=0;renderAll();progress(0,totalDuration());
     document.querySelector('.mission-scroll').scrollTop=0;
@@ -1529,10 +1601,10 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   function makeEditable(){
     cancelAutoAdvance();
     if(mode==='idle')return;
-    mode='idle';animation=null;paused=false;world=initialState(level);failure=null;clipIndex=-1;
+    mode='idle';animation=null;paused=false;world=initialState(level,clips);failure=null;clipIndex=-1;
     $('subtitle').textContent=level.opening;$('transportText').textContent='剪辑预览';updateWorld();updateFeedback();updateControls();progress(0,totalDuration());
   }
-  function afterEdit(focusUid=null){$('subtitle').textContent=level.opening;renderTimeline(focusUid);updateWorld();updateFeedback();progress(0,totalDuration());}
+  function afterEdit(focusUid=null){world=initialState(level,clips);$('subtitle').textContent=level.opening;renderTimeline(focusUid);updateWorld();updateFeedback();progress(0,totalDuration());}
   function moveClip(uid,delta){
     if(busy())return;const from=clips.findIndex(c=>c.uid===uid);if(from<0||!canMove(from,delta))return;
     makeEditable();const to=from+delta;[clips[from],clips[to]]=[clips[to],clips[from]];afterEdit(uid);soundNote('move');tell(`「${label(findClip(uid))}」已移到第 ${to+1} 段`);
@@ -1551,7 +1623,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(busy()||!level.cutBudget)return;const index=clips.findIndex(c=>c.uid===uid),clip=clips[index];
     if(!clip||!canCut(level,clip))return;
     if(removed.length>=level.cutBudget){tell('剪除额度已用完。先从废片区放回一段。');return;}
-    makeEditable();clips.splice(index,1);removed.push({...clip,reversed:false,freeze:false,muted:false,restoreIndex:index});afterEdit(clips[Math.min(index,clips.length-1)]?.uid);soundNote('move');tell(`已剪除「${label(clip)}」。它不会再发生，可从废片区放回。`);
+    makeEditable();clips.splice(index,1);removed.push({...clip,reversed:false,freeze:false,muted:false,restoreIndex:index});afterEdit(clips[Math.min(index,clips.length-1)]?.uid);soundNote('move');tell(`已剪除「${label(clip)}」。${cutImpact(clip)}可从废片区放回。`);
   }
   function restoreClip(uid){
     if(busy())return;const index=removed.findIndex(c=>c.uid===uid);if(index<0)return;
@@ -1603,6 +1675,10 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(clips.length>4)$('scene').scrollIntoView({block:'center',behavior:'smooth'});
   }
   function subtitleFor(clip){
+    if(clip.reversed){
+      const safe={tide:!world.flooded?'水位已经较低，保持低水位。':'',bridge:world.bridge?'桥面已经完好，保持通行。':'',rocks:!world.rocks?'落石已在山坡，桥头保持畅通。':'',branches:!world.branches?'枯枝尚未挡路，通路保持畅通。':'',crate:!world.crate?'木箱已在高处，门前保持畅通。':''}[clipKind(clip)];
+      if(safe)return '倒放 · '+safe;
+    }
     if(clip.reversed)return '倒放 · '+CLIPS[clip.id].backward+(clip.freeze?'。闸门本镜不计时。':'。');
     const descriptions={bridge:clip.reversed?'让碎片回到它们原来的地方。':'桥面在这一刻坍塌。',cross:world.key?'钥匙已经拿走。重复动作不会多出一把。':'过桥，拿到那把发光的钥匙。',exit:'带上钥匙，回家。',tide:clip.reversed?'潮水向后退去，河岸露了出来。':'潮水漫过河岸，冲散了桥梁。',shutter:clip.reversed?(level.shutterMode==='permanent'?'闸门打开，出口可以通行。':'闸门打开了。接下来只有两段时间。'):'闸门落下，出口被封住。',bell:world.bellCount?'第二声铃响，守夜人醒来了。':'第一声铃响，他只是翻了个身。'};
     Object.assign(descriptions,{lever:'前半镜拉开闸门，后半镜松手关门。',latch:'只留下拉闸这一半，门会一直开着。',release:'手一松，闸门又落了下来。',footsteps:clip.muted?'脚步声被剪掉，小橘安静穿过碎石。':'碎石发出声响，巡逻犬听见了。',cell:'把左岸的唯一电池带在身上。',socket:'电池装进电箱，闸门有电了。'});
@@ -1624,14 +1700,14 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     cancelAutoAdvance();
     if(busy()){paused=!paused;updateControls();return;}
     const error=validateEdit(level,clips,removed);if(error){tell(error);return;}
-    mode='playing';paused=false;world=initialState(level);failure=null;clipIndex=0;attempts++;updateWorld();beginClip();soundNote('play');
+    mode='playing';paused=false;world=initialState(level,clips);failure=null;clipIndex=0;attempts++;updateWorld();beginClip();soundNote('play');
     if(clips.length>4)$('scene').scrollIntoView({block:'center',behavior:'smooth'});
   }
   function stop(){if(!busy()&&mode!=='scrub')return;makeEditable();$('subtitle').textContent='剪辑保留了。调整好，再试一次。';renderTimeline();}
   function completeClip(){
     const finished=animation;
     if(mode==='preview'){
-      mode='idle';animation=null;world=initialState(level);$('subtitle').textContent='预览结束。把片段放进你的故事里。';$('transportText').textContent='剪辑预览';
+      mode='idle';animation=null;world=initialState(level,clips);$('subtitle').textContent='预览结束。把片段放进你的故事里。';$('transportText').textContent='剪辑预览';
       updateWorld();updateFeedback();updateControls();progress(0,totalDuration());return;
     }
     world={...finished.to};
@@ -1641,7 +1717,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     animation=null;
     if(goalReached(level,world,clips,removed)){
       mode='success';const done=level.tutorial?tutorialCompleted:completed;if(!done.includes(level.id)){done.push(level.id);saveProgress();}renderLevels();
-      $('subtitle').textContent=level.tutorial?level.lessonSuccess:finalLevel()?`谢谢你，把 ${LEVELS.length} 个故事都剪成了好结局。`:'再小的一段改变，也能换来一个好结局。';
+      $('subtitle').textContent=level.tutorial?lessonMessage():allLevelsComplete()?`谢谢你，把 ${LEVELS.length} 个故事都剪成了好结局。`:'再小的一段改变，也能换来一个好结局。';
       $('transportText').textContent='放映完成';progress(totalDuration(),totalDuration());updateFeedback();updateControls();soundNote('success');scheduleAutoAdvance();
     }else{mode='failure';failure={title:level.tutorial?'再看看这一课的目标':'还没有到达出口',message:level.goal==='rewind'?'这一课要让小橘退回左岸，并把钥匙归还右岸。':level.goal==='cut'?'本课需要使用剪除取出落石，再安全离开。':'让小橘拿到钥匙，并在最后安全离开。'};updateFeedback();updateControls();}
   }
@@ -1701,7 +1777,18 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   $('helpButton').addEventListener('click',()=>{if(busy()&&!paused){paused=true;updateControls();}$('helpDialog').showModal();});
   $('closeHelp').addEventListener('click',()=>$('helpDialog').close());$('startEditing').addEventListener('click',()=>$('helpDialog').close());
   $('helpDialog').addEventListener('click',event=>{if(event.target===$('helpDialog')){const r=$('helpDialog').getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)$('helpDialog').close();}});
-  document.addEventListener('keydown',event=>{if($('helpDialog').open||activeView==='home')return;if(event.code==='Space'&&!event.target.closest('button,input,textarea,select')){event.preventDefault();play();}else if(event.key==='Escape'){stop();}});
+  $('gmButton').addEventListener('click',toggleGM);$('closeGM').addEventListener('click',()=>$('gmDialog').close());
+  $('gmDialog').addEventListener('close',()=>{
+    const open=$('gmDialog').open;
+    $('gmButton').setAttribute('aria-expanded',String(open));
+    if(!open&&activeView==='editor'&&mode==='success')scheduleAutoAdvance();
+  });
+  document.addEventListener('keydown',event=>{
+    const typing=event.target instanceof HTMLElement&&(event.target.isContentEditable||event.target.closest('input,textarea,select'));
+    if(event.code==='KeyG'&&!event.repeat&&!event.isComposing&&!event.ctrlKey&&!event.altKey&&!event.metaKey&&!typing){event.preventDefault();toggleGM();return;}
+    if($('helpDialog').open||$('gmDialog').open||activeView==='home')return;
+    if(event.code==='Space'&&!event.target.closest('button,input,textarea,select')){event.preventDefault();play();}else if(event.key==='Escape'){stop();}
+  });
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&busy()&&!paused){paused=true;updateControls();}});
   window.addEventListener('resize',()=>{fitCanvas();if(hasSession)layoutTimeline();});
   renderHome();requestAnimationFrame(frame);
