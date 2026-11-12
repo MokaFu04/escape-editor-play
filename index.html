@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#191b1f">
 <meta name="description" content="拖动影片、倒转时间，救出困在故事里的小橘。一个可以离线游玩的剪辑解谜小游戏。">
-<title>逃生剪辑师 · 把结局重新剪一次</title>
+<title>小橘剪辑室 · 把结局重新剪一次</title>
 <style>
 :root{--paper:#f6f5f0;--panel:#fffefa;--ink:#262832;--muted:#7b7d87;--line:#e4e3dd;--accent:#5551e8;--accent-soft:#eeedff;--mint:#dceee3;--peach:#f6e5d7;--purple:#e8e2fa;--success:#287c5b;--danger:#b45544;--radius:16px;font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}
 *{box-sizing:border-box}body{margin:0}button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}button:disabled{cursor:not-allowed;opacity:.38}button,a,article{ -webkit-tap-highlight-color:transparent}button:focus-visible,article:focus-visible,a:focus-visible{outline:3px solid #a09bff;outline-offset:3px}button{touch-action:manipulation}svg{display:block;flex-shrink:0}button svg{width:17px;height:17px}button:disabled:hover{transform:none}button,.clip{transition:background .16s,border-color .16s,box-shadow .16s,transform .16s}button:hover:not(:disabled){filter:brightness(.97)}.hidden,[hidden]{display:none!important}
@@ -184,20 +184,46 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
 .nle .timeline-play-shortcut span{display:inline;font:inherit;color:inherit}.nle .timeline-play-shortcut svg{width:16px;height:16px;flex:none}
 @media(max-width:1180px){.monitor-bottom{height:58px;min-height:58px;gap:6px}.monitor-progress .transport-label{display:none}.monitor-timing{flex-direction:column;align-items:flex-end;justify-content:center;gap:2px}.monitor-timing .time-code{font-size:10px}.monitor-timing .speed-button{height:22px;min-height:22px;padding:1px 5px}.monitor-playback .play-button{min-width:106px;padding:6px 8px}.nle .timeline-play-shortcut{min-width:98px;font-size:12px}}
 </style>
+<style id="outro-style">/* A self-contained final-cut workbench. The native dialog keeps the game inert. */
+.outro-dialog{width:min(1120px,calc(100vw - 36px),calc((100dvh - 190px)*1.9));max-width:none;max-height:calc(100dvh - 24px);padding:24px 30px 22px;border:1px solid #536078;border-radius:12px;background:#171d28;color:#f1e9dd;overflow:auto;box-shadow:0 28px 120px #000b}
+.outro-dialog::backdrop{background:#080b13e8;backdrop-filter:blur(6px)}
+.outro-header{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.outro-eyebrow{margin:0 0 9px;color:#adbad0;font:11px Consolas,monospace;letter-spacing:.16em}
+.outro-header h2{margin:0;font-size:clamp(18px,2.2vw,28px);font-weight:650;letter-spacing:.02em}
+.outro-skip{flex-shrink:0;color:#bac6d9;font-size:13px;padding:10px 12px;border:1px solid #485368;border-radius:5px;background:#222b3a;min-height:40px}
+.outro-skip span{margin-left:9px;color:#f3c686}
+#outroCanvas{display:block;width:100%;height:auto;aspect-ratio:1000/520;margin:14px 0 8px;border-radius:5px;background:#111722}
+.outro-footer{display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:58px}
+.outro-copy{min-width:0}
+#outroCaption{font-size:14px;line-height:1.6;margin:0 0 5px;color:#e4e8ef}
+#outroCredit{font-size:11px;line-height:1.5;margin:0;color:#91a0b7}
+.outro-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
+.outro-actions button{font-size:13px;padding:11px 15px;border:1px solid #536078;border-radius:5px;color:#cbd5e4;background:#242e3e;min-height:40px}
+.outro-actions .outro-home{background:#f0c58b;color:#28232a;border-color:#f7d6a8}
+.outro-entry{display:flex;align-items:center;gap:8px;font-size:13px;color:#e4be88;padding:10px 0;min-height:40px;margin-top:8px}
+.outro-entry svg{width:15px;height:15px}
+.outro-entry>span:last-child{margin-left:8px}
+.outro-entry:hover{color:#ffe0b5}
+.outro-dialog button:focus-visible,.outro-entry:focus-visible{outline:2px solid #f1c78d;outline-offset:4px}
+@media(max-width:680px){.outro-dialog{width:calc(100vw - 20px);padding:18px 14px}.outro-eyebrow{font-size:9px;letter-spacing:.09em}.outro-header{gap:8px}.outro-header h2{font-size:18px}.outro-skip{font-size:11px;padding:8px}.outro-skip span{margin-left:3px}.outro-footer{align-items:flex-start;flex-direction:column;gap:12px}#outroCaption{font-size:13px}.outro-actions{width:100%}.outro-actions button{flex:1}.outro-dialog #outroCanvas{margin-top:18px}}
+@media(max-height:520px) and (min-width:681px){.outro-dialog{width:min(760px,calc((100dvh - 130px)*1.9));padding:12px 18px}.outro-header h2{font-size:18px}.outro-eyebrow{font-size:9px;margin-bottom:3px}#outroCanvas{margin:7px 0}.outro-footer{min-height:35px}#outroCaption{font-size:12px}#outroCredit{font-size:10px}.outro-actions button{padding:7px 10px;font-size:11px;min-height:32px}.outro-skip{font-size:11px;min-height:32px;padding:7px}}
+@media(prefers-reduced-motion:reduce){.outro-dialog button{transition:none}}
+</style>
 </head>
 <body>
 <header class="topbar"><div class="topbar-inner">
-  <div class="brand"><span class="brand-mark" data-icon="film"></span>逃生剪辑师 <small>ESCAPE EDITOR</small></div>
-  <div class="top-actions"><span class="badge">本地项目 · 1.1.3</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="gmButton" class="quiet-button" aria-haspopup="dialog" aria-controls="gmDialog" aria-expanded="false" aria-keyshortcuts="G" title="GM 关卡跳转（G）">GM</button><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
+  <div class="brand"><span class="brand-mark" data-icon="film"></span>小橘剪辑室 <small>XIAOJU STUDIO</small></div>
+  <div class="top-actions"><span class="badge">本地项目 · 1.2</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="gmButton" class="quiet-button" aria-haspopup="dialog" aria-controls="gmDialog" aria-expanded="false" aria-keyshortcuts="G" title="GM 关卡跳转（G）">GM</button><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
 </div></header>
 <div class="workspace-strip"><div class="project-path"><span data-icon="film"></span><span id="projectPath">月光归途 / 项目中心</span></div><nav class="workspace-tabs" aria-label="切换工作区"><button id="workspaceHome" aria-pressed="true">项目中心</button><button id="workspaceCampaign" aria-pressed="false">正式剪辑</button><button id="workspaceTutorial" aria-pressed="false">剪辑学堂</button></nav><span class="workspace-format">SEQUENCE · 24 FPS</span></div>
 <main id="homeScreen" class="home-screen" aria-label="游戏开始界面">
   <div class="home-kicker">PROJECT CENTER / 月光归途</div>
   <section class="home-hero" aria-labelledby="homeTitle"><div class="home-copy"><div class="home-project-label"><span data-icon="film"></span>项目 01 · 月光归途</div>
-    <h1 id="homeTitle">逃生<span>剪辑师</span></h1>
+    <h1 id="homeTitle">小橘<span>剪辑室</span></h1>
     <p class="home-description">小橘困在一卷出错的影片里。<br>拖动镜头，倒转时间。<br>这一次，由你把结局剪好。</p>
     <div class="home-buttons"><button id="startGame" class="home-primary"><span id="startLabel">开始游戏</span><span data-icon="arrowRight"></span></button><button id="startTutorial" class="home-secondary"><span>新手教学</span><small>6 个短练习 · 随时重温</small></button></div>
     <p class="home-continue" id="homeContinue">从第一幕开始，剪出属于你的好结局。</p>
+    <button id="homeOutro" class="outro-entry" hidden><span data-icon="film"></span>重看通关片尾<span aria-hidden="true">↗</span></button>
   </div><div class="home-film"><div class="home-preview-header"><span><span data-icon="monitor"></span>项目预览</span><span>月光归途 · 00:18</span></div><span class="home-film-note">SOURCE / MOONLIGHT ARCHIVE</span><canvas id="homeScene" width="1200" height="576" aria-label="正放与倒放交替的月光断桥动画，小橘过桥后又退回起点"></canvas><div class="home-film-label"><span>THE WAY HOME / 00:18</span><strong id="homeDirection">◀◀ 倒放 · 桥梁坍塌</strong></div><div class="film-perforations" aria-hidden="true"></div></div></section>
   <section class="home-mechanics" aria-label="四种剪辑方式"><div class="home-mechanic"><span data-icon="reverse"></span><h2>倒放</h2><p>让发生的事倒着回来</p></div><div class="home-mechanic"><span data-icon="cut"></span><h2>剪除</h2><p>让一次意外不再发生</p></div><div class="home-mechanic"><span data-icon="freeze"></span><h2>定格</h2><p>让闸门为你多等一镜</p></div><div class="home-mechanic"><span data-icon="copy"></span><h2>复制</h2><p>让有用的行动再来一次</p></div></section>
   <footer class="home-bottom"><span>四章 · 十二幕 · 一条回家的路</span><div class="home-saves"><span>正式关卡<strong id="homeCampaignProgress">0 / 12</strong></span><span>剪辑学堂<strong id="homeTutorialProgress">0 / 6</strong></span></div></footer>
@@ -228,11 +254,17 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   <footer class="footer"><span><span data-icon="spark"></span>本地工作区 · 让每一镜通往好结局</span><span class="keyboard-help"><kbd>Space</kbd> 播放 / 暂停 <span style="margin-left:7px"><kbd>←</kbd><kbd>→</kbd> 移动片段</span><span style="margin-left:7px"><kbd>G</kbd> GM 选关</span><span class="direction-help">点击素材下方正放 / 倒放可切换方向</span></span></footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
+<dialog id="outroDialog" class="outro-dialog" aria-labelledby="outroTitle" aria-describedby="outroCaption">
+  <header class="outro-header"><div><p class="outro-eyebrow" id="outroEyebrow">月光归途 / FINAL CUT</p><h2 id="outroTitle">最后一步，交给小橘。</h2></div><button id="outroSkip" class="outro-skip" autofocus>跳过动画 <span aria-hidden="true">↗</span></button></header>
+  <canvas id="outroCanvas" width="1600" height="832" aria-hidden="true"></canvas>
+  <footer class="outro-footer"><div class="outro-copy"><p id="outroCaption" role="status" aria-live="polite">等等，小橘好像还有事要做。</p><p id="outroCredit">剪辑：你　·　特别出演：小橘</p></div><div id="outroActions" class="outro-actions" hidden><button id="outroReplay">再看一次</button><button id="outroHome" class="outro-home">返回项目中心 <span aria-hidden="true">→</span></button></div></footer>
+</dialog>
 <dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。属性栏会说明片头状态、镜头效果与剪除影响；独立预览使用示例状态，不影响本关。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要保持低水位、完整桥面与畅通道路。环境已经安全时，倒放会保持安全状态，仍占用一次倒放额度。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。画面下方中央与时间线左侧都可放映或暂停；也可按空格，Esc 停止。通关后短暂显示成功提示，自动进入下一关；本组最后一关保留完成结果。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—3 关：倒放，修复环境。第 4—6 关：剪除，让坏事不发生。第 7—9 关：定格，闸门停一镜、角色继续走。第 10—12 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习变化、综合考核。两种进度独立保存。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>环境片段决定片头，剪掉或倒放都能改写</h3><p>点击镜头上的橙色「剪除」，或把镜头拖入下方废片区；点击「放回」即可撤销。右侧固定显示剩余 / 总额，取消操作会返还对应额度。潮水片段留在主轨时，片头显示高水位，倒放后退到低水位；剪除潮水会立即让片头变为低水位，放回则恢复高水位。坍塌、落石、枯枝、木箱也按此规则联动：片段在主轨，片头有障碍；剪除后片头恢复安全，放回后重新出现。两段坍塌共用一座桥，全部剪除才以完整桥面开场。在对应镜头上点击「定格」或「复制」；已定格的镜头可再点取消，副本上点「撤销」会返还额度。「出口落锁」是必需镜头，不能剪除；倒放开闸后按镜数计时，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关提供 12 段原片，复制和剪除会改变成片长度。门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销，额度无需用满。满足行动条件和结尾目标的不同剪法都能通关。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
 <dialog id="gmDialog" class="gm-dialog" aria-labelledby="gmTitle" aria-describedby="gmDescription">
   <div class="dialog-head"><h2 id="gmTitle">GM · 自由选关</h2><button id="closeGM" class="close-dialog" aria-label="关闭 GM 面板"><span data-icon="close"></span></button></div>
   <p id="gmDescription" class="gm-description">点击即可进入任意已制作关卡，包括尚未解锁的关卡。切关会重置当前剪辑，不会自动标记通关。</p>
   <div id="gmLevels" class="gm-levels"></div>
+  <button id="gmPreviewOutro" class="outro-entry"><span data-icon="film"></span>预览通关片尾<span aria-hidden="true">↗</span></button>
   <p class="gm-shortcuts"><kbd>G</kbd> / <kbd>Esc</kbd> 关闭 · 放映时打开会暂停，关闭后可继续放映。</p>
 </dialog>
 <script id="game-campaign">
@@ -861,7 +893,12 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     canvas.dataset.renderStyle='pixel';canvas.dataset.theme=theme;
     return true;
   }
-  globalThis.EscapePixel={ready,supported,sample,frameAt,boardPose,obstaclePose,layout,themeOf,draw,get loaded(){return loaded;},size:[500,240]};
+  function drawCharacter(ctx,pose,x,y,ms=0,scale=1){
+    if(!loaded)return false;
+    ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);ctx.imageSmoothingEnabled=false;
+    sprite(ctx,'actor/xiaoju',pose,0,0,ms);ctx.restore();return true;
+  }
+  globalThis.EscapePixel={ready,supported,sample,frameAt,boardPose,obstaclePose,layout,themeOf,draw,drawCharacter,get loaded(){return loaded;},size:[500,240]};
 })();
 </script>
 <script id="game-renderer">
@@ -1161,6 +1198,165 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   globalThis.EscapeScene={draw:drawScene,visual:getVisual,thumbnailState};
 })();
 </script>
+<script id="game-outro">
+(() => {
+  'use strict';
+  const duration=14;
+  const clamp=n=>Math.max(0,Math.min(1,n));
+  const ease=n=>{n=clamp(n);return n*n*(3-2*n);};
+  const mix=(a,b,n)=>a+(b-a)*n;
+  // Seconds are local to the cutscene, independent of playback speed and rules.
+  function sample(t){
+    t=Math.max(0,t);
+    if(t<1.6)return {phase:'peek',x:394,y:mix(350,296,ease(t/1.6)),pose:'idle',mask:true};
+    if(t<2.5)return {phase:'climb',x:394,y:mix(296,270,ease((t-1.6)/.9)),pose:'idle',mask:true};
+    if(t<3.7){const p=clamp((t-2.5)/1.2);return {phase:'jump',x:mix(394,160,p),y:mix(270,403,p)-Math.sin(p*Math.PI)*112,pose:'walk'};}
+    if(t<7.7){const p=clamp((t-3.7)/4),hop=Math.abs(Math.sin(p*Math.PI*5));return {phase:'walk',x:mix(160,735,p),y:403-hop*15,pose:'walk'};}
+    if(t<8.65)return {phase:'ready',x:mix(735,759,ease((t-7.7)/.5)),y:403,pose:'idle'};
+    if(t<9.35)return {phase:'press',x:759,y:403,pose:'reach_key'};
+    if(t<10.65)return {phase:'export',x:759,y:403,pose:'idle'};
+    if(t<12.15)return {phase:'settle',x:mix(759,713,ease((t-10.65)/1.2)),y:403,pose:'walk',flip:true};
+    return {phase:'sleep',x:713,y:403,pose:'sleep'};
+  }
+  function create({onHome=()=>{},onSound=()=>{}}={}){
+    const $=id=>document.getElementById(id);
+    const dialog=$('outroDialog'),canvas=$('outroCanvas'),ctx=canvas.getContext('2d');
+    const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
+    let payload=null,elapsed=0,previous=0,raf=0,phase='',finished=false,saveChime=false;
+    function resize(){canvas.width=Math.max(1,Math.round(canvas.clientWidth*Math.min(window.devicePixelRatio||1,2)));canvas.height=Math.round(canvas.width*.52);}
+    const captions={peek:'等等，小橘好像还有事要做。',climb:'它从画框里，探出了头。',jump:'嘿，时间线也可以走！',walk:'踩着你剪好的镜头，再往前走一点。',ready:'最后这个按钮，就交给它吧。',press:'啪嗒。最后一爪，完成！',export:'正在把好结局，认真收好。',settle:'下班了。小橘找到了一张很好的床。',sleep:'你负责好结局，它负责最后一爪。'};
+    function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
+    function text(value,x,y,size,color,align='left',family='"Microsoft YaHei","PingFang SC",sans-serif'){
+      ctx.fillStyle=color;ctx.font=size+'px '+family;ctx.textAlign=align;ctx.fillText(value,x,y);ctx.textAlign='left';
+    }
+    function stroke(x,y,w,h,color){ctx.strokeStyle=color;ctx.lineWidth=1;ctx.strokeRect(x+.5,y+.5,w,h);}
+    function check(x,y,size,color){
+      ctx.beginPath();ctx.moveTo(x-size*.45,y);ctx.lineTo(x-size*.1,y+size*.32);ctx.lineTo(x+size*.5,y-size*.38);ctx.strokeStyle=color;ctx.lineWidth=3;ctx.stroke();
+    }
+    // An original curled pose in the existing orange / cream / teal palette.
+    // Drawn in logical pixels so the silhouette stays sharp at every viewport.
+    function sleepingCat(x,y,t){
+      const breathe=motion.matches?0:Math.floor((Math.sin(t*2.1)+1)*.7);
+      ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(2,2);
+      const p=(a,b,w,h,c)=>rect(a,b-breathe,w,h,c);
+      p(-22,-10,39,9,'#3c3347');p(-18,-17,32,16,'#3c3347');p(-14,-20,22,19,'#3c3347');
+      p(-18,-14,31,11,'#cf8049');p(-14,-18,22,16,'#efa457');p(-8,-18,7,3,'#ffd08a');
+      p(-18,-13,5,3,'#a9603e');p(-12,-18,3,5,'#a9603e');p(-4,-19,3,5,'#b86e40');
+      p(5,-24,5,8,'#3c3347');p(19,-24,4,9,'#3c3347');p(7,-21,16,16,'#3c3347');
+      p(7,-22,2,6,'#e8a172');p(20,-22,2,6,'#e8a172');p(8,-19,14,12,'#f4b46c');
+      p(8,-11,14,5,'#ffe1aa');p(9,-14,4,1,'#4b3541');p(17,-14,4,1,'#4b3541');
+      p(14,-11,2,2,'#a86861');p(9,-17,3,2,'#c97944');p(18,-17,3,2,'#c97944');
+      p(3,-8,6,4,'#5eacac');p(2,-5,9,2,'#386a7a');p(9,-4,13,3,'#ffe1aa');
+      p(-23,-9,6,7,'#3c3347');p(-21,-9,5,5,'#c9824a');p(-18,-5,20,4,'#f4b46c');p(-16,-5,3,3,'#a96542');
+      ctx.restore();
+      if(!motion.matches)for(let i=0;i<2;i++){const p=((t-12.15)*.36+i*.5)%1;if(p<0)continue;ctx.globalAlpha=(1-p)*.8;text('z',x+35+p*15,y-48-p*30,13+p*4,'#b8cfdf');ctx.globalAlpha=1;}
+    }
+    function draw(){
+      const t=elapsed,actor=sample(t),exportProgress=clamp((t-9.1)/1.55),saved=t>=10.65,pressed=t>=8.94&&t<9.3;
+      ctx.setTransform(canvas.width/1000,0,0,canvas.height/520,0,0);ctx.clearRect(0,0,1000,520);ctx.imageSmoothingEnabled=false;
+      rect(0,0,1000,520,'#111722');
+      for(let y=24;y<510;y+=24)for(let x=24;x<985;x+=24)rect(x,y,1,1,'#263044');
+      // The monitor contains an actual composited game scene.
+      rect(78,28,460,277,'#202b3b');stroke(78,28,460,277,'#526178');
+      rect(79,29,458,30,'#283448');rect(94,40,6,6,saved?'#a9dbc4':'#f0c58b');
+      text('节目监视器 / 月光归途',108,49,12,'#c1cee1');
+      text('24 FPS',518,49,10,'#94a9c5','right','Consolas,monospace');
+      rect(94,63,430,207,'#17273e');
+      if(payload.scene)ctx.drawImage(payload.scene,94,63,430,207);
+      if(saved){rect(101,72,72,20,'#1c3d3b');text('GOOD CUT',137,86,10,'#bde6cb','center','Consolas,monospace');}
+      text('最后一镜',94,290,11,'#92a7c5');text('END OF SEQUENCE',520,290,10,'#a4b9d2','right','Consolas,monospace');
+      text('THE FINAL CUT',594,88,12,'#eac18a','left','Consolas,monospace');
+      text(saved?'好结局，':'还有最后',592,134,36,'#f1e9dd');
+      text(saved?(payload.saved||payload.preview?'保存成功。':'剪辑完成。'):'一个按钮。',592,181,36,saved?'#b5dfc7':'#f1e9dd');
+      text(saved?'把故事剪好的人，是你。':'你已经把每一镜，接成了归途。',594,221,14,'#b1bfd1');
+      text(saved?'替你按下最后一爪的，是它。':'接下来，让小橘收个尾。',594,246,14,'#b1bfd1');
+      rect(594,273,220,1,'#3d4c62');text('EDITOR  /  YOU',594,296,11,'#839ab7','left','Consolas,monospace');
+      text('最终成片',48,350,13,'#d5e0ee');text('V1',49,425,12,'#8da7c6','left','Consolas,monospace');
+      rect(94,367,854,1,'#43546e');
+      for(let i=0;i<14;i++){const x=98+i*65;rect(x,362,1,5,'#526581');if(i%2===0)text('00:'+String(i*3).padStart(2,'0'),x,355,9,'#8da1bb','left','Consolas,monospace');}
+      const colors=[['#405979','#9cbadc'],['#594a75','#d1bae4'],['#386062','#a5d5c9'],['#5c526e','#c7b9e0'],['#69523e','#e7c593']];
+      for(let i=0;i<5;i++){
+        const x=98+i*132,w=i===4?144:124,bounce=actor.phase==='walk'&&Math.abs(actor.x-(x+62))<40?Math.max(0,actor.y-397)*.45:0,y=403+bounce,shot=payload.shots?.[i];
+        rect(x,y+5,w,64,'#070e17');rect(x,y,w,60,colors[i][0]);rect(x,y,w,3,colors[i][1]);
+        if(shot?.image){ctx.globalAlpha=.52;ctx.drawImage(shot.image,x+3,y+6,w-6,32);ctx.globalAlpha=1;}
+        text(String(i+1).padStart(2,'0'),x+7,y+53,9,colors[i][1],'left','Consolas,monospace');
+        const name=shot?.name||['倒转时间','剪去意外','借来一镜','再来一次','好结局'][i];text(name.length>7?name.slice(0,6)+'…':name,x+27,y+53,11,'#f0e6da');
+        rect(x,477,w,3,saved?'#8ec5b1':'#35475e');
+      }
+      // The paw meets the upper left of this export control.
+      const by=403+(pressed?4:0);
+      rect(790,410,158,60,'#080e17');rect(790,by,158,60,saved?'#acd7bb':pressed?'#cda16c':'#efc58c');
+      if(exportProgress>0&&!saved)rect(790,by+55,158*exportProgress,5,'#8a683e');
+      if(saved){check(825,by+29,19,'#244b42');text('已完成',884,by+36,18,'#244b42','center');}
+      else{text(t>=9.1?'导出中…':'导出',870,by+37,20,'#302731','center');}
+      if(t<9.1){text('EXPORT',870,491,10,'#8e9eaf','center','Consolas,monospace');}
+      else{text(saved?'好结局已就位':String(Math.round(exportProgress*100))+'%',870,491,11,'#b5d3c6','center');}
+      if(actor.phase!=='peek'||t>.15){
+        ctx.save();
+        if(actor.mask){ctx.beginPath();ctx.rect(94,63,430,207);ctx.clip();}
+        if(!actor.mask&&actor.phase!=='jump'){ctx.globalAlpha=.25;rect(actor.x-29,404,59,4,'#050b13');ctx.globalAlpha=1;}
+        if(actor.pose==='sleep')sleepingCat(actor.x,actor.y,t);
+        else{
+          if(actor.flip){ctx.translate(actor.x*2,0);ctx.scale(-1,1);}
+          EscapePixel.drawCharacter(ctx,actor.pose,actor.x,actor.y,actor.phase==='press'?(t-8.65)*700:t*1000,2);
+        }
+        ctx.restore();
+        if(actor.phase==='press'){
+          const reach=ease((t-8.65)/.28);rect(779,389,15*reach,8,'#efa95f');rect(790,394,10*reach,pressed?14:10,'#ffe0a4');
+          if(pressed)text('啪嗒',815,382,14,'#f4d9b5');
+        }
+      }
+      if(saved&&t<12.15&&!motion.matches){
+        const p=clamp((t-10.65)/1.5);ctx.globalAlpha=1-p;
+        for(let i=0;i<8;i++){const a=i*Math.PI/4;rect(869+Math.cos(a)*(28+p*44),432+Math.sin(a)*(24+p*35),4,4,i%2?'#efd19c':'#acdbc3');}ctx.globalAlpha=1;
+      }
+      dialog.dataset.phase=actor.phase;
+      if(phase!==actor.phase){phase=actor.phase;$('outroCaption').textContent=captions[phase];if(phase==='press')onSound('move');}
+      if(saved&&!saveChime){saveChime=true;$('outroTitle').textContent=payload.saved||payload.preview?'好结局，保存成功。':'好结局，剪辑完成。';if(!motion.matches)onSound('success');}
+    }
+    function complete(){
+      if(finished)return;
+      finished=true;elapsed=duration;draw();$('outroActions').hidden=false;$('outroSkip').textContent='返回游戏 ↗';dialog.dataset.finished='true';
+      if(!payload.saved&&!payload.preview)$('outroCredit').textContent='本次通关已完成；当前浏览器未保存进度。';
+      if(document.activeElement===$('outroSkip'))$('outroHome').focus({preventScroll:true});
+    }
+    function frame(now){
+      if(!dialog.open){raf=0;return;}
+      const delta=previous?Math.min((now-previous)/1000,.08):0;previous=now;
+      if(!document.hidden){elapsed+=delta;if(elapsed>=duration)complete();draw();}
+      if(!motion.matches)raf=requestAnimationFrame(frame);else raf=0;
+    }
+    function replay(){
+      cancelAnimationFrame(raf);elapsed=0;previous=0;phase='';finished=false;saveChime=false;
+      dialog.dataset.finished='false';$('outroTitle').textContent='最后一步，交给小橘。';
+      $('outroSkip').textContent='跳过动画 ↗';$('outroActions').hidden=true;
+      $('outroCredit').textContent=payload.preview?'片尾预览 · 不计入通关进度':'剪辑：你　·　特别出演：小橘';
+      $('outroSkip').focus({preventScroll:true});
+      if(motion.matches)complete();else{draw();raf=requestAnimationFrame(frame);}
+    }
+    function close(){cancelAnimationFrame(raf);raf=0;previous=0;if(dialog.open)dialog.close();}
+    $('outroSkip').addEventListener('click',()=>finished?close():complete());
+    $('outroReplay').addEventListener('click',replay);
+    $('outroHome').addEventListener('click',()=>{close();onHome();});
+    dialog.addEventListener('cancel',event=>{event.preventDefault();finished?close():complete();});
+    dialog.addEventListener('close',()=>{cancelAnimationFrame(raf);raf=0;previous=0;});
+    dialog.addEventListener('keydown',event=>{
+      if(event.key==='Tab'){
+        const buttons=[...dialog.querySelectorAll('button')].filter(button=>!button.disabled&&button.getClientRects().length);
+        const first=buttons[0],last=buttons.at(-1);
+        if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+      }
+      event.stopPropagation();
+    });
+    window.addEventListener('resize',()=>{if(dialog.open){resize();draw();}});
+    document.addEventListener('visibilitychange',()=>{previous=0;});
+    motion.addEventListener('change',()=>{if(dialog.open&&motion.matches){cancelAnimationFrame(raf);raf=0;complete();draw();}});
+    return {open(data){if(dialog.open)return;payload=data;$('outroEyebrow').textContent=data.preview?'片尾预览 / FINAL CUT':'月光归途 / FINAL CUT';dialog.showModal();resize();replay();},close,get active(){return dialog.open;}};
+  }
+  globalThis.EscapeOutro={create,sample,duration};
+})();
+</script>
 <script id="game-ui">
 (async () => {
   await EscapePixel.ready;
@@ -1202,6 +1398,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
   let completed=[],tutorialCompleted=[],track='campaign',activeView='home',hasSession=false,lastCampaign=0;
   try{const saved=EscapeProgress.read(localStorage,LEVELS);completed=saved.completed;lastCampaign=saved.last;}catch{}
+  let outroOffered=completed.length===LEVELS.length;
   try{const saved=JSON.parse(localStorage.getItem('escape-editor-tutorial-v1')||'[]');if(Array.isArray(saved))tutorialCompleted=[...new Set(saved.filter(n=>Number.isInteger(n)&&n>=0&&n<TUTORIALS.length))];}catch{}
   let level=LEVELS[0],clips=[],removed=[],copySerial=0,world=initialState(level),mode='idle',paused=false,speed=1,animation=null,clipIndex=-1;
   let attempts=0,hintIndex=-1,failure=null,selected=null,dragged=null,sound=false,audioCtx=null,clock=0,lastTime=0,lastDraw=0,toastTimer=0;
@@ -1209,7 +1406,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   let nextLevelTimer=null;
   function cancelAutoAdvance(){if(nextLevelTimer!==null){clearTimeout(nextLevelTimer);nextLevelTimer=null;}}
   function scheduleAutoAdvance(){
-    cancelAutoAdvance();if(finalLevel())return;
+    cancelAutoAdvance();if(finalLevel()||outro.active||(!level.tutorial&&allLevelsComplete()))return;
     const finishedLevel=level,finishedTrack=track;
     nextLevelTimer=setTimeout(()=>{
       nextLevelTimer=null;
@@ -1232,6 +1429,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   const collection=()=>track==='tutorial'?TUTORIALS:LEVELS;
   const finalLevel=()=>level.id===collection().length-1;
   const allLevelsComplete=()=>(level.tutorial?tutorialCompleted:completed).length===collection().length;
+  const outro=EscapeOutro.create({onHome:showHome,onSound:soundNote});
   const lessonMessage=()=>finalLevel()&&!allLevelsComplete()?'这一课已完成，还可以回到其他课程练习。':level.lessonSuccess;
   const findClip=uid=>clips.find(c=>c.uid===uid);
   const label=clip=>CLIPS[clip.id].name+(clip.copyOf?(clip.copyNumber>1?`（副本 ${clip.copyNumber}）`:'（副本）'):'');
@@ -1247,7 +1445,28 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       notes.forEach((freq,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain(),at=audioCtx.currentTime+i*.1;o.type='sine';o.frequency.setValueAtTime(freq,at);g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(.045,at+.015);g.gain.exponentialRampToValueAtTime(.001,at+.19);o.connect(g);g.connect(audioCtx.destination);o.start(at);o.stop(at+.2);});}catch{}
   }
   function saveProgress(){try{EscapeProgress.write(localStorage,LEVELS,completed,lastCampaign);localStorage.setItem('escape-editor-tutorial-v1',JSON.stringify(tutorialCompleted));}catch{}}
+  function showOutro(preview=false){
+    if(outro.active||(!preview&&completed.length!==LEVELS.length))return;
+    cancelAutoAdvance();
+    if(busy()&&!paused){paused=true;updateControls();}
+    if($('gmDialog').open)$('gmDialog').close();
+    const current=activeView==='editor'&&track==='campaign'&&mode==='success';
+    const sceneLevel=current?level:LEVELS.at(-1),exit={id:'exit'};
+    const state=current?world:transition(previewState(exit,sceneLevel),exit,sceneLevel).state;
+    const scene=document.createElement('canvas');scene.width=1000;scene.height=480;
+    EscapeScene.draw(scene,state,null,1.5,sceneLevel);
+    const source=current?clips:[{id:'bridge',reversed:true},{id:'tide',reversed:true},{id:'cross'},{id:'bell'},{id:'exit'}];
+    const shots=Array.from({length:5},(_,i)=>{
+      const clip=source[Math.round(i*(source.length-1)/4)],from=previewState(clip,sceneLevel),result=transition(from,clip,sceneLevel);
+      const image=document.createElement('canvas');image.width=300;image.height=100;
+      EscapeScene.draw(image,from,{clip,from,to:result.state,ok:result.ok,progress:.65},1.5,sceneLevel,{thumbnail:true});
+      return {image,name:CLIPS[clip.id].name};
+    });
+    let saved=false;try{saved=EscapeProgress.read(localStorage,LEVELS).completed.length===LEVELS.length;}catch{}
+    outro.open({scene,shots,saved,preview});
+  }
   function renderHome(){
+    $('homeOutro').hidden=completed.length!==LEVELS.length;
     $('homeCampaignProgress').textContent=`${completed.length} / ${LEVELS.length}`;
     $('homeTutorialProgress').textContent=`${tutorialCompleted.length} / ${TUTORIALS.length}`;
     $('startLabel').textContent=completed.length===LEVELS.length?'重温故事':completed.length||hasSession?'继续游戏':'开始游戏';
@@ -1264,6 +1483,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     hasSession=true;fitCanvas();updateWorkspace();window.scrollTo(0,0);$('missionTitle').focus({preventScroll:true});
   }
   function showHome(){
+    outro.close();
     cancelAutoAdvance();
     if(busy())stop();activeView='home';$('homeScreen').hidden=false;$('gameScreen').hidden=true;$('homeButton').hidden=true;renderHome();updateWorkspace();window.scrollTo(0,0);$('startGame').focus({preventScroll:true});
   }
@@ -1281,6 +1501,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     }));
   }
   function toggleGM(){
+    if(outro.active)return;
     const dialog=$('gmDialog');
     if(dialog.open){dialog.close();return;}
     if($('helpDialog').open)return;
@@ -1372,7 +1593,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       body.textContent=level.tutorial?lessonMessage():`第 ${attempts} 次放映，小橘安全离开。${finalLevel()?(allDone?`你用自己的剪法完成了 ${LEVELS.length} 个故事。`:'这一幕已完成，可以回到其他关卡继续剪辑。'):level.stage==='综合考核'&&chapterDone?'本章三关已完成，下一章使用「'+CHAPTERS[level.chapter+1].mechanic+'」。':'继续用本章机制，试试下一种剪法。'}`;
       $('sceneResult').hidden=false;$('sceneResult').className='scene-result success';$('resultWord').textContent='GOOD CUT!';$('resultLine').textContent=allDone?'所有故事，都有了好结局。':'小橘平安到家了。';
       if(level.tutorial)$('resultLine').textContent=level.goal==='rewind'?'小橘回到起点，钥匙也归位了。':lessonMessage();
-      if(!finalLevel())$('resultLine').textContent+=' 即将自动进入'+(level.tutorial?'下一课。':'下一关。');
+      if(!finalLevel()&&(level.tutorial||!allDone))$('resultLine').textContent+=' 即将自动进入'+(level.tutorial?'下一课。':'下一关。');
       $('nextButton').hidden=false;$('nextButton').innerHTML=(level.tutorial?(finalLevel()?'进入正式关卡':'立即进入下一课'):finalLevel()?'返回开始界面':'立即进入下一关')+icon('arrowRight');
     }else if(mode==='scrub'){
       title.innerHTML=icon('monitor')+'时间线定位';body.textContent='正在查看标尺上的这一刻。点击「放映试试」从头验证剪辑；定位不会记录通关。';
@@ -1718,7 +1939,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(goalReached(level,world,clips,removed)){
       mode='success';const done=level.tutorial?tutorialCompleted:completed;if(!done.includes(level.id)){done.push(level.id);saveProgress();}renderLevels();
       $('subtitle').textContent=level.tutorial?lessonMessage():allLevelsComplete()?`谢谢你，把 ${LEVELS.length} 个故事都剪成了好结局。`:'再小的一段改变，也能换来一个好结局。';
-      $('transportText').textContent='放映完成';progress(totalDuration(),totalDuration());updateFeedback();updateControls();soundNote('success');scheduleAutoAdvance();
+      $('transportText').textContent='放映完成';progress(totalDuration(),totalDuration());updateFeedback();updateControls();soundNote('success');
+      if(!level.tutorial&&allLevelsComplete()&&!outroOffered){outroOffered=true;showOutro();}else scheduleAutoAdvance();
     }else{mode='failure';failure={title:level.tutorial?'再看看这一课的目标':'还没有到达出口',message:level.goal==='rewind'?'这一课要让小橘退回左岸，并把钥匙归还右岸。':level.goal==='cut'?'本课需要使用剪除取出落石，再安全离开。':'让小橘拿到钥匙，并在最后安全离开。'};updateFeedback();updateControls();}
   }
   function fitCanvas(){const rect=$('scene').getBoundingClientRect(),ratio=Math.min(window.devicePixelRatio||1,2);$('scene').width=Math.round(Math.max(640,rect.width)*ratio);$('scene').height=Math.round($('scene').width*.48);}
@@ -1727,6 +1949,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   let homeClock=0;
   function frame(now){
     const dt=lastTime?Math.min(now-lastTime,100):0;lastTime=now;if(!paused)clock+=dt/1000;
+    if(outro.active){requestAnimationFrame(frame);return;}
     if(activeView==='home'){
       homeClock+=dt/1000;
       if(now-lastDraw>=1000/30){const index=Math.floor(homeClock/3)%homeSamples.length,sample=homeSamples[index];EscapeScene.draw($('homeScene'),sample.from,{...sample,progress:reducedMotion ? .55 : (homeClock%3)/3},reducedMotion?1.5:homeClock,LEVELS[0]);$('homeDirection').textContent=(sample.clip.reversed?'◀◀ 倒放':'▶▶ 正放')+' · '+CLIPS[sample.clip.id].name;lastDraw=now;}
@@ -1757,6 +1980,8 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   $('nextButton').addEventListener('click',()=>{if(finalLevel()){if(level.tutorial)openEditor('campaign',completed.includes(lastCampaign)?Math.max(0,LEVELS.findIndex(l=>!completed.includes(l.id))):lastCampaign);else showHome();}else loadLevel(level.id+1);});
   $('startGame').addEventListener('click',()=>openEditor('campaign'));
   $('startTutorial').addEventListener('click',()=>openEditor('tutorial'));
+  $('homeOutro').addEventListener('click',()=>showOutro());
+  $('gmPreviewOutro').addEventListener('click',()=>showOutro(true));
   $('homeButton').addEventListener('click',showHome);
   $('workspaceHome').addEventListener('click',showHome);$('workspaceCampaign').addEventListener('click',()=>openEditor('campaign'));$('workspaceTutorial').addEventListener('click',()=>openEditor('tutorial'));
   $('timelineZoom').addEventListener('input',event=>zoomTimeline(Number(event.target.value)/100));
@@ -1784,6 +2009,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(!open&&activeView==='editor'&&mode==='success')scheduleAutoAdvance();
   });
   document.addEventListener('keydown',event=>{
+    if(outro.active)return;
     const typing=event.target instanceof HTMLElement&&(event.target.isContentEditable||event.target.closest('input,textarea,select'));
     if(event.code==='KeyG'&&!event.repeat&&!event.isComposing&&!event.ctrlKey&&!event.altKey&&!event.metaKey&&!typing){event.preventDefault();toggleGM();return;}
     if($('helpDialog').open||$('gmDialog').open||activeView==='home')return;
