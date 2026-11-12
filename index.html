@@ -188,7 +188,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
 <body>
 <header class="topbar"><div class="topbar-inner">
   <div class="brand"><span class="brand-mark" data-icon="film"></span>逃生剪辑师 <small>ESCAPE EDITOR</small></div>
-  <div class="top-actions"><span class="badge">本地项目 · 1.1.1</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="gmButton" class="quiet-button" aria-haspopup="dialog" aria-controls="gmDialog" aria-expanded="false" aria-keyshortcuts="G" title="GM 关卡跳转（G）">GM</button><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
+  <div class="top-actions"><span class="badge">本地项目 · 1.1.3</span><button id="homeButton" class="quiet-button home-button" hidden><span data-icon="arrowLeft"></span>开始界面</button><button id="soundButton" class="quiet-button" aria-pressed="false"><span data-icon="volumeOff"></span><span id="soundLabel">音效关</span></button><span class="top-divider"></span><button id="gmButton" class="quiet-button" aria-haspopup="dialog" aria-controls="gmDialog" aria-expanded="false" aria-keyshortcuts="G" title="GM 关卡跳转（G）">GM</button><button id="helpButton" class="quiet-button"><span data-icon="help"></span>玩法说明</button></div>
 </div></header>
 <div class="workspace-strip"><div class="project-path"><span data-icon="film"></span><span id="projectPath">月光归途 / 项目中心</span></div><nav class="workspace-tabs" aria-label="切换工作区"><button id="workspaceHome" aria-pressed="true">项目中心</button><button id="workspaceCampaign" aria-pressed="false">正式剪辑</button><button id="workspaceTutorial" aria-pressed="false">剪辑学堂</button></nav><span class="workspace-format">SEQUENCE · 24 FPS</span></div>
 <main id="homeScreen" class="home-screen" aria-label="游戏开始界面">
@@ -228,12 +228,12 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
   <footer class="footer"><span><span data-icon="spark"></span>本地工作区 · 让每一镜通往好结局</span><span class="keyboard-help"><kbd>Space</kbd> 播放 / 暂停 <span style="margin-left:7px"><kbd>←</kbd><kbd>→</kbd> 移动片段</span><span style="margin-left:7px"><kbd>G</kbd> GM 选关</span><span class="direction-help">点击素材下方正放 / 倒放可切换方向</span></span></footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
-<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。属性栏会说明片头状态、镜头效果与剪除影响；独立预览使用示例状态，不影响本关。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要保持低水位、完整桥面与畅通道路。环境已经安全时，倒放会保持安全状态，仍占用一次倒放额度。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。画面下方中央与时间线左侧都可放映或暂停；也可按空格，Esc 停止。通关后短暂显示成功提示，自动进入下一关；本组最后一关保留完成结果。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—3 关：倒放，修复环境。第 4—6 关：剪除，让坏事不发生。第 7—9 关：定格，闸门停一镜、角色继续走。第 10—12 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习变化、综合考核。两种进度独立保存，第五章筹备中。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>环境片段决定片头，剪掉或倒放都能改写</h3><p>点击镜头上的橙色「剪除」，或把镜头拖入下方废片区；点击「放回」即可撤销。右侧固定显示剩余 / 总额，取消操作会返还对应额度。潮水片段留在主轨时，片头显示高水位，倒放后退到低水位；剪除潮水会立即让片头变为低水位，放回则恢复高水位。坍塌、落石、枯枝、木箱也按此规则联动：片段在主轨，片头有障碍；剪除后片头恢复安全，放回后重新出现。两段坍塌共用一座桥，全部剪除才以完整桥面开场。在对应镜头上点击「定格」或「复制」；已定格的镜头可再点取消，副本上点「撤销」会返还额度。限时按镜数计算，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关提供 12 段原片，复制和剪除会改变成片长度。门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销，额度无需用满。满足行动条件和结尾目标的不同剪法都能通关。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
+<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">你来决定，故事怎么发生。</h2><button class="close-dialog" id="closeHelp" aria-label="关闭玩法说明"><span data-icon="close"></span></button></div><p class="lead">小橘被困在一卷出错的影片里。调整镜头的顺序，倒转环境和角色的行动，把它平安送到出口。</p><div class="help-step"><span class="help-index">01</span><div><h3>看一眼，发生了什么</h3><p>单击时间线片段选中，双击片段或点击属性栏「预览」可单独观看。属性栏会说明片头状态、镜头效果与剪除影响；独立预览使用示例状态，不影响本关。</p></div></div><div class="help-step"><span class="help-index">02</span><div><h3>拖动镜头，重排因果</h3><p>在 V1 轨道拖拽片段换序，也可选中后使用属性栏的左右箭头。先修桥还是先出发？每一段都承接上一段的结果。</p></div></div><div class="help-step"><span class="help-index">03</span><div><h3>倒放一次，换一种可能</h3><p>点击每段素材下方「播放方向」轨的正放 / 倒放按钮即可切换。所有片段都能正放与倒放。倒放取钥匙会归还钥匙并退回，倒放转钥匙会重新上锁，倒放门铃会收回一声铃。角色动作倒放需要相应的起始状态。离开时要保持低水位、完整桥面与畅通道路。环境已经安全时，倒放会保持安全状态，仍占用一次倒放额度。倒放额度按当前选中的倒放片段计数，取消倒放即可返还。</p></div></div><div class="help-step"><span class="help-index">04</span><div><h3>放映验证，随时重来</h3><p>失败会停在出错的镜头，并说明原因。保留你的剪辑，修改后即可重试。画面下方中央与时间线左侧都可放映或暂停；也可按空格，Esc 停止。通关后短暂显示成功提示，自动进入下一关；本组最后一关保留完成结果。</p></div></div><div class="help-step"><span class="help-index">05</span><div><h3>新手教学与正式关卡分别进行</h3><p>第 1—3 关：倒放，修复环境。第 4—6 关：剪除，让坏事不发生。第 7—9 关：定格，闸门停一镜、角色继续走。第 10—12 关：复制，让有用的行动重复发生。先在开始界面的六节新手课中练习操作；正式关卡每章依次为应用、练习变化、综合考核。两种进度独立保存。</p></div></div><div class="help-step"><span class="help-index">06</span><div><h3>环境片段决定片头，剪掉或倒放都能改写</h3><p>点击镜头上的橙色「剪除」，或把镜头拖入下方废片区；点击「放回」即可撤销。右侧固定显示剩余 / 总额，取消操作会返还对应额度。潮水片段留在主轨时，片头显示高水位，倒放后退到低水位；剪除潮水会立即让片头变为低水位，放回则恢复高水位。坍塌、落石、枯枝、木箱也按此规则联动：片段在主轨，片头有障碍；剪除后片头恢复安全，放回后重新出现。两段坍塌共用一座桥，全部剪除才以完整桥面开场。在对应镜头上点击「定格」或「复制」；已定格的镜头可再点取消，副本上点「撤销」会返还额度。「出口落锁」是必需镜头，不能剪除；倒放开闸后按镜数计时，暂停和倍速不改变规则。</p></div></div><div class="help-step"><span class="help-index">07</span><div><h3>长影片也能清楚安排</h3><p>最终关提供 12 段原片，复制和剪除会改变成片长度。门外准备与铃声在前，开闸后进门、转钥匙、离开。选中片段后可在属性栏直接选择位置；也可拖拽、点左右箭头或用方向键。倒放、剪除、定格和复制各有额度，均可撤销，额度无需用满。满足行动条件和结尾目标的不同剪法都能通关。</p></div></div><div class="prototype-note">通关进度保存在当前浏览器。随时返回项目中心，可继续正式剪辑或重温新手教学。</div><button class="play-button dialog-play" id="startEditing">开始剪辑<span data-icon="arrowRight"></span></button></dialog>
 <dialog id="gmDialog" class="gm-dialog" aria-labelledby="gmTitle" aria-describedby="gmDescription">
   <div class="dialog-head"><h2 id="gmTitle">GM · 自由选关</h2><button id="closeGM" class="close-dialog" aria-label="关闭 GM 面板"><span data-icon="close"></span></button></div>
   <p id="gmDescription" class="gm-description">点击即可进入任意已制作关卡，包括尚未解锁的关卡。切关会重置当前剪辑，不会自动标记通关。</p>
   <div id="gmLevels" class="gm-levels"></div>
-  <p class="gm-shortcuts"><kbd>G</kbd> / <kbd>Esc</kbd> 关闭 · 放映时打开会暂停，关闭后可继续放映。第五章筹备中。</p>
+  <p class="gm-shortcuts"><kbd>G</kbd> / <kbd>Esc</kbd> 关闭 · 放映时打开会暂停，关闭后可继续放映。</p>
 </dialog>
 <script id="game-campaign">
 (() => {
@@ -308,7 +308,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     if(!data)throw new Error('Missing scene definition: '+sourceId);
     LEVELS.push({id,key:data.key||'scene-'+String(sourceId+1).padStart(2,'0'),legacyId:sourceId<16?sourceId:null,theme:chapter.theme,flooded:false,shutter:false,fixedLast:chapter.tool!=='reverse'?'exit':undefined,...data,openingFromClips:openingKinds(data.order),description:data.description.replace('新机制：','本章机制：'),chapter:chapter.id,stage,newMechanic:false,
       caption:'第 '+(id+1)+' 幕 · '+chapter.name+' / '+stage,tool:chapter.tool,toolName:chapter.mechanic,
-      toolHelp:data.description.replace('新机制：','本章机制：'),required:['cross','entry','unlock','bell','exit'],
+      toolHelp:data.description.replace('新机制：','本章机制：'),required:['cross','entry','unlock','bell','exit','shutter'],
       freezable:data.freezeBudget?['entry','unlock']:[],copyable:data.copyBudget?['bell','cross']:[],
       timeoutHelp:'开闸后只有两镜。把准备与铃声安排在开闸前，给「走进闸门」或「转动钥匙」定格，再离开。'});
     });
@@ -333,7 +333,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       description:'门卫需要两声铃才放行。复制「摇响门铃」，让原片和副本都正放，再取钥匙离开。',opening:'复制的是一次行动，方向由你决定。',
       steps:['点击门铃镜头上的「复制」，让时间线出现四段。','原片和副本都用正放；倒放会收回一声铃。','放映两声铃 → 取钥匙 → 离开。'],hints:['原片一声 + 副本一声 = 两声。','门铃 → 门铃副本 → 取钥匙 → 离开。'],lessonSuccess:'六课完成！现在可以进入四章正式挑战，每章三关，逐步组合剪辑本领。'}
   ];
-  const TUTORIALS=lessons.map((data,id)=>({id,tutorial:true,flooded:false,shutter:false,chapter:-1,stage:'新手练习',newMechanic:true,required:['cross','entry','unlock','bell','exit'],freezable:['entry','unlock'],copyable:['bell','cross'],...data,openingFromClips:openingKinds(data.order),caption:'剪辑学堂 · '+(id+1)+' / '+lessons.length,toolHelp:data.description}));
+  const TUTORIALS=lessons.map((data,id)=>({id,tutorial:true,flooded:false,shutter:false,chapter:-1,stage:'新手练习',newMechanic:true,required:['cross','entry','unlock','bell','exit','shutter'],freezable:['entry','unlock'],copyable:['bell','cross'],...data,openingFromClips:openingKinds(data.order),caption:'剪辑学堂 · '+(id+1)+' / '+lessons.length,toolHelp:data.description}));
   globalThis.EscapeCampaign={CHAPTERS,LEVELS,TUTORIALS};
 })();
 </script>
@@ -1251,7 +1251,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     $('homeCampaignProgress').textContent=`${completed.length} / ${LEVELS.length}`;
     $('homeTutorialProgress').textContent=`${tutorialCompleted.length} / ${TUTORIALS.length}`;
     $('startLabel').textContent=completed.length===LEVELS.length?'重温故事':completed.length||hasSession?'继续游戏':'开始游戏';
-    $('homeContinue').textContent=completed.length===LEVELS.length?'四章全部完成 · 第五章筹备中':completed.length?`正式关卡已完成 ${completed.length} 幕，继续把小橘送回家。`:'从第一幕开始，剪出属于你的好结局。';
+    $('homeContinue').textContent=completed.length===LEVELS.length?'四章全部完成':completed.length?`正式关卡已完成 ${completed.length} 幕，继续把小橘送回家。`:'从第一幕开始，剪出属于你的好结局。';
   }
   function updateWorkspace(){
     const home=activeView==='home';
@@ -1297,7 +1297,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
       return `<button class="level-tab ${level.id===l.id?'active':''} ${done.includes(l.id)?'done':''} ${!unlocked?'locked':''}" data-level="${l.id}" aria-current="${level.id===l.id?'step':'false'}" ${!unlocked?'aria-disabled="true"':''} aria-label="${tutorial?'教学':'第'} ${l.id+1} ${tutorial?'课':'关'} ${l.name}${!unlocked?'，尚未解锁':''}" title="${l.name}"><span class="num">${done.includes(l.id)?'✓':pad(l.id+1)}</span><span class="level-name">${l.name}</span><span class="level-length">${l.order.length*3}s</span>${!unlocked?icon('lock'):''}</button>`;
     };
     $('levels').classList.toggle('tutorial-levels',tutorial);
-    $('levels').innerHTML=tutorial?TUTORIALS.map(tab).join(''):CHAPTERS.map(ch=>ch.status==='planned'?`<section class="chapter-group planned-chapter" aria-label="第 ${ch.id+1} 章筹备中"><div class="chapter-heading"><span>${icon('lock')}第 ${ch.id+1} 章 · 待续</span><small>${ch.summary}</small></div></section>`:`<details open class="chapter-group ${level.chapter===ch.id?'current-chapter':''}"><summary class="chapter-heading" aria-label="第 ${ch.id+1} 章 ${ch.name}"><span>${icon(ch.tool)}${ch.range} · ${ch.mechanic}</span><small>${ch.name}</small></summary><div class="chapter-levels">${LEVELS.filter(l=>l.chapter===ch.id).map(tab).join('')}</div></details>`).join('');
+    $('levels').innerHTML=tutorial?TUTORIALS.map(tab).join(''):CHAPTERS.filter(ch=>ch.status==='ready').map(ch=>`<details open class="chapter-group ${level.chapter===ch.id?'current-chapter':''}"><summary class="chapter-heading" aria-label="第 ${ch.id+1} 章 ${ch.name}"><span>${icon(ch.tool)}${ch.range} · ${ch.mechanic}</span><small>${ch.name}</small></summary><div class="chapter-levels">${LEVELS.filter(l=>l.chapter===ch.id).map(tab).join('')}</div></details>`).join('');
     $('levels').querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{
       if(button.getAttribute('aria-disabled')==='true'){tell('先完成上一幕，就能解锁这段故事。');return;}
       loadLevel(Number(button.dataset.level));
@@ -1369,7 +1369,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     }else if(mode==='success'){
       const allDone=allLevelsComplete(),chapterDone=!level.tutorial&&LEVELS.filter(l=>l.chapter===level.chapter).every(l=>completed.includes(l.id));
       title.classList.add('success');title.innerHTML=icon('check')+(level.tutorial?(allDone?'新手教学全部完成':'这一课，学会了。'):allDone?`${LEVELS.length} 幕全部剪辑完成`:'这个结局，很好。');
-      body.textContent=level.tutorial?lessonMessage():`第 ${attempts} 次放映，小橘安全离开。${finalLevel()?(allDone?`你用自己的剪法完成了 ${LEVELS.length} 个故事。第五章筹备中。`:'这一幕已完成，可以回到其他关卡继续剪辑。'):level.stage==='综合考核'&&chapterDone?'本章三关已完成，下一章使用「'+CHAPTERS[level.chapter+1].mechanic+'」。':'继续用本章机制，试试下一种剪法。'}`;
+      body.textContent=level.tutorial?lessonMessage():`第 ${attempts} 次放映，小橘安全离开。${finalLevel()?(allDone?`你用自己的剪法完成了 ${LEVELS.length} 个故事。`:'这一幕已完成，可以回到其他关卡继续剪辑。'):level.stage==='综合考核'&&chapterDone?'本章三关已完成，下一章使用「'+CHAPTERS[level.chapter+1].mechanic+'」。':'继续用本章机制，试试下一种剪法。'}`;
       $('sceneResult').hidden=false;$('sceneResult').className='scene-result success';$('resultWord').textContent='GOOD CUT!';$('resultLine').textContent=allDone?'所有故事，都有了好结局。':'小橘平安到家了。';
       if(level.tutorial)$('resultLine').textContent=level.goal==='rewind'?'小橘回到起点，钥匙也归位了。':lessonMessage();
       if(!finalLevel())$('resultLine').textContent+=' 即将自动进入'+(level.tutorial?'下一课。':'下一关。');
@@ -1582,7 +1582,7 @@ dialog{background:#252b35;border:1px solid #56647a;border-radius:5px;color:#d1db
     renderLevels();$('missionNumber').textContent=`${level.tutorial?'LESSON':'CASE'} ${pad(level.id+1)} / ${pad(collection().length)}`;
     $('missionTitle').textContent=level.name;$('missionDescription').textContent=level.description;$('sceneCaption').textContent=level.caption;
     $('introTitle').textContent=level.tutorial?'项目：剪辑学堂':'项目：月光归途';
-    $('introSubtitle').textContent=level.tutorial?'六个独立练习 · 随时重温':'四章 · 十二个序列 · 第五章待续';
+    $('introSubtitle').textContent=level.tutorial?'六个独立练习 · 随时重温':'四章 · 十二个序列';
     $('libraryPath').textContent=level.tutorial?'学堂 / 教学序列':'归途 / 正式序列';updateWorkspace();
     $('chapterLesson').textContent=level.tutorial?'独立教学 · '+level.toolName:'第 '+(level.chapter+1)+' 章 · '+CHAPTERS[level.chapter].mechanic+' / '+level.stage;
     $('lessonGuide').hidden=!level.tutorial;
